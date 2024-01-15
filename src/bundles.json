@@ -1,0 +1,11 @@
+[
+    {
+        "name":"preLoad",
+        "assets": [
+            {
+                "name": "tank",
+                "srcs": "assets/units/tank/up/2.png"
+            }
+        ]
+    }
+]
