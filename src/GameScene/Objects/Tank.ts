@@ -1,31 +1,57 @@
 // Tank class
-
-import { extend } from "lodash";
 import { BaseObject } from "./BaseObject";
 
-export class Tank extend BaseObject{
+export class Tank extends BaseObject {
+    /**this tank is player or bot */
+    private _isPlayerTank: boolean;
+    /**hp of this tank */
+    private _HP: number;
 
-    private _fireCallback: (position, direction) => void = null;
+    constructor(isPlayer: boolean) {
+        /**set image of tank is player tank or bot tank*/
+        super(isPlayer ? 'player-tank' : 'bot-tank');
 
-    constructor() {
+        /**set hp of tank */
+        isPlayer ? this._HP = 5 : this._HP = 1;
+
+        /** set speed of tank*/
+        this.speed = 100;
+
+        /**set move engine and type trigger fire bullet for tank base on is player or not*/
+        if(isPlayer) {
+            /**add event listener to fire */
+        } else {
+            /** set random fire */
+        }
 
     }
-
-    fire() {
+    
+    /**
+     * tank start to fire bullet
+     */
+    public fire() {
         // fire bullet
         // call fire bullet from controller
 
-        // 
         // this._fireCallback?.(this.position, this.direction);
     }
 
-    // onHit() {
-    //     HP -1;
-    // }
-
-    destroy() {
-
+    /**
+     * tank has been hit by the bullet
+     */
+    public onHit() {
+        //reduce HP
     }
+
+    /**
+     *  tank hp reduce to 0 and tank will be destroy
+     */
+    public destroy() {
+        //check hp if it is 0
+        // call tank die to tank controller
+    }
+
+    private _fireCallback: (position, direction) => void = null;
 
     /**
      * Update tank
@@ -34,18 +60,6 @@ export class Tank extend BaseObject{
     update(dt: number):void {
         // move
 
-        // --------------
-        // get direction from engine
-        // update move engine
-        this.moveEngine.update(dt);
-        
-        // get direction property.
-
-        // --------------
-        // check possible move
-        // call back to check. 
-
-        // --------------
-        // update position
+        // destroy
     }
 }
