@@ -11,7 +11,7 @@ export class BaseObject {
     /** this ll use for tank when fire bullet */
     protected lastDirection: Direction;
     /**move engine of this object ll define which type of move */
-    protected moveEngine: BaseEngine;
+    protected _moveEngine: BaseEngine;
     /** size of the image object for avoid wrong when check collision */
     private _size: number;
 
@@ -33,17 +33,58 @@ export class BaseObject {
         /** then set this size */
     }
 
-    private _move(deltaTime: number, isBullet: boolean) {
+    get moveEngine() {
+        return this._moveEngine;
+    }
+
+    set moveEngine(moveEngine: BaseEngine) {
+        this._moveEngine = moveEngine;
+    }
+
+    public move(deltaTime: number, isBullet: boolean) {
         if (!this.moveEngine) {
             return;
         }
 
         /** get direction from move engine */
+        const direction = this._moveEngine.direction;
+
+        /** return if current direction is standing*/
+        if (direction === Direction.STAND) {
+            return;
+        }
+
+        /** assign direction to last direction for bullet fire */
+        this.lastDirection = direction;
 
         /**calculate next position base on direction, delta time and speed */
 
-        /**set next position for sprite*/
+        let nextX, nextY : number;
 
+        switch (direction) {
+            case Direction.UP:
+                nextY = (this._sprite.position.y) - ((this.speed * deltaTime) / 1000);
+                nextX = this._sprite.position.x;
+                break;
+            case Direction.DOWN:
+                nextY = (this._sprite.position.y) + ((this.speed * deltaTime) / 1000);
+                nextX = this._sprite.position.x;
+                break;
+            case Direction.LEFT:
+                nextY = this._sprite.position.y;
+                nextX = (this._sprite.position.x) - ((this.speed * deltaTime) / 1000);
+                break;
+            case Direction.RIGHT:
+                nextY = this._sprite.position.y;
+                nextX = (this._sprite.position.x) + ((this.speed * deltaTime) / 1000);
+                break;
+            default:
+                break;
+        }
+
+        /**set next position for sprite*/
+        this._sprite.x = nextX;
+        this._sprite.y = nextY;
         /**change image follow to direction*/
     }
 
