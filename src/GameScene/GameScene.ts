@@ -4,6 +4,8 @@ import { AssetsLoader } from '../AssetsLoader';
 import { TankController } from './Controller/TankController';
 import { BulletController } from './Controller/BulletController';
 import { EnvironmentController } from './Controller/EnvironmentController';
+import { Tank } from './Objects/Tank';
+import { BaseObject } from './Objects/BaseObject';
 
 export class GameScene extends Container {
     private _playerScore: number;
@@ -12,6 +14,11 @@ export class GameScene extends Container {
     private _environmentController: EnvironmentController;
     constructor() {
         super();
+        /**constructor controller */
+        this._tankController = new TankController();
+        this._bulletController = new BulletController();
+        this._environmentController = new EnvironmentController();
+
     }
 
     public init() {
