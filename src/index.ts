@@ -37,6 +37,7 @@ class Main {
         // create scene
         this._gameScene = new GameScene();
         this._gameScene.init();
+        this._pixiApp.stage.eventMode = 'static';
 
         // Add scene to render stage
         this._pixiApp.stage.addChild(this._gameScene);
