@@ -1,22 +1,45 @@
+import { Application } from "@pixi/app";
+import { GameScene } from "../GameScene";
 import { Tank } from "../Objects/Tank";
+import { TankPool } from "../Objects/TankPool";
+import { Direction } from "../type";
+import { getRandomArbitrary, randomEnumKey } from "../util";
 
 export class TankController {
     private _usingTanks: Tank[] = [];
-    private _spawnTankTime: number;
+    private _spawnTankTime: number = 20000;
     private _playerTank: Tank;
 
     constructor() {
         // spawnTank every spawnTankTime
-
+        setInterval(() => this.spawnTank(new GameScene), this._spawnTankTime);
         // create a player tank
+        this._playerTank = new Tank(true);
+        this._usingTanks.push(this._playerTank);
     }
 
     /**
      * spawn a enemy tank
      */
-    private spawnTank() {
+    private spawnTank(GameScene: GameScene) {
         // get a Tank from TankPool then display it.
+        const tank = TankPool.releaseTank();
+
+        // push this tank to using tank
+        this._usingTanks.push(tank);
+
+        // add this tank to game sense
+        GameScene.addChild(tank.sprite);
+
+
         // set Random Position and Direction for it.
+        const direction = randomEnumKey(Direction);
+        tank.moveEngine.direction = direction;
+        /**get random position */
+        //check position is available
+
+        //then set that position
+        tank.sprite.position.set(getRandomArbitrary(600, 800), getRandomArbitrary(600, 800));
     }
 
     /**
