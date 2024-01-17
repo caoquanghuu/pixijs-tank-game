@@ -1,3 +1,4 @@
+import { Application } from "@pixi/app";
 import { Direction } from "../type";
 
 export class ControlEngine {
@@ -7,6 +8,7 @@ export class ControlEngine {
      */
     constructor() {
         /** add event listener for keydown */
+
     }
 
     /**
