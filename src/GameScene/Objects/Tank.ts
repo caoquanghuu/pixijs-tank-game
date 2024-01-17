@@ -1,4 +1,5 @@
 // Tank class
+import { BaseEngine } from "../Engine/BaseEngine";
 import { BaseObject } from "./BaseObject";
 
 export class Tank extends BaseObject {
@@ -9,13 +10,16 @@ export class Tank extends BaseObject {
 
     constructor(isPlayer: boolean) {
         /**set image of tank is player tank or bot tank*/
-        super(isPlayer ? 'player-tank' : 'bot-tank');
+        super(isPlayer ? 'tank' : 'tank');
 
         /**set hp of tank */
         isPlayer ? this._HP = 5 : this._HP = 1;
 
         /** set speed of tank*/
         this.speed = 100;
+
+        /** set move engine for tank */
+        this.moveEngine = new BaseEngine (isPlayer);
 
         /**set move engine and type trigger fire bullet for tank base on is player or not*/
         if(isPlayer) {
@@ -25,7 +29,7 @@ export class Tank extends BaseObject {
         }
 
     }
-    
+
     /**
      * tank start to fire bullet
      */
@@ -41,6 +45,7 @@ export class Tank extends BaseObject {
      */
     public onHit() {
         //reduce HP
+        this._HP -= 1;
     }
 
     /**
@@ -48,7 +53,9 @@ export class Tank extends BaseObject {
      */
     public destroy() {
         //check hp if it is 0
-        // call tank die to tank controller
+        if (this._HP === 0) {
+            // call tank die to tank controller
+        }
     }
 
     private _fireCallback: (position, direction) => void = null;
@@ -59,7 +66,9 @@ export class Tank extends BaseObject {
      */
     update(dt: number):void {
         // move
+        this.move(dt, false);
 
         // destroy
+        this.destroy();
     }
 }
