@@ -1,14 +1,9 @@
 import { Direction } from "../type";
 import { randomEnumKey } from "../util";
+import { BaseEngine } from "./BaseEngine";
 
-export class RandomEngine {
-    private _direction: Direction;
+export class RandomEngine extends BaseEngine {
     private _directionChangeTime: number = 2000;
-
-    /**method to get direction from this engine */
-    public getDirection() {
-        return this._direction;
-    }
 
     /**
      * random get a direction from enum
@@ -17,7 +12,7 @@ export class RandomEngine {
         /**random to get direction from enum Direction */
         const direction = randomEnumKey(Direction);
         /**assign direction to this direction */
-        this._direction = direction;
+        this.direction = direction;
     }
 
     public update(dt: number) {
