@@ -1,31 +1,39 @@
 // Tank class
+import { Point } from "@pixi/core";
 import { BaseEngine } from "../Engine/BaseEngine";
+import { RandomEngine } from "../Engine/RandomEngine";
 import { BaseObject } from "./BaseObject";
+import { Direction } from "../type";
+import { TankController } from "../Controller/TankController";
+import { methodOf } from "lodash";
 
 export class Tank extends BaseObject {
     /**this tank is player or bot */
-    private _isPlayerTank: boolean;
+    readonly _isPlayerTank: boolean;
     /**hp of this tank */
     private _HP: number;
+    private _fireBulletCallBack: Function;
 
-    constructor(isPlayer: boolean) {
+    constructor(isPlayer: boolean, fireBulletCallBack: Function) {
         /**set image of tank is player tank or bot tank*/
-        super(isPlayer ? 'tank' : 'tank');
+        super('tank');
 
+        this._fireBulletCallBack = fireBulletCallBack;
         /**set hp of tank */
         isPlayer ? this._HP = 5 : this._HP = 1;
 
         /** set speed of tank*/
         this.speed = 100;
 
-        /** set move engine for tank */
-        this.moveEngine = new BaseEngine (isPlayer);
+        /** set random move engine for tank */
+        this.moveEngine = new RandomEngine();
 
         /**set move engine and type trigger fire bullet for tank base on is player or not*/
         if(isPlayer) {
             /**add event listener to fire */
         } else {
             /** set random fire */
+            this.fire(this.sprite.position, this.lastDirection, this._isPlayerTank);
         }
 
     }
@@ -33,11 +41,13 @@ export class Tank extends BaseObject {
     /**
      * tank start to fire bullet
      */
-    public fire() {
+    public fire(position: Point, direction: Direction, isPlayer: boolean) {
+
+        this._fireBulletCallBack(position, direction, isPlayer);
         // fire bullet
         // call fire bullet from controller
-
-        // this._fireCallback?.(this.position, this.direction);
+        // this._fireBulletCallBack(this.sprite.position, this.lastDirection)
+        // this._fireCallback?.(this.sprite.position, this.moveEngine.direction);
     }
 
     /**
@@ -58,7 +68,7 @@ export class Tank extends BaseObject {
         }
     }
 
-    private _fireCallback: (position, direction) => void = null;
+    // private _fireCallback: (position, direction) => void = null;
 
     /**
      * Update tank
@@ -70,5 +80,9 @@ export class Tank extends BaseObject {
 
         // destroy
         this.destroy();
+    }
+
+    set HP(newHp: number) {
+        this._HP = newHp;
     }
 }

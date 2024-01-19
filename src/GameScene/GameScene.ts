@@ -4,8 +4,8 @@ import { AssetsLoader } from '../AssetsLoader';
 import { TankController } from './Controller/TankController';
 import { BulletController } from './Controller/BulletController';
 import { EnvironmentController } from './Controller/EnvironmentController';
-import { Tank } from './Objects/Tank';
-import { BaseObject } from './Objects/BaseObject';
+import { Direction } from './type';
+import { Point } from '@pixi/core';
 
 export class GameScene extends Container {
     private _playerScore: number;
@@ -15,10 +15,20 @@ export class GameScene extends Container {
     constructor() {
         super();
         /**constructor controller */
-        this._tankController = new TankController();
-        this._bulletController = new BulletController();
+        this._bulletController = new BulletController(this.addToScene.bind(this));
+        this._tankController = new TankController(this.addToScene.bind(this), this.createBulletCall.bind(this));
         this._environmentController = new EnvironmentController();
 
+    }
+
+    /**
+     * function to send request to bullet controller create a bullet
+     * @param position position start of bullet which get from tank
+     * @param direction direction of bullet which get from tank last direction
+     * @param isPlayerBullet this bullet is player bullet or bot bullet
+     */
+    public createBulletCall(position: Point, direction: Direction, isPlayerBullet: boolean) {
+        this._bulletController.createBullet(position, direction, isPlayerBullet);
     }
 
     public init() {
@@ -33,6 +43,10 @@ export class GameScene extends Container {
         console.log(img);
     }
 
+    private addToScene(sprite: Sprite) {
+        this.addChild(sprite);
+    }
+
     private time = 0;
     public update(deltaTime: number) {
         this.time += deltaTime;
@@ -40,6 +54,8 @@ export class GameScene extends Container {
             this.time -= 1000;
             console.log('GameScene update');
         }
+        this._tankController.update(deltaTime);
+        this._bulletController.update(deltaTime);
     }
 
     public destroy() {
