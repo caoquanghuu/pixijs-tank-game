@@ -1,7 +1,7 @@
 import { Sprite } from "@pixi/sprite";
 import { Direction } from "../type";
-import { AssetsLoader } from "src/AssetsLoader";
 import { BaseEngine } from "../Engine/BaseEngine";
+import { AssetsLoader } from "../../AssetsLoader";
 
 export class BaseObject {
     /**a sprite */
@@ -59,7 +59,7 @@ export class BaseObject {
 
         /**calculate next position base on direction, delta time and speed */
 
-        let nextX, nextY : number;
+        let nextX: number, nextY: number;
 
         switch (direction) {
             case Direction.UP:
