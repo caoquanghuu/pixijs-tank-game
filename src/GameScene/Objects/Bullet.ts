@@ -18,7 +18,7 @@ export class Bullet extends BaseObject {
         this.speed = 200;
 
         /** set move engine for bullet */
-        // this.moveEngine = new BaseEngine(false, false)
+        this.moveEngine = new BaseEngine();
 
         /** set property for this bullet */
         this._isPlayerBullet = isPlayer;
@@ -26,5 +26,6 @@ export class Bullet extends BaseObject {
 
     update (dt) {
         /**bullet move */
+        this.move(dt, true);
     }
 }
