@@ -1,7 +1,7 @@
 import { Point } from "@pixi/core";
 import { Tank } from "../Objects/Tank";
 import { TankPool } from "../TankPool";
-import { AddToScene, Direction, FireBullet } from "../type";
+import { AddToScene, Direction, FireBullet, RemoveFromScene } from "../type";
 import { getRandomArbitrary, randomEnumKey } from "../util";
 import { Sprite } from "@pixi/sprite";
 
@@ -10,13 +10,15 @@ export class TankController {
     private _spawnTankTime: number = 20000;
     private _playerTank: Tank;
     private _addToScene: AddToScene;
+    private _removeFromScene: RemoveFromScene;
     private _fireBulletCallback: FireBullet;
     private _tankPool: TankPool;
 
-    constructor(addToSceneCallBack: AddToScene, fireBulletCallBack: FireBullet) {
+    constructor(addToSceneCallBack: AddToScene, removeFromeSceneCallBack: RemoveFromScene, fireBulletCallBack: FireBullet) {
         this._tankPool = TankPool.getInstance(this.fireBullet.bind(this));
         // spawnTank every spawnTankTime
         this._addToScene = addToSceneCallBack;
+        this._removeFromScene = removeFromeSceneCallBack;
         this._fireBulletCallback = fireBulletCallBack;
 
         this.spawnTank();
@@ -67,8 +69,12 @@ export class TankController {
             // game over
             console.log('game over');
         } else {
+            //return tank to tank pool
             this._tankPool.getTank(tank);
+            // set back hp for tank
             tank.HP = 1;
+            //remove sprite from game scene
+            this._removeFromScene(tank.sprite);
         }
     }
 
@@ -85,7 +91,7 @@ export class TankController {
         /**reduce spawn tank time back */
         this._spawnTankTime -= dt;
         /** then spawn tank based on dt time */
-        if (this._spawnTankTime <= 0 && this._tankPool.releaseTank()) {
+        if (this._spawnTankTime <= 0) {
             this._spawnTankTime = 20000;
 
             this.spawnTank();

@@ -16,7 +16,7 @@ export class GameScene extends Container {
         super();
         /**constructor controller */
         this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
-        this._tankController = new TankController(this.addToScene.bind(this), this.createBulletCall.bind(this));
+        this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this));
         this._environmentController = new EnvironmentController();
     }
 
@@ -39,6 +39,8 @@ export class GameScene extends Container {
         // this.addChild(img);
 
         img.position.set(100, 100);
+        const bg = new Sprite(AssetsLoader.getTexture('back-ground'));
+        this.addChild(bg);
     }
 
     private addToScene(sprite: Sprite) {
