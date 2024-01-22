@@ -1,5 +1,5 @@
-import { Application } from "@pixi/app";
-import { Direction } from "../type";
+import { Direction} from "../type";
+import { keyboard } from "../util";
 import { BaseEngine } from "./BaseEngine";
 
 export class ControlEngine extends BaseEngine {
@@ -7,22 +7,35 @@ export class ControlEngine extends BaseEngine {
      * constructor to create event listener to player control
      */
     constructor() {
-        super()
+        super();
         /** add event listener for keydown */
-
-    }
-
-    /**
-     * method to return direction base on player control
-     * @returns return direction
-     */
-
-    private onKeyDown() {
-        /** create a direction base on key down */
-        /** assign direction to this _direction */
-    }
-
-    private onKeyUp() {
-        /**set direction to stand because key up mean that player was stop control move */
+        const left = keyboard('ArrowLeft'),
+            up = keyboard('ArrowUp'),
+            right = keyboard('ArrowRight'),
+            down = keyboard('ArrowDown');
+        left.press = () => {
+            this.direction = Direction.LEFT;
+        };
+        left.release = () => {
+            this.direction = Direction.STAND;
+        };
+        right.press = () => {
+            this.direction = Direction.RIGHT;
+        };
+        right.release = () => {
+            this.direction = Direction.STAND;
+        };
+        up.press = () => {
+            this.direction = Direction.UP;
+        };
+        up.release = () => {
+            this.direction = Direction.STAND;
+        };
+        down.press = () => {
+            this.direction = Direction.DOWN;
+        };
+        down.release = () => {
+            this.direction = Direction.STAND;
+        };
     }
 }

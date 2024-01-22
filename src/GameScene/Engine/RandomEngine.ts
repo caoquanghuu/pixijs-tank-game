@@ -15,6 +15,10 @@ export class RandomEngine extends BaseEngine {
         this.direction = direction;
     }
 
+    private forceChangeDirection() {
+        this._directionChangeTime = 0;
+    }
+
     public update(dt: number) {
         /**set for the direction change time reduce to dt. */
         this._directionChangeTime -= dt;
