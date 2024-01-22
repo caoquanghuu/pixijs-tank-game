@@ -1,26 +1,30 @@
 import { Point } from "@pixi/core";
 import { Tank } from "../Objects/Tank";
 import { TankPool } from "../TankPool";
-import { Direction } from "../type";
+import { AddToScene, Direction, FireBullet } from "../type";
 import { getRandomArbitrary, randomEnumKey } from "../util";
+import { Sprite } from "@pixi/sprite";
 
 export class TankController {
     private _usingTanks: Tank[] = [];
     private _spawnTankTime: number = 20000;
     private _playerTank: Tank;
-    private _spawnCallBack: Function;
-    private _fireBulletCallback: Function;
-    private _tankPool = TankPool.getInstance(this.fireBullet.bind(this));
+    private _addToScene: AddToScene;
+    private _fireBulletCallback: FireBullet;
+    private _tankPool: TankPool;
 
-    constructor(spawnTankCallBack: Function, fireBulletCallBack: Function) {
+    constructor(addToSceneCallBack: AddToScene, fireBulletCallBack: FireBullet) {
+        this._tankPool = TankPool.getInstance(this.fireBullet.bind(this));
         // spawnTank every spawnTankTime
-        this._spawnCallBack = spawnTankCallBack;
+        this._addToScene = addToSceneCallBack;
         this._fireBulletCallback = fireBulletCallBack;
 
         this.spawnTank();
         // create a player tank
         this._playerTank = new Tank(true, this.fireBullet.bind(this));
         this._usingTanks.push(this._playerTank);
+        this._addToScene(this._playerTank.sprite);
+        this._playerTank.sprite.position.set(100, 100);
     }
 
     /**
@@ -34,7 +38,7 @@ export class TankController {
         this._usingTanks.push(tank);
 
         // add this tank to game sense
-        this._spawnCallBack(tank);
+        this._addToScene(tank.sprite);
 
 
         // set Random Position and Direction for it.
@@ -44,7 +48,7 @@ export class TankController {
         //check position is available
 
         //then set that position
-        tank.sprite.position.set(getRandomArbitrary(600, 800), getRandomArbitrary(600, 800));
+        tank.sprite.position.set(getRandomArbitrary(0, 800), getRandomArbitrary(0, 600));
     }
 
     public fireBullet(position: Point, direction: Direction, isPlayerBullet: boolean) {
@@ -81,7 +85,7 @@ export class TankController {
         /**reduce spawn tank time back */
         this._spawnTankTime -= dt;
         /** then spawn tank based on dt time */
-        if (this._spawnTankTime <= 0) {
+        if (this._spawnTankTime <= 0 && this._tankPool.releaseTank()) {
             this._spawnTankTime = 20000;
 
             this.spawnTank();
