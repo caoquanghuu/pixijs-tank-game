@@ -3,8 +3,24 @@
         "name":"preLoad",
         "assets": [
             {
-                "name": "tank",
+                "name": "tank-up",
                 "srcs": "assets/units/tank/up/2.png"
+            },
+            {
+                "name": "tank-down",
+                "srcs": "assets/units/tank/down/2.png"
+            },
+            {
+                "name": "tank-right",
+                "srcs": "assets/units/tank/right/2.png"
+            },
+            {
+                "name": "tank-left",
+                "srcs": "assets/units/tank/left/2.png"
+            },
+            {
+                "name": "bullet",
+                "srcs": "assets/UI/unit-menu-icons/49.png"
             }
         ]
     }
