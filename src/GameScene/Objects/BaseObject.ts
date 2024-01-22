@@ -2,6 +2,8 @@ import { Sprite } from "@pixi/sprite";
 import { Direction } from "../type";
 import { BaseEngine } from "../Engine/BaseEngine";
 import { AssetsLoader } from "../../AssetsLoader";
+import { PositionMap} from '../Map/PositionMap';
+import { ObservablePoint, Point } from "@pixi/core";
 
 export class BaseObject {
     /**a sprite */
@@ -39,6 +41,10 @@ export class BaseObject {
 
     set moveEngine(moveEngine: BaseEngine) {
         this._moveEngine = moveEngine;
+    }
+
+    set sprite(texture: string) {
+        this._sprite.texture = AssetsLoader.getTexture(texture);
     }
 
     public move(deltaTime: number, isBullet: boolean) {
@@ -82,9 +88,13 @@ export class BaseObject {
                 break;
         }
 
+        const position: Point = new Point(nextX, nextY);
+
+        const nextPosition = PositionMap.getMoveDistance(this.sprite.position, position, isBullet)
+
         /**set next position for sprite*/
-        this._sprite.x = nextX;
-        this._sprite.y = nextY;
+        this._sprite.x = nextPosition.x;
+        this._sprite.y = nextPosition.y;
         /**change image follow to direction*/
     }
 
