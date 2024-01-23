@@ -15,7 +15,7 @@ export class RandomEngine extends BaseEngine {
         this.direction = direction;
     }
 
-    private forceChangeDirection() {
+    public forceChangeDirection() {
         this._directionChangeTime = 0;
     }
 
