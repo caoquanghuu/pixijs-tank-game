@@ -6,12 +6,16 @@ import { BaseEngine } from "../Engine/BaseEngine";
 export class BulletController {
     // bullets which display on game sense
     private _bullets: Bullet [] = [];
-    private _spawnBulletCallBack: AddToScene;
-    private _removeBulletCallback: RemoveFromScene;
+    private _addBulletToSceneCallBack: AddToScene;
+    private _removeBulletFromSceneCallback: RemoveFromScene;
 
-    constructor(spawnBulletCallBack: AddToScene, removeBulletCallBack: RemoveFromScene) {
-        this._spawnBulletCallBack = spawnBulletCallBack;
-        this._removeBulletCallback = removeBulletCallBack;
+    constructor(addBulletToSceneCallBack: AddToScene, removeBulletFromSceneCallBack: RemoveFromScene) {
+        this._addBulletToSceneCallBack = addBulletToSceneCallBack;
+        this._removeBulletFromSceneCallback = removeBulletFromSceneCallBack;
+    }
+
+    get bullets(): Bullet[] {
+        return this._bullets;
     }
     /**
      * fire a bullet when tank require
@@ -32,20 +36,20 @@ export class BulletController {
         this.rotateSpriteFollowDirection(bullet);
 
         // append bullet to game sense
-        this._spawnBulletCallBack(bullet.sprite);
+        this._addBulletToSceneCallBack(bullet.sprite);
     }
 
     /**
      * remove bullet when require
      * @param bullet bullet which need to remove
      */
-    private removeBullet(bullet: Bullet) {
+    public removeBullet(bullet: Bullet) {
         /** remove bullet in array list*/
         const p = this._bullets.findIndex(bullets => bullets === bullet);
-        this._bullets.slice(p, 1);
+        this._bullets.splice(p, 1);
 
         /** remove bullet in game sense */
-        this._removeBulletCallback(bullet.sprite);
+        this._removeBulletFromSceneCallback(bullet.sprite);
     }
     /**
      * rotate sprite follow direction
