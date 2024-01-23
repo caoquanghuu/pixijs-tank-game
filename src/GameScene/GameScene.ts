@@ -6,7 +6,6 @@ import { BulletController } from './Controller/BulletController';
 import { EnvironmentController } from './Controller/EnvironmentController';
 import { Direction } from './type';
 import { Point } from '@pixi/core';
-import { Application } from '@pixi/app';
 import { CollisionController } from './Controller/CollisionController';
 import { Tank } from './Objects/Tank';
 import { Bullet } from './Objects/Bullet';
@@ -61,7 +60,7 @@ export class GameScene extends Container {
 
         const img = new Sprite(AssetsLoader.getTexture('tank'));
 
-        // this.addChild(img);
+        this.addChild(img);
 
         img.position.set(100, 100);
     }

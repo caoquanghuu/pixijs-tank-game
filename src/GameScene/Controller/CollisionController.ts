@@ -1,8 +1,6 @@
 import { Point } from "@pixi/core";
 import { BaseObject } from "../Objects/BaseObject";
 import { GetBulletList, GetObjectList, GetTankList, RemoveBullet } from "../type";
-import { getDistanceOfTwoPosition } from "../util";
-import { Sprite } from "@pixi/sprite";
 
 export class CollisionController {
     /**position of tanks which be using on map */

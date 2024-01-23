@@ -80,7 +80,6 @@ export class TankController {
             // remove from using tank list
             const p = this._usingTanks.findIndex(tank => tank === tankDie);
             this._usingTanks.splice(p, 1);
-            console.log(this._usingTanks);
         }
     }
 
@@ -98,7 +97,6 @@ export class TankController {
         // if have no collision tank ll move normally.
         // force change direction if tank is bot
         if (!tank.isPlayerTank) {
-            
         }
     }
 
