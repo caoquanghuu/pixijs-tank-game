@@ -21,6 +21,22 @@
             {
                 "name": "bullet",
                 "srcs": "assets/UI/unit-menu-icons/49.png"
+            },
+            {
+                "name": "back-ground",
+                "srcs": "assets/units/back-ground/1.jpg"
+            },
+            {
+                "name": "tree-1",
+                "srcs": "assets/units/tree/1.png"
+            },
+            {
+                "name": "tree-2",
+                "srcs": "assets/units/tree/2.png"
+            },
+            {
+                "name": "rock",
+                "srcs": "assets/units/rocks/1.png"
             }
         ]
     }
