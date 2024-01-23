@@ -9,13 +9,13 @@ export class BaseObject {
     /**a sprite */
     private _sprite: Sprite;
     /**speed move of the object */
-    protected speed: number;
+    private _speed: number;
     /** this ll use for tank when fire bullet */
     protected lastDirection: Direction;
     /**move engine of this object ll define which type of move */
     protected _moveEngine: BaseEngine;
     /** size of the image object for avoid wrong when check collision */
-    private _size: number;
+    private _size: {w: number, h: number};
 
     /**
      * constructor a object with option
@@ -27,11 +27,12 @@ export class BaseObject {
 
         /** set middle point for sprite*/
         this._sprite.anchor.set(0.5);
+        this._size = { w: this._sprite.width, h: this._sprite.height };
     }
 
     private calculateObjectSize(sprite: Sprite) {
         /**base on the sprite calculate the size of this object */
-
+        sprite.width
         /** then set this size */
     }
 
@@ -45,6 +46,10 @@ export class BaseObject {
 
     set sprite(texture: string) {
         this._sprite.texture = AssetsLoader.getTexture(texture);
+    }
+
+    set speed(speed: number) {
+        this._speed = speed;
     }
 
     public move(deltaTime: number, isBullet: boolean) {
@@ -104,7 +109,7 @@ export class BaseObject {
     }
 
     /**method to get size of this object for check collision */
-    get size(): number {
+    get size() {
         return this._size;
     }
 }

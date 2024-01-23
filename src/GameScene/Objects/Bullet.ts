@@ -24,8 +24,12 @@ export class Bullet extends BaseObject {
         this._isPlayerBullet = isPlayer;
     }
 
-    update (dt) {
+    update(dt) {
         /**bullet move */
         this.move(dt, true);
+    }
+
+    get isPlayerBullet(): boolean {
+        return this._isPlayerBullet;
     }
 }
