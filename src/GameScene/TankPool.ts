@@ -1,7 +1,7 @@
 import { TankController } from "./Controller/TankController";
 import { RandomEngine } from "./Engine/RandomEngine";
 import { Tank } from "./Objects/Tank";
-import { FireBullet } from "./type";
+import { FireBullet, TankDie } from "./type";
 
 export class TankPool {
     private static instance: TankPool;
@@ -9,23 +9,25 @@ export class TankPool {
     private _maxTanks: number = 20;
     /**a array to contain bot tank */
     private _tanksPool: Tank[] = [];
-    public _fireBulletCallBack: FireBullet;
+    private _fireBulletCallBack: FireBullet;
+    private _tankDieCall: TankDie;
 
     /**
      * constructor tank pool base on number of tank
      */
-    constructor(fireBulletCallBack: FireBullet) {
+    constructor(fireBulletCallBack: FireBullet, tankDieCallBack: TankDie) {
         this._fireBulletCallBack = fireBulletCallBack;
+        this._tankDieCall = tankDieCallBack;
         /**a loop to create tank and add it to tank pool */
         for (let i = 0; i < this._maxTanks; i++) {
-            const tank = new Tank(false, this._fireBulletCallBack);
+            const tank = new Tank(false, this._fireBulletCallBack, this._tankDieCall);
             this._tanksPool.push(tank);
         }
     }
 
-    public static getInstance(fireBulletCallBack: FireBullet): TankPool {
+    public static getInstance(fireBulletCallBack: FireBullet, tankDieCallBack: TankDie): TankPool {
         if (!TankPool.instance) {
-            TankPool.instance = new TankPool(fireBulletCallBack);
+            TankPool.instance = new TankPool(fireBulletCallBack, tankDieCallBack);
         }
         return TankPool.instance;
     }

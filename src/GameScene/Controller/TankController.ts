@@ -4,6 +4,7 @@ import { TankPool } from "../TankPool";
 import { AddToScene, Direction, FireBullet, RemoveFromScene } from "../type";
 import { getRandomArbitrary, randomEnumKey } from "../util";
 import { Sprite } from "@pixi/sprite";
+import { PositionMap } from "../Map/PositionMap";
 
 export class TankController {
     private _usingTanks: Tank[] = [];
@@ -13,17 +14,18 @@ export class TankController {
     private _removeFromScene: RemoveFromScene;
     private _fireBulletCallback: FireBullet;
     private _tankPool: TankPool;
+    private _positionMap: PositionMap;
 
-    constructor(addToSceneCallBack: AddToScene, removeFromeSceneCallBack: RemoveFromScene, fireBulletCallBack: FireBullet) {
-        this._tankPool = TankPool.getInstance(this.fireBullet.bind(this));
+    constructor(addToSceneCallBack: AddToScene, removeFromSceneCallBack: RemoveFromScene, fireBulletCallBack: FireBullet) {
+        this._tankPool = TankPool.getInstance(this.fireBullet.bind(this), this.tankDie.bind(this));
         // spawnTank every spawnTankTime
         this._addToScene = addToSceneCallBack;
-        this._removeFromScene = removeFromeSceneCallBack;
+        this._removeFromScene = removeFromSceneCallBack;
         this._fireBulletCallback = fireBulletCallBack;
 
         this.spawnTank();
         // create a player tank
-        this._playerTank = new Tank(true, this.fireBullet.bind(this));
+        this._playerTank = new Tank(true, this.fireBullet.bind(this), this.tankDie.bind(this));
         this._usingTanks.push(this._playerTank);
         this._addToScene(this._playerTank.sprite);
         this._playerTank.sprite.position.set(100, 100);
@@ -61,20 +63,24 @@ export class TankController {
      * tank will die
      * @param tank tank which will die
      */
-    private tankDie(tank: Tank) {
+    private tankDie(tankDie: Tank) {
         /** check tank die is player or AI tank
         if player tank die return game over to game sense, if ene tank die then:
         check tank die in using tank, return it to tank pool and set it HP to 1.  */
-        if (tank._isPlayerTank) {
+        if (tankDie.isPlayerTank) {
             // game over
             console.log('game over');
         } else {
             //return tank to tank pool
-            this._tankPool.getTank(tank);
+            this._tankPool.getTank(tankDie);
             // set back hp for tank
-            tank.HP = 1;
+            tankDie.HP = 1;
             //remove sprite from game scene
-            this._removeFromScene(tank.sprite);
+            this._removeFromScene(tankDie.sprite);
+            // remove from using tank list
+            const p = this._usingTanks.findIndex(tank => tank === tankDie);
+            this._usingTanks.splice(p, 1);
+            console.log(this._usingTanks);
         }
     }
 
@@ -82,9 +88,18 @@ export class TankController {
      * handle move of tank when have collision
      * @param tank tank which need to handle move
      */
-    private tankHandleMove(tank: Tank) {
+    private handleTankMove(tank: Tank, isCollision: boolean) {
         // check collision is allow tank move, if have collision then set tank can not move.
+        if (isCollision) {
+            tank.speed = 0;
+        } else {
+            tank.speed = 100;
+        }
         // if have no collision tank ll move normally.
+        // force change direction if tank is bot
+        if (!tank.isPlayerTank) {
+            
+        }
     }
 
     public update(dt: number) {
