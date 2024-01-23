@@ -30,12 +30,6 @@ export class BaseObject {
         this._size = { w: this._sprite.width, h: this._sprite.height };
     }
 
-    private calculateObjectSize(sprite: Sprite) {
-        /**base on the sprite calculate the size of this object */
-        sprite.width
-        /** then set this size */
-    }
-
     get moveEngine() {
         return this._moveEngine;
     }
@@ -50,6 +44,10 @@ export class BaseObject {
 
     set speed(speed: number) {
         this._speed = speed;
+    }
+
+    get speed() {
+        return this._speed;
     }
 
     public move(deltaTime: number, isBullet: boolean) {
@@ -74,20 +72,20 @@ export class BaseObject {
 
         switch (direction) {
             case Direction.UP:
-                nextY = (this._sprite.position.y) - ((this.speed * deltaTime) / 1000);
+                nextY = (this._sprite.position.y) - ((this._speed * deltaTime) / 1000);
                 nextX = this._sprite.position.x;
                 break;
             case Direction.DOWN:
-                nextY = (this._sprite.position.y) + ((this.speed * deltaTime) / 1000);
+                nextY = (this._sprite.position.y) + ((this._speed * deltaTime) / 1000);
                 nextX = this._sprite.position.x;
                 break;
             case Direction.LEFT:
                 nextY = this._sprite.position.y;
-                nextX = (this._sprite.position.x) - ((this.speed * deltaTime) / 1000);
+                nextX = (this._sprite.position.x) - ((this._speed * deltaTime) / 1000);
                 break;
             case Direction.RIGHT:
                 nextY = this._sprite.position.y;
-                nextX = (this._sprite.position.x) + ((this.speed * deltaTime) / 1000);
+                nextX = (this._sprite.position.x) + ((this._speed * deltaTime) / 1000);
                 break;
             default:
                 break;
