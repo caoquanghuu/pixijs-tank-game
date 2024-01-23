@@ -1,4 +1,5 @@
 import { Point } from "@pixi/core";
+import { getDistanceOfTwoPosition } from "../util";
 
 export class PositionMap {
     // static
@@ -39,29 +40,29 @@ export class PositionMap {
             nextPosition.y = 590;
         }
 
-        // // kiem tra xem co phai bullet khong
-        // if (!isBullet) {
-        // // loai bo vi tri cua tank khoi position map
-        //     let newPositionMap = PositionMap._positions;
-        //     const i = newPositionMap.findIndex(
-        //         (position) => position === currentPosition
-        //     );
-        //     delete newPositionMap[i];
+        // kiem tra xem co phai bullet khong
+        if (!isBullet) {
+        // remove position of itself
+            const newPositionMap = PositionMap._positions;
+            const i = newPositionMap.findIndex(
+                (position) => position === currentPosition
+            );
+            delete newPositionMap[i];
 
-        //     //kiem tra xem next position co gan voi cac tank khac khong
-        //     const isNextPositionCloseWithOtherTank = newPositionMap.some(
-        //         (positions) => {
-        //             const distance = getDistanceOfTwoPosition(positions, nextPosition);
-        //             if (distance <= 70) {
-        //                 return true;
-        //             }
-        //         }
-        //     );
+            //kiem tra xem next position co gan voi cac tank khac khong
+            const isCloseWithOtherObjects = newPositionMap.some(
+                (positions) => {
+                    const distance = getDistanceOfTwoPosition(positions, nextPosition);
+                    if (distance <= 15) {
+                        return true;
+                    }
+                }
+            );
 
-        //     if (isNextPositionCloseWithOtherTank) {
-        //         return currentPosition;
-        //     }
-        // }
+            if (isCloseWithOtherObjects) {
+                return currentPosition;
+            }
+        }
 
         return nextPosition;
     }
