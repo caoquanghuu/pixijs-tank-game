@@ -71,17 +71,17 @@ export class Tank extends BaseObject {
     public onHit() {
         //reduce HP
         this._HP -= 1;
+        if (this._HP === 0) {
+            this.destroy();
+        }
     }
 
     /**
      *  tank hp reduce to 0 and tank will be destroy
      */
     public destroy() {
-        //check hp if it is 0
-        if (this._HP === 0) {
-            // call tank die to tank controller
-            this._tankDieCall(this);
-        }
+        // call tank die to tank controller
+        this._tankDieCall(this);
     }
     /**
      * change texture and size of tank when direction of tank change
@@ -123,8 +123,6 @@ export class Tank extends BaseObject {
         this.move(dt, false);
         //update new direction for random move
         this.moveEngine.update(dt);
-        // destroy
-        this.destroy();
         // change texture when direction of tank change
         this.changeTextureFollowDirection(this.moveEngine.direction);
         // push and update position of tank in position map
