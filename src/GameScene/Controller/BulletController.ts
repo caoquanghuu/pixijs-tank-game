@@ -58,19 +58,19 @@ export class BulletController {
     private rotateSpriteFollowDirection(bullet: Bullet) {
         switch (bullet.moveEngine.direction) {
             case Direction.UP: {
-                bullet.sprite.texture.rotate = 4;
+                bullet.sprite.angle = 180;
                 break;
             }
             case Direction.DOWN: {
-                bullet.sprite.texture.rotate = 0;
+                bullet.sprite.angle = 0;
                 break;
             }
             case Direction.LEFT: {
-                bullet.sprite.texture.rotate = 6;
+                bullet.sprite.angle = 90;
                 break;
             }
             case Direction.RIGHT: {
-                bullet.sprite.texture.rotate = 2;
+                bullet.sprite.angle = -90;
                 break;
             }
         }
