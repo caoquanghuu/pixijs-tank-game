@@ -87,24 +87,44 @@ export class TankController {
      * handle move of tank when have collision
      * @param tank tank which need to handle move
      */
-    private handleTankMove(tank: Tank, isCollision: boolean) {
+    public handleTankMove(tank: Tank) {
+        // get current direction of tank
+        const direction = tank.moveEngine.direction;
         // check collision is allow tank move, if have collision then set tank can not move.
-        if (isCollision) {
-            tank.speed = 0;
-        } else {
-            tank.speed = 100;
+        tank.moveEngine.direction = Direction.STAND;
+
+        switch (direction) {
+            case Direction.UP: {
+                tank.sprite.position.y += 1;
+                break;
+            }
+            case Direction.DOWN: {
+                tank.sprite.position.y -= 1;
+                break;
+            }
+            case Direction.LEFT: {
+                tank.sprite.position.x += 1;
+                break;
+            }
+            case Direction.RIGHT: {
+                tank.sprite.position.x -= 1;
+                break;
+            }
         }
+        //change direction if tank is bot
+        if (!tank.isPlayerTank) {
+            tank.moveEngine.forceChangeDirectionCall();
+        }
+
         // if have no collision tank ll move normally.
         // force change direction if tank is bot
-        if (!tank.isPlayerTank) {
-        }
     }
 
     public update(dt: number) {
         /**reduce spawn tank time back */
         this._spawnTankTime -= dt;
         /** then spawn tank based on dt time */
-        if (this._spawnTankTime <= 0) {
+        if (this._spawnTankTime <= 0 && this._tankPool.releaseTank()) {
             this._spawnTankTime = 20000;
 
             this.spawnTank();

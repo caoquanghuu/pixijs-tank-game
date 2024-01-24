@@ -23,7 +23,7 @@ export class GameScene extends Container {
         this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
         this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this));
         this._environmentController = new EnvironmentController(this.addToScene.bind(this));
-        this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this));
+        this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this));
     }
 
     public getTankList(): Tank[] {
@@ -40,6 +40,10 @@ export class GameScene extends Container {
 
     public removeBulletCall(bullet: Bullet) {
         this._bulletController.removeBullet(bullet);
+    }
+
+    public handleTankMoveCall(tank: Tank) {
+        this._tankController.handleTankMove(tank);
     }
 
 
