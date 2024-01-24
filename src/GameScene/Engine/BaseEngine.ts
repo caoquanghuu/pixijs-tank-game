@@ -4,6 +4,7 @@ import { RandomEngine } from "./RandomEngine";
 
 export class BaseEngine {
     private _direction: Direction = Direction.STAND;
+    public forceChangeDirectionCall: () => void = null;
 
     /** get a direction */
     get direction() {

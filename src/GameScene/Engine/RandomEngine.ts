@@ -5,6 +5,11 @@ import { BaseEngine } from "./BaseEngine";
 export class RandomEngine extends BaseEngine {
     private _directionChangeTime: number = 2000;
 
+    constructor() {
+        super();
+        this.forceChangeDirectionCall = this.forceChangeDirection;
+    }
+
     /**
      * random get a direction from enum
      */
