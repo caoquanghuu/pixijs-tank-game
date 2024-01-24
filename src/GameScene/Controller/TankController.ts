@@ -37,6 +37,10 @@ export class TankController {
     private spawnTank() {
         // get a Tank from TankPool then display it.
         const tank = this._tankPool.releaseTank();
+        const positionMap = new PositionMap();
+        tank.rectangle = PositionMap.createNewPosition(tank.size);
+        tank.keyInPositionMap = positionMap.keyInArrayRectangle;
+        tank.sprite.position.set(tank.rectangle.x, tank.rectangle.y);
 
         // push this tank to using tank
         this._usingTanks.push(tank);
@@ -52,7 +56,7 @@ export class TankController {
         //check position is available
 
         //then set that position
-        tank.sprite.position.set(getRandomArbitrary(0, 800), getRandomArbitrary(0, 600));
+        // tank.sprite.position.set(getRandomArbitrary(0, 800), getRandomArbitrary(0, 600));
     }
 
     public fireBullet(position: Point, direction: Direction, isPlayerBullet: boolean) {
@@ -80,6 +84,8 @@ export class TankController {
             // remove from using tank list
             const p = this._usingTanks.findIndex(tank => tank === tankDie);
             this._usingTanks.splice(p, 1);
+            // remove from position map
+            PositionMap._positions.splice(tankDie.keyInPositionMap, 1);
         }
     }
 
@@ -95,19 +101,19 @@ export class TankController {
 
         switch (direction) {
             case Direction.UP: {
-                tank.sprite.position.y += 1;
+                tank.sprite.position.y += 2;
                 break;
             }
             case Direction.DOWN: {
-                tank.sprite.position.y -= 1;
+                tank.sprite.position.y -= 2;
                 break;
             }
             case Direction.LEFT: {
-                tank.sprite.position.x += 1;
+                tank.sprite.position.x += 2;
                 break;
             }
             case Direction.RIGHT: {
-                tank.sprite.position.x -= 1;
+                tank.sprite.position.x -= 2;
                 break;
             }
         }

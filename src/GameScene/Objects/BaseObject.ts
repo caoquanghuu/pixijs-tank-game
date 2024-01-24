@@ -3,7 +3,7 @@ import { Direction } from "../type";
 import { BaseEngine } from "../Engine/BaseEngine";
 import { AssetsLoader } from "../../AssetsLoader";
 import { PositionMap} from '../Map/PositionMap';
-import { ObservablePoint, Point } from "@pixi/core";
+import { ObservablePoint, Point, Rectangle } from "@pixi/core";
 
 export class BaseObject {
     /**a sprite */
@@ -16,6 +16,8 @@ export class BaseObject {
     protected _moveEngine: BaseEngine;
     /** size of the image object for avoid wrong when check collision */
     private _size: {w: number, h: number};
+    /** rectangle of object */
+    private _rectangle: Rectangle;
 
     /**
      * constructor a object with option
@@ -46,8 +48,16 @@ export class BaseObject {
         this._speed = speed;
     }
 
-    get speed() {
+    get speed(): number {
         return this._speed;
+    }
+
+    get rectangle(): Rectangle {
+        return this._rectangle;
+    }
+
+    set rectangle(rectangle: Rectangle) {
+        this._rectangle = rectangle;
     }
 
     public move(deltaTime: number, isBullet: boolean) {

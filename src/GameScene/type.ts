@@ -12,6 +12,11 @@ export enum Direction {
     RIGHT
 }
 
+export type Size = {
+    w: number,
+    h: number,
+}
+
 export type AddToScene = (sprite: Sprite) => void;
 
 export type RemoveFromScene = (srite: Sprite) => void;

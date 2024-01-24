@@ -16,6 +16,7 @@ export class Tank extends BaseObject {
     private _fireBulletCallBack: FireBullet;
     private _tankDieCall: TankDie;
     private _positionMap: PositionMap;
+    private _keyInPositionMap: number;
     private _fireBulletTime: number;
 
     constructor(isPlayer: boolean, fireBulletCallBack: FireBullet, tankDieCallBack: TankDie) {
@@ -25,7 +26,9 @@ export class Tank extends BaseObject {
         this._tankDieCall = tankDieCallBack;
         /** set speed of tank*/
         this.speed = 100;
-        this._positionMap = new PositionMap();
+        /** set size of tank */
+        this.size = { w: 20, h: 30 };
+
         this._isPlayerTank = isPlayer;
 
         /**set move engine and type trigger fire bullet for tank base on is player or not*/
@@ -35,6 +38,14 @@ export class Tank extends BaseObject {
             this.moveEngine = new ControlEngine();
             // set hp
             this.HP = 5;
+            /** create new position map to get key */
+            const positionMap = new PositionMap();
+            /** assign key in position map*/
+            this._keyInPositionMap = positionMap.keyInArrayRectangle;
+            /** create a new rectangle of tank */
+            this.rectangle = PositionMap.createNewPosition(this.size);
+            /** create a random available position */
+            this.sprite.position.set(this.rectangle.x, this.rectangle.y);
             //control fire
             const fire = keyboard(' ');
             fire.press = () => {
@@ -50,7 +61,14 @@ export class Tank extends BaseObject {
             // set time for fire bullet
             this._fireBulletTime = 5000;
         }
+    }
 
+    get keyInPositionMap(): number {
+        return this._keyInPositionMap;
+    }
+
+    set keyInPositionMap(key: number) {
+        this._keyInPositionMap = key;
     }
 
     /**
@@ -62,6 +80,7 @@ export class Tank extends BaseObject {
         // fire bullet
         // call fire bullet from controller
         // this._fireBulletCallBack(this.sprite.position, this.lastDirection)
+        //
         // this._fireCallback?.(this.sprite.position, this.moveEngine.direction);
     }
 
@@ -126,7 +145,6 @@ export class Tank extends BaseObject {
         // change texture when direction of tank change
         this.changeTextureFollowDirection(this.moveEngine.direction);
         // push and update position of tank in position map
-        PositionMap.setPositionMap(this.sprite.position, this._positionMap.keyInStaticArrayPosition);
         // set fire bullet call for bot tank
         if (!this._isPlayerTank) {
             this._fireBulletTime -= dt;
@@ -135,6 +153,7 @@ export class Tank extends BaseObject {
                 this._fireBulletTime = getRandomArbitrary(3000, 5000);
             }
         }
+        PositionMap.setPositionMap(this.rectangle, this._keyInPositionMap);
     }
 
     set HP(newHp: number) {

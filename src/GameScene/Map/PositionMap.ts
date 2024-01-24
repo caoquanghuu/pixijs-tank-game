@@ -1,25 +1,21 @@
-import { Point } from "@pixi/core";
-import { getDistanceOfTwoPosition } from "../util";
+import { Point, Rectangle } from "@pixi/core";
+import { getDistanceOfTwoPosition, getRandomArbitrary } from "../util";
+import { Size } from "../type";
 
 export class PositionMap {
     // static
-    public static _positions: Point[] = [];
+    public static _positions: Rectangle[] = [];
 
-    private static _countPositionOfTanks: number = 0;
+    public static _keyInStaticArrayRectangle: number;
 
-    private _keyInStaticArrayPosition: number;
+    public keyInArrayRectangle: number;
 
     constructor() {
-        PositionMap._countPositionOfTanks += 1;
-        this._keyInStaticArrayPosition = PositionMap._countPositionOfTanks;
+        this.keyInArrayRectangle = PositionMap._positions.length;
     }
 
-    get keyInStaticArrayPosition() {
-        return this._keyInStaticArrayPosition;
-    }
-
-    public static setPositionMap(position: Point, keyInStaticArrayPosition: number) {
-        PositionMap._positions[keyInStaticArrayPosition - 1] = position;
+    public static setPositionMap(rectangle: Rectangle, keyInStaticArrayPosition: number) {
+        PositionMap._positions[keyInStaticArrayPosition - 1] = rectangle;
     }
 
     public static getMoveDistance(currentPosition: Point, nextPosition: Point, isBullet: boolean) {
@@ -40,5 +36,40 @@ export class PositionMap {
             nextPosition.y = 590;
         }
         return nextPosition;
+    }
+
+    static checkPositionIsAvailable(r1: Rectangle, r2: Rectangle) {
+        if (r1.x + r1.width >= r2.x &&
+            r1.x <= r2.x + r2.width &&
+            r1.y + r1.height >= r2.y &&
+            r1.y <= r2.y + r2.height) {
+            return false;
+        }
+        return true;
+    }
+
+    static createNewPosition(size: Size): Rectangle {
+        const rectangle = new Rectangle(null, null, size.w, size.h);
+        for (let i = 0; i < 999; i++) {
+
+            const position: Point = new Point();
+
+            position.set(getRandomArbitrary(0, 790), getRandomArbitrary(0, 590));
+
+            rectangle.x = position.x;
+            rectangle.y = position.y;
+
+            const isPositionAvailable = PositionMap._positions.some(position => {
+                const isAvailable = PositionMap.checkPositionIsAvailable(rectangle, position);
+                if (isAvailable) {
+                    return true;
+                }
+            });
+
+            if (isPositionAvailable) {
+                break;
+            }
+        }
+        return rectangle;
     }
 }
