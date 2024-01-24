@@ -20,7 +20,6 @@ export class EnvironmentController {
         for (let i = 0; i < 10; i++) {
             this.createEnvironmentObject('rock');
         }
-        /**add there object to the game */
     }
 
     /**
@@ -30,13 +29,17 @@ export class EnvironmentController {
     private createEnvironmentObject(name: string) {
         /**use name to get image from asset */
         const object = new BaseObject(name);
+        /** add sprite to game scene */
         this._addToSceneCall(object.sprite);
         /** set random position for it*/
         object.sprite.position.set(getRandomArbitrary(10, 790), getRandomArbitrary(10, 590));
         /** set size */
         object.sprite.width = 15;
         object.sprite.height = 15;
+        /** set size property */
+        object.size = { w: 15, h: 15 };
         /** set anchor point */
+        object.sprite.anchor.set(0.5);
         /**push it to this.environmentObject array */
         this._environmentObjects.push(object);
         PositionMap._positions.push(object.sprite.position);
