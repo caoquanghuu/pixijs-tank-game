@@ -1,6 +1,6 @@
-import { Point } from "@pixi/core";
+import { Point, Rectangle } from "@pixi/core";
 import { BaseObject } from "../Objects/BaseObject";
-import { GetBulletList, GetObjectList, GetTankList, RemoveBullet } from "../type";
+import { GetBulletList, GetObjectList, GetTankList, HandleTankMove, RemoveBullet } from "../type";
 
 export class CollisionController {
     /**position of tanks which be using on map */
@@ -14,12 +14,14 @@ export class CollisionController {
     private _getBulletListCall: GetBulletList;
     private _getEnvironmentListCall: GetObjectList;
     private _removeBulletCall: RemoveBullet;
+    private _handleTankMoveCall: HandleTankMove;
 
-    constructor(getTankListCallBack: GetTankList, getBulletListCallBack: GetBulletList, getEnvironmentListCallBack: GetObjectList, removeBulletCallBack: RemoveBullet) {
+    constructor(getTankListCallBack: GetTankList, getBulletListCallBack: GetBulletList, getEnvironmentListCallBack: GetObjectList, removeBulletCallBack: RemoveBullet, handleTankMoveCallBack: HandleTankMove) {
         this._getTankListCall = getTankListCallBack;
         this._getBulletListCall = getBulletListCallBack;
         this._getEnvironmentListCall = getEnvironmentListCallBack;
         this._removeBulletCall = removeBulletCallBack;
+        this._handleTankMoveCall = handleTankMoveCallBack;
     }
 
     /**
@@ -38,6 +40,7 @@ export class CollisionController {
      */
     private handleCollision() {
         const tanks = this._getTankListCall();
+        const tanksClone = tanks;
         const bullets = this._getBulletListCall();
         const environments = this._getEnvironmentListCall();
 
@@ -64,7 +67,15 @@ export class CollisionController {
             environments.forEach(environment => {
                 const isCollision = this.checkCollision(tank, environment);
                 if (isCollision) {
-                    // handle tank move
+                    this._handleTankMoveCall(tank);
+                }
+            });
+            // handle tank with other tank
+            tanksClone.forEach(tankClone => {
+                if (tankClone === tank) return;
+                const isCollision = this.checkCollision(tankClone, tank);
+                if (isCollision) {
+                    this._handleTankMoveCall(tank);
                 }
             });
 
@@ -79,13 +90,13 @@ export class CollisionController {
     private checkCollision(object1: BaseObject, object2: BaseObject) {
         /**loop to check collision of this objects to other */
 
-        const aBox = object1.sprite.getBounds();
-        const bBox = object2.sprite.getBounds();
+        const aBox = new Rectangle(object1.sprite.x - object1.size.w / 2, object1.sprite.y - object1.size.h / 2, object1.size.w, object1.size.h);
+        const bBox = new Rectangle(object2.sprite.x - object2.size.w / 2, object2.sprite.y - object2.size.h / 2, object2.size.w, object2.size.h);
 
-        return aBox.x + aBox.width > bBox.x &&
-                aBox.x < bBox.x + bBox.width &&
-                aBox.y + aBox.height > bBox.y &&
-                aBox.y < bBox.y + bBox.height;
+        return aBox.x + aBox.width >= bBox.x &&
+                aBox.x <= bBox.x + bBox.width &&
+                aBox.y + aBox.height >= bBox.y &&
+                aBox.y <= bBox.y + bBox.height;
     }
 
     public update() {

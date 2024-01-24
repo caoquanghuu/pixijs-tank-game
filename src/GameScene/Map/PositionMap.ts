@@ -39,31 +39,6 @@ export class PositionMap {
         if (nextPosition.y > 590) {
             nextPosition.y = 590;
         }
-
-        // kiem tra xem co phai bullet khong
-        if (!isBullet) {
-        // remove position of itself
-            const newPositionMap = PositionMap._positions;
-            const i = newPositionMap.findIndex(
-                (position) => position === currentPosition
-            );
-            delete newPositionMap[i];
-
-            //kiem tra xem next position co gan voi cac tank khac khong
-            const isCloseWithOtherObjects = newPositionMap.some(
-                (positions) => {
-                    const distance = getDistanceOfTwoPosition(positions, nextPosition);
-                    if (distance <= 15) {
-                        return true;
-                    }
-                }
-            );
-
-            if (isCloseWithOtherObjects) {
-                return currentPosition;
-            }
-        }
-
         return nextPosition;
     }
 }
