@@ -8,7 +8,7 @@ import { PositionMap } from "../Map/PositionMap";
 
 export class TankController {
     private _usingTanks: Tank[] = [];
-    private _spawnTankTime: number = 20000;
+    private _spawnTankTime: number = 2000;
     private _playerTank: Tank;
     private _addToScene: AddToScene;
     private _removeFromScene: RemoveFromScene;
@@ -124,10 +124,12 @@ export class TankController {
         /**reduce spawn tank time back */
         this._spawnTankTime -= dt;
         /** then spawn tank based on dt time */
-        if (this._spawnTankTime <= 0 && this._tankPool.releaseTank()) {
-            this._spawnTankTime = 20000;
+        if (this._spawnTankTime <= 0) {
+            this._spawnTankTime = 2000;
+            if (this._tankPool.tankPool.length != 0) {
+                this.spawnTank();
+            }
 
-            this.spawnTank();
         }
 
         this._usingTanks.forEach(tank => tank.update(dt));

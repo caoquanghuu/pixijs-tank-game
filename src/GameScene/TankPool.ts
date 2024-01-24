@@ -23,6 +23,7 @@ export class TankPool {
             const tank = new Tank(false, this._fireBulletCallBack, this._tankDieCall);
             this._tanksPool.push(tank);
         }
+        console.log(this._tanksPool);
     }
 
     public static getInstance(fireBulletCallBack: FireBullet, tankDieCallBack: TankDie): TankPool {
@@ -32,17 +33,20 @@ export class TankPool {
         return TankPool.instance;
     }
 
-    public releaseTank() {
+    public releaseTank(): Tank {
         /** get tank from tank pool and return that tank */
         const tank = this._tanksPool.pop();
         // return tank;
         return tank;
-
     }
 
     public getTank(tank: Tank) {
         /** get tank die from tank controller */
         /** return tank to tank pool when tank die */
         this._tanksPool.push(tank);
+    }
+
+    get tankPool(): Tank[] {
+        return this._tanksPool;
     }
 }
