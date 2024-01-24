@@ -4,6 +4,7 @@ import { BaseEngine } from "./BaseEngine";
 
 export class RandomEngine extends BaseEngine {
     private _directionChangeTime: number = 2000;
+    private _forceDirectionCountDown: number = 200;
 
     constructor() {
         super();
@@ -21,7 +22,10 @@ export class RandomEngine extends BaseEngine {
     }
 
     public forceChangeDirection() {
-        this._directionChangeTime = 0;
+        if (this._forceDirectionCountDown <= 0) {
+            this._forceDirectionCountDown = 200;
+            this._directionChangeTime = 0;
+        }
     }
 
     public update(dt: number) {
@@ -31,6 +35,9 @@ export class RandomEngine extends BaseEngine {
         if (this._directionChangeTime <= 0) {
             this._directionChangeTime = 2000;
             this.randomDirection();
+        }
+        if (this._forceDirectionCountDown) {
+            this._forceDirectionCountDown -= dt;
         }
     }
 
