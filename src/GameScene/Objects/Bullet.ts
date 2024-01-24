@@ -24,7 +24,7 @@ export class Bullet extends BaseObject {
         this._isPlayerBullet = isPlayer;
     }
 
-    update(dt) {
+    update(dt: number) {
         /**bullet move */
         this.move(dt, true);
     }

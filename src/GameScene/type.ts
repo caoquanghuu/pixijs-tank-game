@@ -22,6 +22,8 @@ export type GetTankList = () => Tank[];
 
 export type TankDie = (tank: Tank) => void;
 
+export type HandleTankMove = (tank: Tank) => void;
+
 export type GetBulletList = () => Bullet[];
 
 export type RemoveBullet = (bullet: Bullet) => void;

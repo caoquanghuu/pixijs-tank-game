@@ -110,4 +110,8 @@ export class BaseObject {
     get size() {
         return this._size;
     }
+
+    set size(size) {
+        this._size = size;
+    }
 }
