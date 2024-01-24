@@ -23,7 +23,6 @@ export class TankPool {
             const tank = new Tank(false, this._fireBulletCallBack, this._tankDieCall);
             this._tanksPool.push(tank);
         }
-        console.log(this._tanksPool);
     }
 
     public static getInstance(fireBulletCallBack: FireBullet, tankDieCallBack: TankDie): TankPool {

@@ -3,13 +3,6 @@ import { BaseObject } from "../Objects/BaseObject";
 import { GetBulletList, GetObjectList, GetTankList, HandleTankMove, RemoveBullet } from "../type";
 
 export class CollisionController {
-    /**position of tanks which be using on map */
-    private _tanksPosition: Point[] = [];
-    /**position of bullet which displaying on map */
-    private _bulletsPosition: Point[] = [];
-    /**position of environment displaying on map */
-    private _environmentsPosition: Point [] = [];
-
     private _getTankListCall: GetTankList;
     private _getBulletListCall: GetBulletList;
     private _getEnvironmentListCall: GetObjectList;
