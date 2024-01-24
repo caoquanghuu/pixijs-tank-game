@@ -1,11 +1,12 @@
 // Tank class
-import { Point } from "@pixi/core";
+import { Point, Rectangle } from "@pixi/core";
 import { RandomEngine } from "../Engine/RandomEngine";
 import { BaseObject } from "./BaseObject";
 import { Direction, FireBullet, TankDie } from "../type";
 import { ControlEngine } from "../Engine/ControlEngine";
-import { keyboard } from "../util";
+import { getRandomArbitrary, keyboard } from "../util";
 import { PositionMap } from "../Map/PositionMap";
+import { Bounds } from "@pixi/display";
 
 export class Tank extends BaseObject {
     /**this tank is player or bot */
@@ -83,25 +84,29 @@ export class Tank extends BaseObject {
         }
     }
     /**
-     * change texture when direction of tank change
+     * change texture and size of tank when direction of tank change
      * @param direction new direction changed
      */
     private changeTextureFollowDirection(direction: Direction) {
         switch (direction) {
             case Direction.UP: {
                 this.sprite = 'tank-up';
+                this.size = { w: 20, h: 30 };
                 break;
             }
             case Direction.DOWN: {
                 this.sprite = 'tank-down';
+                this.size = { w: 20, h: 30 };
                 break;
             }
             case Direction.RIGHT: {
                 this.sprite = 'tank-right';
+                this.size = { w: 35, h: 20 };
                 break;
             }
             case Direction.LEFT: {
                 this.sprite = 'tank-left';
+                this.size = { w: 35, h: 20 };
                 break;
             }
         }
@@ -129,7 +134,7 @@ export class Tank extends BaseObject {
             this._fireBulletTime -= dt;
             if (this._fireBulletTime <= 0) {
                 this.fire(this.sprite.position, this.lastDirection, false);
-                this._fireBulletTime = 5000;
+                this._fireBulletTime = getRandomArbitrary(3000, 5000);
             }
         }
     }
