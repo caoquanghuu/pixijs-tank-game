@@ -37,6 +37,10 @@
             {
                 "name": "rock",
                 "srcs": "assets/units/rocks/1.png"
+            },
+            {
+                "name": "game-back-ground",
+                "srcs": "assets/units/back-ground/3.jpg"
             }
         ]
     }
