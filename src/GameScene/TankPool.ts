@@ -1,31 +1,32 @@
-import { TankController } from "./Controller/TankController";
-import { RandomEngine } from "./Engine/RandomEngine";
-import { Tank } from "./Objects/Tank";
-import { FireBullet, TankDie } from "./type";
+import { Tank } from './Objects/Tank';
+import { FireBulletFn, TankDieFn } from './type';
 
 export class TankPool {
     private static instance: TankPool;
-    /**a variable to limit bot tank pool */
+
+    // a variable to limit bot tank pool
     private _maxTanks: number = 20;
-    /**a array to contain bot tank */
+
+    // a array to contain bot tank
     private _tanksPool: Tank[] = [];
-    private _fireBulletCallBack: FireBullet;
-    private _tankDieCall: TankDie;
+    private _fireBulletCallBack: FireBulletFn;
+    private _tankDieCall: TankDieFn;
 
     /**
      * constructor tank pool base on number of tank
      */
-    constructor(fireBulletCallBack: FireBullet, tankDieCallBack: TankDie) {
+    constructor(fireBulletCallBack: FireBulletFn, tankDieCallBack: TankDieFn) {
         this._fireBulletCallBack = fireBulletCallBack;
         this._tankDieCall = tankDieCallBack;
-        /**a loop to create tank and add it to tank pool */
+
+        // a loop to create tank and add it to tank pool
         for (let i = 0; i < this._maxTanks; i++) {
             const tank = new Tank(false, this._fireBulletCallBack, this._tankDieCall);
             this._tanksPool.push(tank);
         }
     }
 
-    public static getInstance(fireBulletCallBack: FireBullet, tankDieCallBack: TankDie): TankPool {
+    public static getInstance(fireBulletCallBack: FireBulletFn, tankDieCallBack: TankDieFn): TankPool {
         if (!TankPool.instance) {
             TankPool.instance = new TankPool(fireBulletCallBack, tankDieCallBack);
         }
@@ -33,15 +34,18 @@ export class TankPool {
     }
 
     public releaseTank(): Tank {
-        /** get tank from tank pool and return that tank */
+
+        // get tank from tank pool and return that tank
         const tank = this._tanksPool.pop();
+
         // return tank;
         return tank;
     }
 
     public getTank(tank: Tank) {
-        /** get tank die from tank controller */
-        /** return tank to tank pool when tank die */
+
+        // get tank die from tank controller
+        // return tank to tank pool when tank die
         this._tanksPool.push(tank);
     }
 
