@@ -1,22 +1,26 @@
-import { Sprite } from "@pixi/sprite";
-import { Direction } from "../type";
-import { BaseEngine } from "../Engine/BaseEngine";
-import { AssetsLoader } from "../../AssetsLoader";
-import { PositionMap} from '../Map/PositionMap';
-import { ObservablePoint, Point, Rectangle } from "@pixi/core";
+import { Sprite } from '@pixi/sprite';
+import { Direction } from '../type';
+import { BaseEngine } from '../Engine/BaseEngine';
+import { AssetsLoader } from '../../AssetsLoader';
+import { Point, Rectangle } from '@pixi/core';
 
 export class BaseObject {
-    /**a sprite */
+    // a sprite
     private _sprite: Sprite;
-    /**speed move of the object */
+
+    //speed move of the object
     private _speed: number;
-    /** this ll use for tank when fire bullet */
+
+    // this ll use for tank when fire bullet
     protected lastDirection: Direction;
-    /**move engine of this object ll define which type of move */
+
+    //move engine of this object ll define which type of move
     protected _moveEngine: BaseEngine;
-    /** size of the image object for avoid wrong when check collision */
+
+    // size of the image object for avoid wrong when check collision
     private _size: {w: number, h: number};
-    /** rectangle of object */
+
+    // rectangle of object */
     private _rectangle: Rectangle;
 
     /**
@@ -24,12 +28,23 @@ export class BaseObject {
      * @param id name of object base on asset name, this ll be use to get image too
      */
     constructor(id: string) {
-        /** get image for sprite with id*/
+        // get image for sprite with id
         this._sprite = new Sprite(AssetsLoader.getTexture(id));
 
-        /** set middle point for sprite*/
+        // set middle point for sprite
         this._sprite.anchor.set(0.5);
         this._size = { w: this._sprite.width, h: this._sprite.height };
+    }
+
+    get position(): Point {
+        const position = new Point();
+        position.x = this.sprite.position.x;
+        position.y = this.sprite.position.y;
+        return position;
+    }
+
+    set position(position: Point) {
+        this.sprite.position = position;
     }
 
     get moveEngine() {
@@ -60,63 +75,80 @@ export class BaseObject {
         this._rectangle = rectangle;
     }
 
-    public move(deltaTime: number, isBullet: boolean) {
+    public move(deltaTime: number, isBullet) {
         if (!this.moveEngine) {
             return;
         }
 
-        /** get direction from move engine */
+        // get direction from move engine
         const direction = this._moveEngine.direction;
 
-        /** return if current direction is standing*/
+        // return if current direction is standing
         if (direction === Direction.STAND) {
             return;
         }
 
-        /** assign direction to last direction for bullet fire */
+        // assign direction to last direction for bullet fire
         this.lastDirection = direction;
 
-        /**calculate next position base on direction, delta time and speed */
+        //calculate next position base on direction, delta time and speed
 
         let nextX: number, nextY: number;
 
         switch (direction) {
             case Direction.UP:
-                nextY = (this._sprite.position.y) - ((this._speed * deltaTime) / 1000);
-                nextX = this._sprite.position.x;
+                nextY = (this.position.y) - ((this._speed * deltaTime) / 1000);
+                nextX = this.position.x;
                 break;
             case Direction.DOWN:
-                nextY = (this._sprite.position.y) + ((this._speed * deltaTime) / 1000);
-                nextX = this._sprite.position.x;
+                nextY = (this.position.y) + ((this._speed * deltaTime) / 1000);
+                nextX = this.position.x;
                 break;
             case Direction.LEFT:
-                nextY = this._sprite.position.y;
-                nextX = (this._sprite.position.x) - ((this._speed * deltaTime) / 1000);
+                nextY = this.position.y;
+                nextX = (this.position.x) - ((this._speed * deltaTime) / 1000);
                 break;
             case Direction.RIGHT:
-                nextY = this._sprite.position.y;
-                nextX = (this._sprite.position.x) + ((this._speed * deltaTime) / 1000);
+                nextY = this.position.y;
+                nextX = (this.position.x) + ((this._speed * deltaTime) / 1000);
                 break;
             default:
                 break;
         }
 
-        const position: Point = new Point(nextX, nextY);
+        if (!isBullet) {
+            if (nextX < 10) {
+                // cham trai
+                nextX = 10;
+            }
+            if (nextX > 790) {
+                // cham phai
+                nextX = 790;
+            }
 
-        const nextPosition = PositionMap.getMoveDistance(this.sprite.position, position, isBullet)
+            if (nextY < 10) {
+                // cham tren
+                nextY = 10;
+            }
+            if (nextY > 590) {
+                nextY = 590;
+            }
+        }
 
-        /**set next position for sprite*/
-        this._sprite.x = nextPosition.x;
-        this._sprite.y = nextPosition.y;
-        /**change image follow to direction*/
+
+        const newPosition: Point = new Point(nextX, nextY);
+
+
+        //set next position for sprite
+        this.position = newPosition;
     }
 
-    /**method to get this sprite for get position or some thing else */
+    // method to get this sprite for get position or some thing else
     get sprite(): Sprite {
         return this._sprite;
     }
 
-    /**method to get size of this object for check collision */
+    // method to get size of this object for check collision
     get size() {
         return this._size;
     }
