@@ -4,8 +4,8 @@ import { AssetsLoader } from '../AssetsLoader';
 import { TankController } from './Controller/TankController';
 import { BulletController } from './Controller/BulletController';
 import { EnvironmentController } from './Controller/EnvironmentController';
-import { Direction } from './type';
-import { Point } from '@pixi/core';
+import { Direction, Size } from './type';
+import { Point, Rectangle } from '@pixi/core';
 import { CollisionController } from './Controller/CollisionController';
 import { Tank } from './Objects/Tank';
 import { Bullet } from './Objects/Bullet';
@@ -19,11 +19,18 @@ export class GameScene extends Container {
     private _collisionController: CollisionController;
     constructor() {
         super();
-        /**constructor controller */
-        this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
-        this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this));
-        this._environmentController = new EnvironmentController(this.addToScene.bind(this));
+        const bg = new Sprite(AssetsLoader.getTexture('game-back-ground'));
+        this.addChild(bg);
+        bg.width = 800;
+        bg.height = 600;
+        // constructor controller
         this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this));
+
+        this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
+
+        this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this));
+
+        this._environmentController = new EnvironmentController(this.addToScene.bind(this), this.createNewRandomPositionCall.bind(this));
     }
 
     public getTankList(): Tank[] {
@@ -46,6 +53,9 @@ export class GameScene extends Container {
         this._tankController.handleTankMove(tank);
     }
 
+    public createNewRandomPositionCall(size: Size): Rectangle {
+        return this._collisionController.createNewRandomPosition(size);
+    }
 
 
     /**
@@ -60,7 +70,6 @@ export class GameScene extends Container {
 
     public init() {
         console.log('GameScene init');
-
 
         const img = new Sprite(AssetsLoader.getTexture('tank'));
 
