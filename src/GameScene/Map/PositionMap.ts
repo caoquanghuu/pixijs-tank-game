@@ -15,7 +15,7 @@ export class PositionMap {
     }
 
     public static setPositionMap(rectangle: Rectangle, keyInStaticArrayPosition: number) {
-        PositionMap._positions[keyInStaticArrayPosition - 1] = rectangle;
+        PositionMap._positions[keyInStaticArrayPosition] = rectangle;
     }
 
     public static getMoveDistance(currentPosition: Point, nextPosition: Point, isBullet: boolean) {
@@ -38,7 +38,10 @@ export class PositionMap {
         return nextPosition;
     }
 
-    static checkPositionIsAvailable(r1: Rectangle, r2: Rectangle) {
+    static checkPositionIsAvailable(rectangle1: Rectangle, rectangle2: Rectangle) {
+        const r1 = new Rectangle(rectangle1.x - rectangle1.width / 2, rectangle1.y - rectangle1.height / 2, rectangle1.width, rectangle1.height);
+        const r2 = new Rectangle(rectangle2.x - rectangle2.width / 2, rectangle2.y - rectangle2.height / 2, rectangle2.width, rectangle2.height);
+
         if (r1.x + r1.width >= r2.x &&
             r1.x <= r2.x + r2.width &&
             r1.y + r1.height >= r2.y &&
