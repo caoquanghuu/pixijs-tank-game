@@ -1,22 +1,21 @@
-import { Direction } from "../type";
-import { ControlEngine } from "./ControlEngine";
-import { RandomEngine } from "./RandomEngine";
+import { Direction } from '../type';
 
 export class BaseEngine {
     private _direction: Direction = Direction.STAND;
     public forceChangeDirectionCall: () => void = null;
 
-    /** get a direction */
+    // get a direction
     get direction() {
         return this._direction;
     }
 
-    /** set a direction */
+    // set a direction
     set direction(direction: Direction) {
         this._direction = direction;
     }
 
-    public update(dt) {
+    // eslint-disable-next-line no-unused-vars
+    public update(dt: number) {
 
     }
 }

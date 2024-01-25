@@ -1,6 +1,6 @@
-import { Direction} from "../type";
-import { keyboard } from "../util";
-import { BaseEngine } from "./BaseEngine";
+import { Direction } from '../type';
+import { keyboard } from '../util';
+import { BaseEngine } from './BaseEngine';
 
 export class ControlEngine extends BaseEngine {
     /**
@@ -8,7 +8,7 @@ export class ControlEngine extends BaseEngine {
      */
     constructor() {
         super();
-        /** add event listener for keydown */
+        // add event listener for keydown
         const left = keyboard('ArrowLeft'),
             up = keyboard('ArrowUp'),
             right = keyboard('ArrowRight'),
