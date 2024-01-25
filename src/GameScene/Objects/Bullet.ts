@@ -1,9 +1,8 @@
-import { extend } from "lodash";
-import { BaseObject } from "./BaseObject";
-import { BaseEngine } from "../Engine/BaseEngine";
+import { BaseObject } from './BaseObject';
+import { BaseEngine } from '../Engine/BaseEngine';
 
 export class Bullet extends BaseObject {
-    /** property define this bullet belong to player or bot tank */
+    // property define this bullet belong to player or bot tank
     private _isPlayerBullet: boolean;
 
     /**
@@ -11,21 +10,21 @@ export class Bullet extends BaseObject {
      * @param isPlayer is this bullet is belong to player tank
      */
     constructor(isPlayer: boolean) {
-        /**set id is bullet to get image of bullet */
+        // set id is bullet to get image of bullet */
         super('bullet');
 
-        /**set speed of bullet */
+        // set speed of bullet
         this.speed = 200;
 
-        /** set move engine for bullet */
+        // set move engine for bullet
         this.moveEngine = new BaseEngine();
 
-        /** set property for this bullet */
+        // set property for this bullet
         this._isPlayerBullet = isPlayer;
     }
 
     update(dt: number) {
-        /**bullet move */
+        //bullet move
         this.move(dt, true);
     }
 

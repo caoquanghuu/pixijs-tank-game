@@ -1,15 +1,20 @@
-import { Point } from "@pixi/core";
-import { Bullet } from "../Objects/Bullet"
-import { AddToScene, Direction, RemoveFromScene} from "../type";
-import { BaseEngine } from "../Engine/BaseEngine";
+import { Point } from '@pixi/core';
+import { Bullet } from '../Objects/Bullet';
+import { AddToSceneFn, Direction, RemoveFromSceneFn } from '../type';
 
 export class BulletController {
-    // bullets which display on game sense
-    private _bullets: Bullet [] = [];
-    private _addBulletToSceneCallBack: AddToScene;
-    private _removeBulletFromSceneCallback: RemoveFromScene;
 
-    constructor(addBulletToSceneCallBack: AddToScene, removeBulletFromSceneCallBack: RemoveFromScene) {
+    // bullets list which display on game sense
+    private _bullets: Bullet [] = [];
+
+    // function to call create child to game scene
+    private _addBulletToSceneCallBack: AddToSceneFn;
+
+    // function to call remove child to game scene
+    private _removeBulletFromSceneCallback: RemoveFromSceneFn;
+
+    constructor(addBulletToSceneCallBack: AddToSceneFn, removeBulletFromSceneCallBack: RemoveFromSceneFn) {
+
         this._addBulletToSceneCallBack = addBulletToSceneCallBack;
         this._removeBulletFromSceneCallback = removeBulletFromSceneCallBack;
     }
@@ -24,14 +29,15 @@ export class BulletController {
      * @param isPlayerBullet define is player tank require fire bullet
      */
     public createBullet(tankPosition: Point, tankDirection: Direction, isPlayerBullet: boolean) {
+
         // create a new bullet
         const bullet = new Bullet (isPlayerBullet);
         this._bullets.push(bullet);
 
         // set position and direction for this bullet
-        bullet.sprite.position = tankPosition;
-        bullet.moveEngine = new BaseEngine;
+        bullet.position = tankPosition;
         bullet.moveEngine.direction = tankDirection;
+
         //rotate sprite of bullet
         this.rotateSpriteFollowDirection(bullet);
 
@@ -44,11 +50,12 @@ export class BulletController {
      * @param bullet bullet which need to remove
      */
     public removeBullet(bullet: Bullet) {
-        /** remove bullet in array list*/
+
+        // remove bullet in array list
         const p = this._bullets.findIndex(bullets => bullets === bullet);
         this._bullets.splice(p, 1);
 
-        /** remove bullet in game sense */
+        // remove bullet in game sense
         this._removeBulletFromSceneCallback(bullet.sprite);
     }
     /**
@@ -56,6 +63,7 @@ export class BulletController {
      * @param bullet bullet which is's sprite will be rotate
      */
     private rotateSpriteFollowDirection(bullet: Bullet) {
+
         switch (bullet.moveEngine.direction) {
             case Direction.UP: {
                 bullet.sprite.angle = 180;
@@ -82,13 +90,16 @@ export class BulletController {
      * @param dt
      */
     public update(dt: number) {
-        /**check bullet position out of map yet then: */
+
+        //check bullet position out of map yet then:
         this._bullets.forEach(bullet => {
+
             // check bullet position out of map yet?
             // if is it.
-            if ((bullet.sprite.position.x === 10 || bullet.sprite.position.x === 790) || ((bullet.sprite.position.y === 10) || (bullet.sprite.position.y === 590))) {
+            if ((bullet.position.x < 0 || bullet.position.x > 800) || ((bullet.position.y < 0) || (bullet.position.y > 600))) {
                 this.removeBullet(bullet);
             }
+            // update bullet
             bullet.update(dt);
 
         });
