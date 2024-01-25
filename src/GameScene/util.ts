@@ -1,4 +1,4 @@
-import { Point } from "@pixi/core";
+import { Point } from '@pixi/core';
 
 export const randomEnumKey = (enumeration: any) => {
     const keys = Object.keys(enumeration).filter(
@@ -21,6 +21,7 @@ export function keyboard(value: any) {
     key.isUp = true;
     key.press = undefined;
     key.release = undefined;
+
     //The `downHandler`
     key.downHandler = (event) => {
         if (event.key === key.value) {
@@ -49,13 +50,13 @@ export function keyboard(value: any) {
     const downListener = key.downHandler.bind(key);
     const upListener = key.upHandler.bind(key);
 
-    window.addEventListener("keydown", downListener, false);
-    window.addEventListener("keyup", upListener, false);
+    window.addEventListener('keydown', downListener, false);
+    window.addEventListener('keyup', upListener, false);
 
     // Detach event listeners
     key.unsubscribe = () => {
-        window.removeEventListener("keydown", downListener);
-        window.removeEventListener("keyup", upListener);
+        window.removeEventListener('keydown', downListener);
+        window.removeEventListener('keyup', upListener);
     };
 
     return key;
@@ -66,4 +67,8 @@ export function getDistanceOfTwoPosition(pos1: Point, pos2: Point) {
         Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2)
     );
     return distance;
+}
+
+export function isClassOf(target: object, targetCompare: object) {
+    return target && typeof target === 'object' && (/^(object|array)$/i.test(target.constructor.name)) === (/^(object|array)$/i.test(targetCompare.constructor.name));
 }
