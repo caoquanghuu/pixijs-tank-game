@@ -3,20 +3,36 @@
         "name":"preLoad",
         "assets": [
             {
-                "name": "tank-up",
+                "name": "tank-stand-up",
                 "srcs": "assets/units/tank/up/2.png"
             },
             {
-                "name": "tank-down",
+                "name": "tank-stand-down",
                 "srcs": "assets/units/tank/down/2.png"
             },
             {
-                "name": "tank-right",
+                "name": "tank-stand-right",
                 "srcs": "assets/units/tank/right/2.png"
             },
             {
-                "name": "tank-left",
+                "name": "tank-stand-left",
                 "srcs": "assets/units/tank/left/2.png"
+            },
+            {
+                "name": "tank-move-up",
+                "srcs": "assets/units/tank/up/1.png"
+            },
+            {
+                "name": "tank-move-down",
+                "srcs": "assets/units/tank/down/1.png"
+            },
+            {
+                "name": "tank-move-right",
+                "srcs": "assets/units/tank/right/1.png"
+            },
+            {
+                "name": "tank-move-left",
+                "srcs": "assets/units/tank/left/1.png"
             },
             {
                 "name": "bullet",

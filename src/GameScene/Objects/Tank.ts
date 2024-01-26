@@ -21,7 +21,7 @@ export class Tank extends BaseObject {
     constructor(isPlayer: boolean, fireBulletCallBack: FireBulletFn, tankDieCallBack: TankDieFn, addToSceneCallBack: AddToSceneFn) {
 
         // set image of tank is player tank or bot tank
-        super('tank-up');
+        super('tank-stand-up');
         this._fireBulletCallBack = fireBulletCallBack;
         this._tankDieCall = tankDieCallBack;
 
@@ -88,22 +88,46 @@ export class Tank extends BaseObject {
      * @param direction new direction changed
      */
     private changeTextureFollowDirection(direction: Direction) {
+
+        // when tank moving:
         switch (direction) {
             case Direction.UP: {
-                this.sprite = 'tank-up';
+                this.sprite = 'tank-move-up';
                 break;
             }
             case Direction.DOWN: {
-                this.sprite = 'tank-down';
+                this.sprite = 'tank-move-down';
                 break;
             }
             case Direction.RIGHT: {
-                this.sprite = 'tank-right';
+                this.sprite = 'tank-move-right';
                 break;
             }
             case Direction.LEFT: {
-                this.sprite = 'tank-left';
+                this.sprite = 'tank-move-left';
                 break;
+            }
+        }
+
+        // when tank stop move:
+        if (direction === Direction.STAND) {
+            switch (this.lastDirection) {
+                case Direction.UP: {
+                    this.sprite = 'tank-stand-up';
+                    break;
+                }
+                case Direction.DOWN: {
+                    this.sprite = 'tank-stand-down';
+                    break;
+                }
+                case Direction.LEFT: {
+                    this.sprite = 'tank-stand-left';
+                    break;
+                }
+                case Direction.RIGHT: {
+                    this.sprite = 'tank-stand-right';
+                    break;
+                }
             }
         }
     }
