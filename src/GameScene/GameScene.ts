@@ -1,4 +1,4 @@
-import { Container} from '@pixi/display';
+import { Container } from '@pixi/display';
 import { Sprite } from '@pixi/sprite';
 import { AssetsLoader } from '../AssetsLoader';
 import { TankController } from './Controller/TankController';

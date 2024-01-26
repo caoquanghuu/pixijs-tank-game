@@ -42,6 +42,7 @@ class Main {
         // Add scene to render stage
         this._pixiApp.stage.addChild(this._gameScene);
 
+
         // Update function
         this._pixiApp.ticker.add(this._update.bind(this));
     }
