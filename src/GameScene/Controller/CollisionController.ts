@@ -26,10 +26,11 @@ export class CollisionController {
     }
 
     private checkCollisionBetweenTwoRectangle(r1: Rectangle, r2: Rectangle) {
-        if (r1.x + r1.width >= r2.x &&
-            r1.x <= r2.x + r2.width &&
-            r1.y + r1.height >= r2.y &&
-            r1.y <= r2.y + r2.height) {
+
+        if (r1.x + r1.width / 2 >= r2.x - r2.width / 2 &&
+            r1.x - r1.width / 2 <= r2.x + r2.width / 2 &&
+            r1.y + r1.height / 2 >= r2.y - r2.height / 2 &&
+            r1.y - r1.height / 2 <= r2.y + r2.height / 2) {
             return true;
         }
         return false;
@@ -140,8 +141,8 @@ export class CollisionController {
      */
     private checkCollision(object1: BaseObject, object2: BaseObject) {
 
-        const aBox = new Rectangle(object1.sprite.x - object1.size.w / 2, object1.sprite.y - object1.size.h / 2, object1.size.w, object1.size.h);
-        const bBox = new Rectangle(object2.sprite.x - object2.size.w / 2, object2.sprite.y - object2.size.h / 2, object2.size.w, object2.size.h);
+        const aBox = new Rectangle(object1.sprite.x, object1.sprite.y, object1.size.w, object1.size.h);
+        const bBox = new Rectangle(object2.sprite.x, object2.sprite.y, object2.size.w, object2.size.h);
 
         return this.checkCollisionBetweenTwoRectangle(aBox, bBox);
     }
