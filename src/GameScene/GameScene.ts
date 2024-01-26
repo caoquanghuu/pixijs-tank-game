@@ -1,4 +1,4 @@
-import { Container } from '@pixi/display';
+import { Container, DisplayObject } from '@pixi/display';
 import { Sprite } from '@pixi/sprite';
 import { AssetsLoader } from '../AssetsLoader';
 import { TankController } from './Controller/TankController';
@@ -12,7 +12,8 @@ import { Bullet } from './Objects/Bullet';
 import { BaseObject } from './Objects/BaseObject';
 
 export class GameScene extends Container {
-    private _playerScore: number;
+    private _playerScore: number = 0;
+    private _scoreSpriteArray: Sprite[];
     private _tankController: TankController;
     private _bulletController: BulletController;
     private _environmentController: EnvironmentController;
@@ -23,14 +24,17 @@ export class GameScene extends Container {
         this.addChild(bg);
         bg.width = 800;
         bg.height = 600;
+
+        this.displayScore();
         // constructor controller
         this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this));
 
         this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
 
-        this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this));
+        this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this));
 
         this._environmentController = new EnvironmentController(this.addToScene.bind(this), this.createNewRandomPositionCall.bind(this));
+
     }
 
     public getTankList(): Tank[] {
@@ -55,6 +59,59 @@ export class GameScene extends Container {
 
     public createNewRandomPositionCall(size: Size): Rectangle {
         return this._collisionController.createNewRandomPosition(size);
+    }
+
+    public setNewScore(newScore: number) {
+        this._playerScore += newScore;
+
+        // call display score on changed score
+        this.displayScore();
+    }
+
+    public displayScore() {
+        // convert this score to array contain element
+        const scoreArray: string[] = String(this._playerScore).split('').map((numberToString) => {
+            return numberToString;
+        });
+
+        // which each element will be convert to a sprite display number of that element
+        const scoreSpriteArray: Sprite[] = scoreArray.map(score => {
+
+            // get sprite match with number element
+            const scoreSprite = new Sprite(AssetsLoader.getTexture('score-number-' + score));
+
+            scoreSprite.width = 30;
+            scoreSprite.height = 30;
+
+            return scoreSprite;
+        });
+
+        // create a start position
+        const position = new Point(770, 10);
+
+        // remove old sprite of score if have
+        if (this._scoreSpriteArray) {
+            this._scoreSpriteArray.forEach(sprite => {
+                this.removeFromScene(sprite);
+            });
+        }
+
+        // loop from end to start there sprites and render it to game scene with the position of last element is top right of game scene
+        // and the next sprites will be place left of last sprite
+        for (let i = scoreSpriteArray.length; i > 0 ; i--) {
+
+            // the last of number will have start position
+            scoreSpriteArray[i - 1].position.set(position.x, position.y);
+
+            // add this sprite to game scene
+            this.addToScene(scoreSpriteArray[i - 1]);
+
+            // next left score number will have a new position
+            position.x -= 17;
+        }
+
+        // add new score array sprite
+        this._scoreSpriteArray = scoreSpriteArray;
     }
 
 

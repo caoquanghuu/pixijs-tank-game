@@ -65,6 +65,46 @@
             {
                 "name": "1-hp",
                 "srcs": "assets/UI/health-bar/5.png"
+            },
+            {
+                "name": "score-number-0",
+                "srcs": "assets/UI/number/0.png"
+            },
+            {
+                "name": "score-number-1",
+                "srcs": "assets/UI/number/1.png"
+            },
+            {
+                "name": "score-number-2",
+                "srcs": "assets/UI/number/2.png"
+            },
+            {
+                "name": "score-number-3",
+                "srcs": "assets/UI/number/3.png"
+            },
+            {
+                "name": "score-number-4",
+                "srcs": "assets/UI/number/4.png"
+            },
+            {
+                "name": "score-number-5",
+                "srcs": "assets/UI/number/5.png"
+            },
+            {
+                "name": "score-number-6",
+                "srcs": "assets/UI/number/6.png"
+            },
+            {
+                "name": "score-number-7",
+                "srcs": "assets/UI/number/7.png"
+            },
+            {
+                "name": "score-number-8",
+                "srcs": "assets/UI/number/8.png"
+            },
+            {
+                "name": "score-number-9",
+                "srcs": "assets/UI/number/9.png"
             }
         ]
     }

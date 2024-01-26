@@ -38,3 +38,5 @@ export type FireBulletFn = (position: Point, direction: Direction, isPlayerBulle
 
 export type CreateNewRandomPositionFn = (size: Size) => Rectangle;
 
+export type SetNewScoreFn = (newScore: number) => void;
+

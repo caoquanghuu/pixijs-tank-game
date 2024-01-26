@@ -1,7 +1,7 @@
 import { Point } from '@pixi/core';
 import { Tank } from '../Objects/Tank';
 import { TankPool } from '../TankPool';
-import { AddToSceneFn, CreateNewRandomPositionFn, Direction, FireBulletFn, RemoveFromSceneFn } from '../type';
+import { AddToSceneFn, CreateNewRandomPositionFn, Direction, FireBulletFn, RemoveFromSceneFn, SetNewScoreFn } from '../type';
 import { getRandomArbitrary, randomEnumKey } from '../util';
 
 export class TankController {
@@ -15,9 +15,11 @@ export class TankController {
     private _removeFromScene: RemoveFromSceneFn;
     private _fireBulletCallback: FireBulletFn;
     private _createNewRandomPositionCall: CreateNewRandomPositionFn;
+    private _setNewScoreCall: SetNewScoreFn;
 
 
-    constructor(addToSceneCallBack: AddToSceneFn, removeFromSceneCallBack: RemoveFromSceneFn, fireBulletCallBack: FireBulletFn, createNewRandomPositionCallBack: CreateNewRandomPositionFn) {
+    constructor(addToSceneCallBack: AddToSceneFn, removeFromSceneCallBack: RemoveFromSceneFn, fireBulletCallBack: FireBulletFn,
+        createNewRandomPositionCallBack: CreateNewRandomPositionFn, setNewScoreCallBack: SetNewScoreFn) {
 
         this._tankPool = TankPool.getInstance(this.fireBullet.bind(this), this.tankDie.bind(this), addToSceneCallBack);
 
@@ -26,6 +28,7 @@ export class TankController {
         this._removeFromScene = removeFromSceneCallBack;
         this._fireBulletCallback = fireBulletCallBack;
         this._createNewRandomPositionCall = createNewRandomPositionCallBack;
+        this._setNewScoreCall = setNewScoreCallBack;
 
         this.spawnTank();
 
@@ -86,6 +89,9 @@ export class TankController {
 
             //return tank to tank pool
             this._tankPool.getTank(tankDie);
+
+            // update score of player
+            this._setNewScoreCall(1);
 
             // set back hp for tank
             tankDie.HPBar.HP = 1;
