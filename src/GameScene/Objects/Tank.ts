@@ -2,9 +2,10 @@
 import { Point } from '@pixi/core';
 import { RandomEngine } from '../Engine/RandomEngine';
 import { BaseObject } from './BaseObject';
-import { Direction, FireBulletFn, TankDieFn } from '../type';
+import { AddToSceneFn, Direction, FireBulletFn, TankDieFn } from '../type';
 import { ControlEngine } from '../Engine/ControlEngine';
 import { getRandomArbitrary, keyboard } from '../util';
+import { HP } from './HP';
 
 export class Tank extends BaseObject {
 
@@ -12,12 +13,12 @@ export class Tank extends BaseObject {
     private _isPlayerTank: boolean;
 
     // hp of this tank
-    private _HP: number;
+    private _HPBar: HP;
     private _fireBulletCallBack: FireBulletFn;
     private _tankDieCall: TankDieFn;
     private _fireBulletTime: number;
 
-    constructor(isPlayer: boolean, fireBulletCallBack: FireBulletFn, tankDieCallBack: TankDieFn) {
+    constructor(isPlayer: boolean, fireBulletCallBack: FireBulletFn, tankDieCallBack: TankDieFn, addToSceneCallBack: AddToSceneFn) {
 
         // set image of tank is player tank or bot tank
         super('tank-up');
@@ -32,6 +33,8 @@ export class Tank extends BaseObject {
 
         this._isPlayerTank = isPlayer;
 
+        this._HPBar = new HP(isPlayer, addToSceneCallBack.bind(this));
+
         // set move engine and type trigger fire bullet for tank base on is player or not
         if (isPlayer) {
 
@@ -39,7 +42,7 @@ export class Tank extends BaseObject {
             this.moveEngine = new ControlEngine();
 
             // set hp
-            this.HP = 5;
+            this._HPBar.HP = 5;
 
             // set control fire
             const fire = keyboard(' ');
@@ -52,7 +55,7 @@ export class Tank extends BaseObject {
             this.moveEngine = new RandomEngine();
 
             //set hp
-            this.HP = 1;
+            this._HPBar.HP = 1;
 
             //change color for bot tank
             this.sprite.tint = 'F02468';
@@ -75,7 +78,7 @@ export class Tank extends BaseObject {
      *  tank hp reduce to 0 and tank will be destroy
      */
     public destroy() {
-        if (this.HP === 0) {
+        if (this.HPBar.HP === 0) {
             // call tank die to tank controller
             this._tankDieCall(this);
         }
@@ -117,8 +120,11 @@ export class Tank extends BaseObject {
         // check hp tank and destroy it if hp = 0
         this.destroy();
 
-        //update new direction for random move
+        // update new direction for random move
         this.moveEngine.update(dt);
+
+        // update this HP
+        this._HPBar.update(this.position);
 
         // change texture when direction of tank change
         this.changeTextureFollowDirection(this.moveEngine.direction);
@@ -133,12 +139,8 @@ export class Tank extends BaseObject {
         }
     }
 
-    set HP(newHp: number) {
-        this._HP = newHp;
-    }
-
-    get HP(): number {
-        return this._HP;
+    get HPBar() {
+        return this._HPBar;
     }
 
     get isPlayerTank(): boolean {

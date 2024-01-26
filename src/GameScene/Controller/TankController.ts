@@ -19,7 +19,7 @@ export class TankController {
 
     constructor(addToSceneCallBack: AddToSceneFn, removeFromSceneCallBack: RemoveFromSceneFn, fireBulletCallBack: FireBulletFn, createNewRandomPositionCallBack: CreateNewRandomPositionFn) {
 
-        this._tankPool = TankPool.getInstance(this.fireBullet.bind(this), this.tankDie.bind(this));
+        this._tankPool = TankPool.getInstance(this.fireBullet.bind(this), this.tankDie.bind(this), addToSceneCallBack);
 
         // spawnTank every spawnTankTime
         this._addToScene = addToSceneCallBack;
@@ -30,7 +30,7 @@ export class TankController {
         this.spawnTank();
 
         // create a player tank
-        this._playerTank = new Tank(true, this.fireBullet.bind(this), this.tankDie.bind(this));
+        this._playerTank = new Tank(true, this.fireBullet.bind(this), this.tankDie.bind(this), this._addToScene.bind(this));
         this._usingTanks.push(this._playerTank);
         this._addToScene(this._playerTank.sprite);
         this._playerTank.rectangle = this._createNewRandomPositionCall(this._playerTank.size);
@@ -61,6 +61,7 @@ export class TankController {
 
         // add this tank to game sense
         this._addToScene(tank.sprite);
+        this._addToScene(tank.HPBar.sprite);
 
         const direction = randomEnumKey(Direction);
         tank.moveEngine.direction = direction;
@@ -87,10 +88,12 @@ export class TankController {
             this._tankPool.getTank(tankDie);
 
             // set back hp for tank
-            tankDie.HP = 1;
+            tankDie.HPBar.HP = 1;
 
             //remove sprite from game scene
             this._removeFromScene(tankDie.sprite);
+
+            this._removeFromScene(tankDie.HPBar.sprite);
 
             // remove from using tank list
             const p = this._usingTanks.findIndex(tank => tank === tankDie);

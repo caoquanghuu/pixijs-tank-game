@@ -38,7 +38,7 @@ export class BulletController {
         bullet.position = tankPosition;
         bullet.moveEngine.direction = tankDirection;
 
-        //rotate sprite of bullet
+        // rotate sprite of bullet
         this.rotateSpriteFollowDirection(bullet);
 
         // append bullet to game sense

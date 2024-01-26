@@ -98,7 +98,7 @@ export class CollisionController {
                 if (tank.isPlayerTank != bullet.isPlayerBullet) {
                     const isCollision = this.checkCollision(tank, bullet);
                     if (isCollision) {
-                        tank.HP -= 1;
+                        tank.HPBar.HP -= 1;
                         this._removeBulletCall(bullet);
                     }
                 }

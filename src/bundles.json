@@ -41,6 +41,30 @@
             {
                 "name": "game-back-ground",
                 "srcs": "assets/units/back-ground/3.jpg"
+            },
+            {
+                "name": "player-hp",
+                "srcs": "assets/UI/health-bar/1.png"
+            },
+            {
+                "name": "bot-hp",
+                "srcs": "assets/UI/health-bar/6.png"
+            },
+            {
+                "name": "4-hp",
+                "srcs": "assets/UI/health-bar/2.png"
+            },
+            {
+                "name": "3-hp",
+                "srcs": "assets/UI/health-bar/3.png"
+            },
+            {
+                "name": "2-hp",
+                "srcs": "assets/UI/health-bar/4.png"
+            },
+            {
+                "name": "1-hp",
+                "srcs": "assets/UI/health-bar/5.png"
             }
         ]
     }
