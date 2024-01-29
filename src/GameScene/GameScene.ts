@@ -54,7 +54,7 @@ export class GameScene extends Container {
         this._playerScore += newScore;
 
         // call display score on changed score
-        const positionDisplayScore = new Point(700, 10);
+        const positionDisplayScore = new Point(760, 10);
         this.displayScore(positionDisplayScore);
     }
 
