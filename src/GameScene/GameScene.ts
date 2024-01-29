@@ -1,4 +1,4 @@
-import { Container } from '@pixi/display';
+import { Container, DisplayObject } from '@pixi/display';
 import { Sprite } from '@pixi/sprite';
 import { AssetsLoader } from '../AssetsLoader';
 import { TankController } from './Controller/TankController';
@@ -10,6 +10,8 @@ import { CollisionController } from './Controller/CollisionController';
 import { Tank } from './Objects/Tank';
 import { Bullet } from './Objects/Bullet';
 import { BaseObject } from './Objects/BaseObject';
+import { Button, FancyButton } from '@pixi/ui';
+import { Text } from '@pixi/text';
 
 export class GameScene extends Container {
     private _playerScore: number = 0;
@@ -20,20 +22,22 @@ export class GameScene extends Container {
     private _collisionController: CollisionController;
     constructor() {
         super();
-        const bg = new Sprite(AssetsLoader.getTexture('game-back-ground'));
-        this.addChild(bg);
-        bg.width = 800;
-        bg.height = 600;
 
-        this.displayScore();
-        // constructor controller
-        this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this));
+        this.mainMenuGame();
+        // const bg = new Sprite(AssetsLoader.getTexture('game-back-ground'));
+        // this.addChild(bg);
+        // bg.width = 800;
+        // bg.height = 600;
 
-        this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
+        // this.displayScore();
+        // // constructor controller
+        // this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this));
 
-        this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this));
+        // this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
 
-        this._environmentController = new EnvironmentController(this.addToScene.bind(this), this.createNewRandomPositionCall.bind(this));
+        // this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this));
+
+        // this._environmentController = new EnvironmentController(this.addToScene.bind(this), this.createNewRandomPositionCall.bind(this));
 
     }
 
@@ -66,6 +70,65 @@ export class GameScene extends Container {
 
         // call display score on changed score
         this.displayScore();
+    }
+
+    public mainMenuGame() {
+        // create a main game back ground
+        const mainBg = new Sprite(AssetsLoader.getTexture('main-back-ground'));
+        mainBg.width = 800;
+        mainBg.height = 600;
+
+        const title = new Sprite(AssetsLoader.getTexture('title'));
+        title.anchor.set(0.5);
+
+        // create a text for start button
+        const text = new Text('start', {
+            fontSize: 14,
+            fill: 0xff1010,
+            align: 'center'
+        });
+        text.anchor.set(0.5);
+
+        // create a sprite which will be like a button
+        const btnSprite = new Sprite(AssetsLoader.getTexture('button-sprite'));
+        btnSprite.anchor.set(0.5);
+
+        // add text to sprite
+        btnSprite.addChild(text);
+
+        // when player tap start game will start
+        btnSprite.eventMode = 'static';
+        btnSprite.cursor = 'pointer';
+
+        // player tap on start button to start play game
+        btnSprite.on('pointertap', this.startPlayGame.bind(this));
+
+        // set title and button in side main bg
+        mainBg.addChild(title, btnSprite);
+        title.position.x = 180;
+        title.position.y = 60;
+
+        btnSprite.position.x = 180;
+        btnSprite.position.y = 180;
+
+        this.addToScene(mainBg);
+    }
+
+    public startPlayGame() {
+        const bg = new Sprite(AssetsLoader.getTexture('game-back-ground'));
+        this.addChild(bg);
+        bg.width = 800;
+        bg.height = 600;
+
+        this.displayScore();
+        // constructor controller
+        this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this));
+
+        this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
+
+        this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this));
+
+        this._environmentController = new EnvironmentController(this.addToScene.bind(this), this.createNewRandomPositionCall.bind(this));
     }
 
     public displayScore() {
@@ -135,8 +198,8 @@ export class GameScene extends Container {
         img.position.set(100, 100);
     }
 
-    private addToScene(sprite: Sprite) {
-        this.addChild(sprite);
+    private addToScene(displayObject: DisplayObject) {
+        this.addChild(displayObject);
     }
 
     private removeFromScene(sprite: Sprite) {
@@ -150,9 +213,12 @@ export class GameScene extends Container {
             this.time -= 1000;
             console.log('GameScene update');
         }
-        this._tankController.update(deltaTime);
-        this._bulletController.update(deltaTime);
-        this._collisionController.update();
+
+        if (this._tankController && this._bulletController && this._collisionController) {
+            this._tankController.update(deltaTime);
+            this._bulletController.update(deltaTime);
+            this._collisionController.update();
+        }
     }
 
     public destroy() {

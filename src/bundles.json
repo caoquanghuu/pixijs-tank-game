@@ -121,6 +121,18 @@
             {
                 "name": "score-number-9",
                 "srcs": "assets/UI/number/9.png"
+            },
+            {
+                "name": "main-back-ground",
+                "srcs": "assets/UI/title-screen/background.png"
+            },
+            {
+                "name": "button-sprite",
+                "srcs": "assets/UI/title-screen/title-button.png"
+            },
+            {
+                "name": "title",
+                "srcs": "assets/UI/title-screen/title.png"
             }
         ]
     }
