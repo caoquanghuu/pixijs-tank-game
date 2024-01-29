@@ -40,3 +40,5 @@ export type CreateNewRandomPositionFn = (size: Size) => Rectangle;
 
 export type SetNewScoreFn = (newScore: number) => void;
 
+export type GameOverFn = () => void;
+

@@ -10,7 +10,6 @@ import { CollisionController } from './Controller/CollisionController';
 import { Tank } from './Objects/Tank';
 import { Bullet } from './Objects/Bullet';
 import { BaseObject } from './Objects/BaseObject';
-import { Button, FancyButton } from '@pixi/ui';
 import { Text } from '@pixi/text';
 
 export class GameScene extends Container {
@@ -24,21 +23,7 @@ export class GameScene extends Container {
         super();
 
         this.mainMenuGame();
-        // const bg = new Sprite(AssetsLoader.getTexture('game-back-ground'));
-        // this.addChild(bg);
-        // bg.width = 800;
-        // bg.height = 600;
-
-        // this.displayScore();
-        // // constructor controller
-        // this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this));
-
-        // this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
-
-        // this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this));
-
-        // this._environmentController = new EnvironmentController(this.addToScene.bind(this), this.createNewRandomPositionCall.bind(this));
-
+        // this.gameOver();
     }
 
     public getTankList(): Tank[] {
@@ -69,7 +54,8 @@ export class GameScene extends Container {
         this._playerScore += newScore;
 
         // call display score on changed score
-        this.displayScore();
+        const positionDisplayScore = new Point(700, 10);
+        this.displayScore(positionDisplayScore);
     }
 
     public mainMenuGame() {
@@ -82,19 +68,19 @@ export class GameScene extends Container {
         title.anchor.set(0.5);
 
         // create a text for start button
-        const text = new Text('start', {
+        const textStart = new Text('start', {
             fontSize: 14,
             fill: 0xff1010,
             align: 'center'
         });
-        text.anchor.set(0.5);
+        textStart.anchor.set(0.5);
 
         // create a sprite which will be like a button
         const btnSprite = new Sprite(AssetsLoader.getTexture('button-sprite'));
         btnSprite.anchor.set(0.5);
 
         // add text to sprite
-        btnSprite.addChild(text);
+        btnSprite.addChild(textStart);
 
         // when player tap start game will start
         btnSprite.eventMode = 'static';
@@ -120,18 +106,60 @@ export class GameScene extends Container {
         bg.width = 800;
         bg.height = 600;
 
-        this.displayScore();
+        const positionDisplayScore = new Point(760, 10);
+        this.displayScore(positionDisplayScore);
         // constructor controller
         this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this));
 
         this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
 
-        this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this));
+        this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this), this.gameOver.bind(this));
 
         this._environmentController = new EnvironmentController(this.addToScene.bind(this), this.createNewRandomPositionCall.bind(this));
     }
 
-    public displayScore() {
+    public gameOver() {
+        // create a bg for display option when end game
+
+        // game over back ground
+        const overBg = new Sprite(AssetsLoader.getTexture('main-back-ground'));
+        overBg.width = 800;
+        overBg.height = 600;
+
+        // button to display play again option
+
+        // create text content which will be display on game over bg
+        const textGameOver = new Text('Game Over', {
+            fontSize: 24,
+            fill: 0xff1010,
+            align: 'center'
+        });
+        textGameOver.anchor.set(0.5);
+
+        const textYourScore = new Text('your score:', {
+            fontSize: 14,
+            fill: 0xff1010
+        });
+        textYourScore.anchor.set(0.5);
+
+
+        // add there text to game over back ground and set position for it
+        overBg.addChild(textGameOver, textYourScore);
+        textGameOver.x = 180;
+        textGameOver.y = 80;
+
+        textYourScore.x = 180;
+        textYourScore.y = 110;
+
+        // add bg game to game scene
+        this.addChild(overBg);
+
+        // display score at position
+        const positionDisplayScore = new Point(400, 340);
+        this.displayScore(positionDisplayScore);
+    }
+
+    public displayScore(positionDisplay: Point) {
         // convert this score to array contain element
         const scoreArray: string[] = String(this._playerScore).split('').map((numberToString) => {
             return numberToString;
@@ -150,7 +178,8 @@ export class GameScene extends Container {
         });
 
         // create a start position
-        const position = new Point(770, 10);
+        // const position = new Point(770, 10);
+        const position = positionDisplay;
 
         // remove old sprite of score if have
         if (this._scoreSpriteArray) {

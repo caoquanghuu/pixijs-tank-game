@@ -1,7 +1,7 @@
 import { Point } from '@pixi/core';
 import { Tank } from '../Objects/Tank';
 import { TankPool } from '../TankPool';
-import { AddToSceneFn, CreateNewRandomPositionFn, Direction, FireBulletFn, RemoveFromSceneFn, SetNewScoreFn } from '../type';
+import { AddToSceneFn, CreateNewRandomPositionFn, Direction, FireBulletFn, GameOverFn, RemoveFromSceneFn, SetNewScoreFn } from '../type';
 import { getRandomArbitrary, randomEnumKey } from '../util';
 
 export class TankController {
@@ -16,10 +16,11 @@ export class TankController {
     private _fireBulletCallback: FireBulletFn;
     private _createNewRandomPositionCall: CreateNewRandomPositionFn;
     private _setNewScoreCall: SetNewScoreFn;
+    private _gameOverCall: GameOverFn;
 
 
     constructor(addToSceneCallBack: AddToSceneFn, removeFromSceneCallBack: RemoveFromSceneFn, fireBulletCallBack: FireBulletFn,
-        createNewRandomPositionCallBack: CreateNewRandomPositionFn, setNewScoreCallBack: SetNewScoreFn) {
+        createNewRandomPositionCallBack: CreateNewRandomPositionFn, setNewScoreCallBack: SetNewScoreFn, gameOverCallBack: GameOverFn) {
 
         this._tankPool = TankPool.getInstance(this.fireBullet.bind(this), this.tankDie.bind(this), addToSceneCallBack);
 
@@ -29,6 +30,7 @@ export class TankController {
         this._fireBulletCallback = fireBulletCallBack;
         this._createNewRandomPositionCall = createNewRandomPositionCallBack;
         this._setNewScoreCall = setNewScoreCallBack;
+        this._gameOverCall = gameOverCallBack;
 
         this.spawnTank();
 
@@ -83,8 +85,8 @@ export class TankController {
         // check tank die is player or AI tank
         if (tankDie.isPlayerTank) {
 
-            // game over
-            console.log('game over');
+            // call game over to game scene
+            this._gameOverCall();
         } else {
 
             //return tank to tank pool
