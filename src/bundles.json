@@ -133,6 +133,10 @@
             {
                 "name": "title",
                 "srcs": "assets/UI/title-screen/title.png"
+            },
+            {
+                "name": "explosion",
+                "srcs": "assets/units/explosion/explosion.png"
             }
         ]
     }

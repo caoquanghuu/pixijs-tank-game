@@ -1,6 +1,7 @@
 import { Point } from '@pixi/core';
 import { Bullet } from '../Objects/Bullet';
 import { AddToSceneFn, Direction, RemoveFromSceneFn } from '../type';
+import { BaseObject } from '../Objects/BaseObject';
 
 export class BulletController {
 
@@ -17,6 +18,7 @@ export class BulletController {
 
         this._addBulletToSceneCallBack = addBulletToSceneCallBack;
         this._removeBulletFromSceneCallback = removeBulletFromSceneCallBack;
+
     }
 
     get bullets(): Bullet[] {
@@ -57,6 +59,22 @@ export class BulletController {
 
         // remove bullet in game sense
         this._removeBulletFromSceneCallback(bullet.sprite);
+
+        // create a sprite with explosion
+        const explosion = new BaseObject('explosion');
+
+        // set size for explosion sprite
+        explosion.sprite.width = 15;
+        explosion.sprite.height = 15;
+
+        // add this explosion to game
+        this._addBulletToSceneCallBack(explosion.sprite);
+
+        // set position for it where bullet being remove
+        explosion.position = bullet.position;
+
+        // remove this bullet after time
+        setTimeout(() => { this._removeBulletFromSceneCallback(explosion.sprite); }, 100);
     }
     /**
      * rotate sprite follow direction
