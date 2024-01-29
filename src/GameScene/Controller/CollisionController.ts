@@ -1,6 +1,6 @@
 import { Point, Rectangle } from '@pixi/core';
 import { BaseObject } from '../Objects/BaseObject';
-import { GetBulletListFn, GetObjectListFn, GetTankListFn, HandleTankMoveFn, RemoveBulletFn, Size } from '../type';
+import { GetBulletListFn, GetObjectListFn, GetTankListFn, HandleTankMoveFn, RemoveBulletFn, RemoveEnvironmentFn, Size } from '../type';
 import { getRandomArbitrary } from '../util';
 
 export class CollisionController {
@@ -9,14 +9,17 @@ export class CollisionController {
     private _getEnvironmentListCall: GetObjectListFn;
     private _removeBulletCall: RemoveBulletFn;
     private _handleTankMoveCall: HandleTankMoveFn;
+    private _removeEnvironmentCall: RemoveEnvironmentFn;
     private _usingObjectsList: BaseObject[] = [];
 
-    constructor(getTankListCallBack: GetTankListFn, getBulletListCallBack: GetBulletListFn, getEnvironmentListCallBack: GetObjectListFn, removeBulletCallBack: RemoveBulletFn, handleTankMoveCallBack: HandleTankMoveFn) {
+    constructor(getTankListCallBack: GetTankListFn, getBulletListCallBack: GetBulletListFn, getEnvironmentListCallBack: GetObjectListFn,
+        removeBulletCallBack: RemoveBulletFn, handleTankMoveCallBack: HandleTankMoveFn, removeEnvironmentCallBack: RemoveEnvironmentFn) {
         this._getTankListCall = getTankListCallBack;
         this._getBulletListCall = getBulletListCallBack;
         this._getEnvironmentListCall = getEnvironmentListCallBack;
         this._removeBulletCall = removeBulletCallBack;
         this._handleTankMoveCall = handleTankMoveCallBack;
+        this._removeEnvironmentCall = removeEnvironmentCallBack;
     }
 
     private getUsingObjectsList() {
@@ -129,6 +132,7 @@ export class CollisionController {
                 const isCollision = this.checkCollision(bullet, environment);
                 if (isCollision) {
                     this._removeBulletCall(bullet);
+                    this._removeEnvironmentCall(environment);
                 }
             });
         });

@@ -58,6 +58,10 @@ export class GameScene extends Container {
         this.displayScore(positionDisplayScore);
     }
 
+    public removeEnvironmentCall(environment: BaseObject) {
+        this._environmentController.removeEnvironmentObject(environment);
+    }
+
     public mainMenuGame() {
         // create a main game back ground
         const mainBg = new Sprite(AssetsLoader.getTexture('main-back-ground'));
@@ -109,13 +113,13 @@ export class GameScene extends Container {
         const positionDisplayScore = new Point(760, 10);
         this.displayScore(positionDisplayScore);
         // constructor controller
-        this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this));
+        this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this), this.removeEnvironmentCall.bind(this));
 
         this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
 
         this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this), this.gameOver.bind(this));
 
-        this._environmentController = new EnvironmentController(this.addToScene.bind(this), this.createNewRandomPositionCall.bind(this));
+        this._environmentController = new EnvironmentController(this.addToScene.bind(this), this.createNewRandomPositionCall.bind(this), this.removeFromScene.bind(this));
     }
 
     public gameOver() {

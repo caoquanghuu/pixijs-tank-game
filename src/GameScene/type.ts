@@ -20,7 +20,7 @@ export type Size = {
 
 export type AddToSceneFn = (sprite: Sprite) => void;
 
-export type RemoveFromSceneFn = (srite: Sprite) => void;
+export type RemoveFromSceneFn = (sprite: Sprite) => void;
 
 export type GetObjectListFn = () => BaseObject[];
 
@@ -41,4 +41,6 @@ export type CreateNewRandomPositionFn = (size: Size) => Rectangle;
 export type SetNewScoreFn = (newScore: number) => void;
 
 export type GameOverFn = () => void;
+
+export type RemoveEnvironmentFn = (environment: BaseObject) => void;
 

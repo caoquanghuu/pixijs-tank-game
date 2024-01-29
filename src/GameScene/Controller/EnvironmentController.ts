@@ -1,5 +1,5 @@
 import { BaseObject } from '../Objects/BaseObject';
-import { AddToSceneFn, CreateNewRandomPositionFn } from '../type';
+import { AddToSceneFn, CreateNewRandomPositionFn, RemoveFromSceneFn } from '../type';
 import { Point } from '@pixi/core';
 
 export class EnvironmentController {
@@ -8,10 +8,12 @@ export class EnvironmentController {
     private _environmentObjects: BaseObject[] = [];
     private _addToSceneCall: AddToSceneFn;
     private _createNewRandomPositionCall: CreateNewRandomPositionFn;
+    private _removeFromSceneCall: RemoveFromSceneFn;
 
-    constructor(addToSceneCallBack: AddToSceneFn, createNewRandomPositionCallBack: CreateNewRandomPositionFn) {
+    constructor(addToSceneCallBack: AddToSceneFn, createNewRandomPositionCallBack: CreateNewRandomPositionFn, removeFromSceneCallBack: RemoveFromSceneFn) {
 
         this._addToSceneCall = addToSceneCallBack;
+        this._removeFromSceneCall = removeFromSceneCallBack;
         this._createNewRandomPositionCall = createNewRandomPositionCallBack;
 
         //create environment object with define from begin*/
@@ -55,6 +57,14 @@ export class EnvironmentController {
 
         // push it to this.environmentObject array
         this._environmentObjects.push(object);
+    }
+
+    public removeEnvironmentObject(environment: BaseObject) {
+
+        this._removeFromSceneCall(environment.sprite);
+
+        const p = this._environmentObjects.findIndex(environments => environment === environments);
+        this._environmentObjects.splice(p, 1);
     }
 
     // method for collision controller can access to get position of environment objects*/
