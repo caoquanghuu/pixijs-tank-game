@@ -1,11 +1,13 @@
 import { BaseObject } from '../Objects/BaseObject';
 import { AddToSceneFn, CreateNewRandomPositionFn, RemoveFromSceneFn } from '../type';
 import { Point } from '@pixi/core';
+import { getRandomArbitrary } from '../util';
 
 export class EnvironmentController {
 
     // list of environment objects which will be create on map
     private _environmentObjects: BaseObject[] = [];
+    private _rewardObjects: BaseObject[] = [];
     private _addToSceneCall: AddToSceneFn;
     private _createNewRandomPositionCall: CreateNewRandomPositionFn;
     private _removeFromSceneCall: RemoveFromSceneFn;
@@ -17,7 +19,7 @@ export class EnvironmentController {
         this._createNewRandomPositionCall = createNewRandomPositionCallBack;
 
         //create environment object with define from begin*/
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 30; i++) {
             this.createEnvironmentObject('tree-1');
             this.createEnvironmentObject('tree-2');
             this.createEnvironmentObject('rock');
@@ -52,11 +54,30 @@ export class EnvironmentController {
         // set position for object
         object.position = position;
 
-        // set anchor point */
-        object.sprite.anchor.set(0.5);
-
         // push it to this.environmentObject array
         this._environmentObjects.push(object);
+    }
+
+    private createRewardRandomly(position: Point) {
+
+        // get a random number
+        const randomNumber = getRandomArbitrary(1, 5);
+
+        // if random number === 1
+        if (randomNumber === 1) {
+
+            // create new object is hp bag
+            const rewardObject = new BaseObject('hp-bag');
+
+            // set position of it where it be call
+            rewardObject.position = position;
+
+            // add hp bag to game scene
+            this._addToSceneCall(rewardObject.sprite);
+
+            // push mid hp bag to list
+            this._rewardObjects.push(rewardObject);
+        }
     }
 
     public removeEnvironmentObject(environment: BaseObject) {
@@ -65,6 +86,10 @@ export class EnvironmentController {
 
         const p = this._environmentObjects.findIndex(environments => environment === environments);
         this._environmentObjects.splice(p, 1);
+    }
+
+    get rewardObjects(): BaseObject[] {
+        return this._rewardObjects;
     }
 
     // method for collision controller can access to get position of environment objects*/
