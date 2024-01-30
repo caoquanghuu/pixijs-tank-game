@@ -40,9 +40,6 @@ export class BulletController {
         bullet.position = tankPosition;
         bullet.moveEngine.direction = tankDirection;
 
-        // rotate sprite of bullet
-        this.rotateSpriteFollowDirection(bullet);
-
         // append bullet to game sense
         this._addBulletToSceneCallBack(bullet.sprite);
     }
@@ -75,31 +72,6 @@ export class BulletController {
 
         // remove this bullet after time
         setTimeout(() => { this._removeBulletFromSceneCallback(explosion.sprite); }, 100);
-    }
-    /**
-     * rotate sprite follow direction
-     * @param bullet bullet which is's sprite will be rotate
-     */
-    private rotateSpriteFollowDirection(bullet: Bullet) {
-
-        switch (bullet.moveEngine.direction) {
-            case Direction.UP: {
-                bullet.sprite.angle = 180;
-                break;
-            }
-            case Direction.DOWN: {
-                bullet.sprite.angle = 0;
-                break;
-            }
-            case Direction.LEFT: {
-                bullet.sprite.angle = 90;
-                break;
-            }
-            case Direction.RIGHT: {
-                bullet.sprite.angle = -90;
-                break;
-            }
-        }
     }
 
 
