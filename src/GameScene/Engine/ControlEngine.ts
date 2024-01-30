@@ -3,39 +3,61 @@ import { keyboard } from '../util';
 import { BaseEngine } from './BaseEngine';
 
 export class ControlEngine extends BaseEngine {
+
+    private _left: any;
+    private _right: any;
+    private _up: any;
+    private _down: any;
+    private _keyHandler = {
+        isUp : false,
+        isDown : false,
+        isLeft : false,
+        isRight : false
+    };
     /**
      * constructor to create event listener to player control
      */
     constructor() {
         super();
         // add event listener for keydown
-        const left = keyboard('ArrowLeft'),
-            up = keyboard('ArrowUp'),
-            right = keyboard('ArrowRight'),
-            down = keyboard('ArrowDown');
-        left.press = () => {
+        this._left = keyboard('ArrowLeft'),
+        this._up = keyboard('ArrowUp'),
+        this._right = keyboard('ArrowRight'),
+        this._down = keyboard('ArrowDown');
+
+        this._left.press = () => {
             this.direction = Direction.LEFT;
+            this._keyHandler.isLeft = true;
         };
-        left.release = () => {
-            this.direction = Direction.STAND;
+        this._left.release = () => {
+            this._keyHandler.isLeft = false;
         };
-        right.press = () => {
+        this._right.press = () => {
             this.direction = Direction.RIGHT;
+            this._keyHandler.isRight = true;
         };
-        right.release = () => {
-            this.direction = Direction.STAND;
+        this._right.release = () => {
+            this._keyHandler.isRight = false;
         };
-        up.press = () => {
+        this._up.press = () => {
             this.direction = Direction.UP;
+            this._keyHandler.isUp = true;
         };
-        up.release = () => {
-            this.direction = Direction.STAND;
+        this._up.release = () => {
+            this._keyHandler.isUp = false;
         };
-        down.press = () => {
+        this._down.press = () => {
             this.direction = Direction.DOWN;
+            this._keyHandler.isDown = true;
         };
-        down.release = () => {
+        this._down.release = () => {
+            this._keyHandler.isDown = false;
+        };
+    }
+
+    public update() {
+        if (!this._keyHandler.isUp && !this._keyHandler.isDown && !this._keyHandler.isLeft && !this._keyHandler.isRight) {
             this.direction = Direction.STAND;
-        };
+        }
     }
 }
