@@ -65,8 +65,11 @@ export class CollisionController {
                 // use calculate distance to get random position
                 const pos2 = new Point(object.rectangle.x, object.rectangle.y);
                 const distance = getDistanceOfTwoPosition(pos1, pos2);
-                if (distance > 100) {
+
+                if (distance > 70) {
                     return true;
+                } else {
+                    return false;
                 }
 
                 // use collision to get random position
@@ -75,11 +78,7 @@ export class CollisionController {
                 //     return true;
                 // }
             });
-
-            // if this rectangle is available to use then break out of loop
-            if (isPositionAvailable) {
-                break;
-            }
+            if (isPositionAvailable) break;
         }
 
         // return that rectangle which will ready to use
@@ -92,9 +91,6 @@ export class CollisionController {
     private handleCollision() {
         // get using tanks list from tank controller
         const tanks = this._getTankListCall();
-
-        // copy tanks list use for compare collision between tanks
-        const tanksClone = tanks;
 
         // get bullets list from bullet controller
         const bullets = this._getBulletListCall();
@@ -111,17 +107,23 @@ export class CollisionController {
                 if (tank.isPlayerTank != bullet.isPlayerBullet) {
                     const isCollision = this.checkCollision(tank, bullet);
                     if (isCollision) {
+
+                        // have collision then hp of tank will reduce by 1
                         tank.HPBar.HP -= 1;
+
+                        // remove the bullet
                         this._removeBulletCall(bullet);
                     }
                 }
             });
 
             // handle tank vs environment and other tank
-            [...environments, ...tanksClone].forEach(object => {
+            [...environments, ...tanks].forEach(object => {
 
                 // avoid tank is it self
                 if (object === tank) return;
+
+                // console.log('check', object instanceof Tank);
 
                 // start check 2 object have collision or not?
                 const isCollision = this.checkCollision(tank, object);
@@ -140,7 +142,11 @@ export class CollisionController {
             environments.forEach(environment => {
                 const isCollision = this.checkCollision(bullet, environment);
                 if (isCollision) {
+
+                    // remove the bullet
                     this._removeBulletCall(bullet);
+
+                    // remove the environment
                     this._removeEnvironmentCall(environment);
                 }
             });
@@ -156,6 +162,8 @@ export class CollisionController {
 
         const aBox = new Rectangle(object1.sprite.x, object1.sprite.y, object1.size.w, object1.size.h);
         const bBox = new Rectangle(object2.sprite.x, object2.sprite.y, object2.size.w, object2.size.h);
+        // const aBox = object1.sprite.getBounds();
+        // const bBox = object2.sprite.getBounds();
 
         return this.checkCollisionBetweenTwoRectangle(aBox, bBox);
     }
