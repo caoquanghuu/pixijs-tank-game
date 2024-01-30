@@ -44,7 +44,7 @@ export class Tank extends BaseObject {
             // set hp
             this._HPBar.HP = 5;
 
-            // set control fire
+            // set control fire key event by space keyboard
             const fire = keyboard(' ');
             fire.press = () => {
                 this.fire(this.position, this.lastDirection, true);
@@ -83,6 +83,7 @@ export class Tank extends BaseObject {
             this._tankDieCall(this);
         }
     }
+
     /**
      * change texture and size of tank when direction of tank change
      * @param direction new direction changed
