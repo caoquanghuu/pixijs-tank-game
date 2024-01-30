@@ -1,7 +1,7 @@
 import { Point, Rectangle } from '@pixi/core';
 import { BaseObject } from '../Objects/BaseObject';
 import { GetBulletListFn, GetObjectListFn, GetTankListFn, HandleTankMoveFn, RemoveBulletFn, RemoveEnvironmentFn, Size } from '../type';
-import { getRandomArbitrary } from '../util';
+import { getDistanceOfTwoPosition, getRandomArbitrary } from '../util';
 
 export class CollisionController {
     private _getTankListCall: GetTankListFn;
@@ -53,18 +53,27 @@ export class CollisionController {
         for (let i = 0; i < 999; i++) {
 
             // create a test position which will be compare
-            const position: Point = new Point(getRandomArbitrary(0, 790), getRandomArbitrary(0, 590));
+            const pos1: Point = new Point(getRandomArbitrary(0, 790), getRandomArbitrary(0, 590));
 
             //try assign test position to rectangle
-            rectangle.x = position.x;
-            rectangle.y = position.y;
+            rectangle.x = pos1.x;
+            rectangle.y = pos1.y;
 
             // check this test rectangle is collision with other objects
             const isPositionAvailable = this._usingObjectsList.some(object => {
-                const isCollisionWithOther = this.checkCollisionBetweenTwoRectangle(rectangle, object.rectangle);
-                if (!isCollisionWithOther) {
+
+                // use calculate distance to get random position
+                const pos2 = new Point(object.rectangle.x, object.rectangle.y);
+                const distance = getDistanceOfTwoPosition(pos1, pos2);
+                if (distance > 100) {
                     return true;
                 }
+
+                // use collision to get random position
+                // const isCollisionWithOther = this.checkCollisionBetweenTwoRectangle(rectangle, object.rectangle);
+                // if (!isCollisionWithOther) {
+                //     return true;
+                // }
             });
 
             // if this rectangle is available to use then break out of loop
