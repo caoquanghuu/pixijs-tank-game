@@ -23,7 +23,7 @@ export class GameScene extends Container {
     constructor() {
         super();
 
-        this.mainMenuGame();
+        this.displayMainMenuGame();
     }
 
     public getTankList(): Tank[] {
@@ -81,7 +81,7 @@ export class GameScene extends Container {
     /**
      * method to display main menu game
      */
-    public mainMenuGame() {
+    public displayMainMenuGame() {
         // create a main game back ground
         const mainBg = new Sprite(AssetsLoader.getTexture('main-back-ground'));
         mainBg.width = 800;
@@ -145,13 +145,13 @@ export class GameScene extends Container {
 
         this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
 
-        this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this), this.gameOver.bind(this));
+        this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this), this.displayGameOver.bind(this));
 
         this._environmentController = new EnvironmentController(this.addToScene.bind(this), this.createNewRandomPositionCall.bind(this), this.removeFromScene.bind(this));
     }
 
     // method game over will be call when player tank die
-    public gameOver() {
+    public displayGameOver() {
         // create a bg for display option when end game
 
         // game over back ground
