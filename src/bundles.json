@@ -36,7 +36,7 @@
             },
             {
                 "name": "bullet",
-                "srcs": "assets/UI/unit-menu-icons/49.png"
+                "srcs": "assets/units/bullet/bullet.png"
             },
             {
                 "name": "back-ground",

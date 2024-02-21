@@ -22,6 +22,13 @@ export class Bullet extends BaseObject {
 
         // set property for this bullet
         this._isPlayerBullet = isPlayer;
+
+        // resize bullet sprite
+        this.sprite.width = 15;
+        this.sprite.height = 15;
+
+        // fix size
+        this.size = { w: 15, h: 15 };
     }
 
     /**

@@ -216,7 +216,7 @@ export class GameScene extends Container {
             scoreSprite.height = 30;
 
             return scoreSprite;
-        })
+        });
 
         // create a start position
         // const position = new Point(770, 10);
