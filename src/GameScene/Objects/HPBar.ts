@@ -2,7 +2,7 @@ import { Point } from '@pixi/core';
 import { BaseObject } from './BaseObject';
 import { AddToSceneFn } from '../type';
 
-export class HP extends BaseObject {
+export class HPBar extends BaseObject {
     private _isPlayer: boolean;
     private _HP: number;
     private _addToSceneCall: AddToSceneFn;

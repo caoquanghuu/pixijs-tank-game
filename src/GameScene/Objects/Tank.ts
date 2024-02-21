@@ -5,7 +5,7 @@ import { BaseObject } from './BaseObject';
 import { AddToSceneFn, Direction, FireBulletFn, TankDieFn } from '../type';
 import { ControlEngine } from '../Engine/ControlEngine';
 import { getRandomArbitrary, keyboard } from '../util';
-import { HP } from './HP';
+import { HPBar } from './HPBar';
 
 export class Tank extends BaseObject {
 
@@ -13,7 +13,8 @@ export class Tank extends BaseObject {
     private _isPlayerTank: boolean;
 
     // hp of this tank
-    private _HPBar: HP;
+    private _HPBar: HPBar;
+
     private _fireBulletCallBack: FireBulletFn;
     private _tankDieCall: TankDieFn;
     private _fireBulletTime: number;
@@ -33,7 +34,7 @@ export class Tank extends BaseObject {
 
         this._isPlayerTank = isPlayer;
 
-        this._HPBar = new HP(isPlayer, addToSceneCallBack.bind(this));
+        this._HPBar = new HPBar(isPlayer, addToSceneCallBack.bind(this));
 
         // set move engine and type trigger fire bullet for tank base on is player or not
         if (isPlayer) {
