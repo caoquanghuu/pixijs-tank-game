@@ -49,18 +49,18 @@ export class CollisionController {
         // create a new rectangle
         const rectangle = new Rectangle(null, null, size.w, size.h);
 
-        // ulimit loop until can get rectangle which have no collision with other objects
-        for (let i = 0; i < 999; i++) {
+        let isPositionAvailable = false;
 
+        do {
             // create a test position which will be compare
             const pos1: Point = new Point(getRandomArbitrary(0, 790), getRandomArbitrary(0, 590));
 
-            //try assign test position to rectangle
+            // try assign test position to rectangle
             rectangle.x = pos1.x;
             rectangle.y = pos1.y;
 
             // check this test rectangle is collision with other objects
-            const isPositionAvailable = this._usingObjectsList.some(object => {
+            isPositionAvailable = this._usingObjectsList.some(object => {
 
                 // use calculate distance to get random position
                 const pos2 = new Point(object.rectangle.x, object.rectangle.y);
@@ -78,8 +78,10 @@ export class CollisionController {
                 //     return true;
                 // }
             });
-            if (isPositionAvailable) break;
-        }
+            if (isPositionAvailable) {
+                break;
+            }
+        } while (isPositionAvailable);
 
         // return that rectangle which will ready to use
         return rectangle;
