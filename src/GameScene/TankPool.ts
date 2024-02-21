@@ -28,12 +28,12 @@ export class TankPool {
         }
     }
 
-    public static getInstance(fireBulletCallBack: FireBulletFn, tankDieCallBack: TankDieFn, addToSceneCallBack: AddToSceneFn): TankPool {
-        if (!TankPool.instance) {
-            TankPool.instance = new TankPool(fireBulletCallBack, tankDieCallBack, addToSceneCallBack);
-        }
-        return TankPool.instance;
-    }
+    // public static getInstance(fireBulletCallBack: FireBulletFn, tankDieCallBack: TankDieFn, addToSceneCallBack: AddToSceneFn): TankPool {
+    //     if (!TankPool.instance) {
+    //         TankPool.instance = new TankPool(fireBulletCallBack, tankDieCallBack, addToSceneCallBack);
+    //     }
+    //     return TankPool.instance;
+    // }
 
     public releaseTank(): Tank {
 

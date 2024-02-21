@@ -22,7 +22,7 @@ export class TankController {
     constructor(addToSceneCallBack: AddToSceneFn, removeFromSceneCallBack: RemoveFromSceneFn, fireBulletCallBack: FireBulletFn,
         createNewRandomPositionCallBack: CreateNewRandomPositionFn, setNewScoreCallBack: SetNewScoreFn, gameOverCallBack: GameOverFn) {
 
-        this._tankPool = TankPool.getInstance(this.fireBullet.bind(this), this.tankDie.bind(this), addToSceneCallBack);
+        this._tankPool = new TankPool(this.fireBullet.bind(this), this.tankDie.bind(this), addToSceneCallBack);
 
         // spawnTank every spawnTankTime
         this._addToScene = addToSceneCallBack;
