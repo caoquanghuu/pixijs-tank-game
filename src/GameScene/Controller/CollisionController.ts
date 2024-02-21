@@ -1,25 +1,30 @@
 import { Point, Rectangle } from '@pixi/core';
 import { BaseObject } from '../Objects/BaseObject';
-import { GetBulletListFn, GetObjectListFn, GetTankListFn, HandleTankMoveFn, RemoveBulletFn, RemoveEnvironmentFn, Size } from '../type';
+import { GetBulletListFn, GetObjectListFn, GetRewardObjectsFn, GetTankListFn, HandleTankMoveFn, RemoveBulletFn, RemoveEnvironmentFn, RemoveRewardObjectFn, Size } from '../type';
 import { getDistanceOfTwoPosition, getRandomArbitrary } from '../util';
 
 export class CollisionController {
     private _getTankListCall: GetTankListFn;
     private _getBulletListCall: GetBulletListFn;
     private _getEnvironmentListCall: GetObjectListFn;
+    private _getRewardListCall: GetRewardObjectsFn;
     private _removeBulletCall: RemoveBulletFn;
     private _handleTankMoveCall: HandleTankMoveFn;
     private _removeEnvironmentCall: RemoveEnvironmentFn;
+    private _removeRewardObjectCall: RemoveRewardObjectFn;
     private _usingObjectsList: BaseObject[] = [];
 
     constructor(getTankListCallBack: GetTankListFn, getBulletListCallBack: GetBulletListFn, getEnvironmentListCallBack: GetObjectListFn,
-        removeBulletCallBack: RemoveBulletFn, handleTankMoveCallBack: HandleTankMoveFn, removeEnvironmentCallBack: RemoveEnvironmentFn) {
+        removeBulletCallBack: RemoveBulletFn, handleTankMoveCallBack: HandleTankMoveFn, removeEnvironmentCallBack: RemoveEnvironmentFn,
+        removeRewardObjectCallBack: RemoveRewardObjectFn, getRewardListCallBack: GetRewardObjectsFn) {
         this._getTankListCall = getTankListCallBack;
         this._getBulletListCall = getBulletListCallBack;
         this._getEnvironmentListCall = getEnvironmentListCallBack;
         this._removeBulletCall = removeBulletCallBack;
         this._handleTankMoveCall = handleTankMoveCallBack;
         this._removeEnvironmentCall = removeEnvironmentCallBack;
+        this._removeRewardObjectCall = removeRewardObjectCallBack;
+        this._getRewardListCall = getRewardListCallBack;
     }
 
     private getUsingObjectsList() {
@@ -78,6 +83,7 @@ export class CollisionController {
                 //     return true;
                 // }
             });
+
             if (isPositionAvailable) {
                 break;
             }
@@ -99,6 +105,9 @@ export class CollisionController {
 
         // get environments list from environment controller
         const environments = this._getEnvironmentListCall();
+
+        // get reward list from environment controller
+        const rewardObjects = this._getRewardListCall();
 
         tanks.forEach(tank => {
 
@@ -134,6 +143,20 @@ export class CollisionController {
 
                     // handle move of tank
                     this._handleTankMoveCall(tank);
+                }
+            });
+
+            // handle tank vs reward object
+            rewardObjects.forEach(object => {
+                if (!tank.isPlayerTank) return;
+                const isCollision = this.checkCollision(tank, object);
+
+                if (isCollision) {
+                    this._removeRewardObjectCall(object);
+
+                    if (tank.HPBar.HP < 5) {
+                        tank.HPBar.HP += 1;
+                    }
                 }
             });
         });

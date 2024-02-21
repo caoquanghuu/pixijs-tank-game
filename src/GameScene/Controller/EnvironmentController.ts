@@ -61,16 +61,21 @@ export class EnvironmentController {
     private createRewardRandomly(position: Point) {
 
         // get a random number
-        const randomNumber = getRandomArbitrary(1, 5);
+        const randomNumber = getRandomArbitrary(1, 10);
 
         // if random number === 1
         if (randomNumber === 1) {
 
             // create new object is hp bag
-            const rewardObject = new BaseObject('hp-bag');
+            const rewardObject = new BaseObject('medical-bag');
 
             // set position of it where it be call
             rewardObject.position = position;
+
+            // set size
+            rewardObject.sprite.width = 20;
+            rewardObject.sprite.height = 20;
+            rewardObject.size = { w: 20, h : 20 };
 
             // add hp bag to game scene
             this._addToSceneCall(rewardObject.sprite);
@@ -82,10 +87,19 @@ export class EnvironmentController {
 
     public removeEnvironmentObject(environment: BaseObject) {
 
-        this._removeFromSceneCall(environment.sprite);
+        this.removeObject(environment, this._environmentObjects);
 
-        const p = this._environmentObjects.findIndex(environments => environment === environments);
-        this._environmentObjects.splice(p, 1);
+        const position: Point = environment.position;
+
+        // create reward randomly
+        this.createRewardRandomly(position);
+    }
+
+    public removeObject(object: BaseObject, objectList: BaseObject[]) {
+        this._removeFromSceneCall(object.sprite);
+
+        const p = objectList.findIndex(objects => objects === object);
+        objectList.splice(p, 1);
     }
 
     get rewardObjects(): BaseObject[] {

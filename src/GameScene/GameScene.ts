@@ -46,6 +46,10 @@ export class GameScene extends Container {
         this._environmentController.removeEnvironmentObject(environment);
     }
 
+    public removeRewardObjectCall(rewardObject: BaseObject) {
+        this._environmentController.removeObject(rewardObject, this._environmentController.rewardObjects);
+    }
+
 
     public removeBulletCall(bullet: Bullet) {
         this._bulletController.removeBullet(bullet);
@@ -141,7 +145,7 @@ export class GameScene extends Container {
         this.displayScore(positionDisplayScore);
 
         // constructor controller
-        this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this), this.removeEnvironmentCall.bind(this));
+        this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this), this.removeEnvironmentCall.bind(this), this.removeRewardObjectCall.bind(this), this.getRewardList.bind(this));
 
         this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
 

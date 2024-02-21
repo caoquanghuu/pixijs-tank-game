@@ -44,3 +44,7 @@ export type GameOverFn = () => void;
 
 export type RemoveEnvironmentFn = (environment: BaseObject) => void;
 
+export type RemoveRewardObjectFn = (rewardObject: BaseObject) => void;
+
+export type GetRewardObjectsFn = () => BaseObject[];
+

@@ -137,6 +137,10 @@
             {
                 "name": "explosion",
                 "srcs": "assets/units/explosion/explosion.png"
+            },
+            {
+                "name": "medical-bag",
+                "srcs": "assets/units/medic/medical-bag.png"
             }
         ]
     }
