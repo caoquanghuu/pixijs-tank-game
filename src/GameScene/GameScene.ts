@@ -204,7 +204,10 @@ export class GameScene extends Container {
         }
 
         // convert this score to array contain element
-        const scoreArray: string[] = `${this._playerScore}`.split('');
+        const scoreArray: string[] = `${this._playerScore}`.split('').reverse();
+
+        // create a start position
+        const position = positionDisplay;
 
         // which each element will be convert to a sprite display number of that element
         const scoreSpriteArray: Sprite[] = scoreArray.map(score => {
@@ -215,26 +218,14 @@ export class GameScene extends Container {
             scoreSprite.width = 30;
             scoreSprite.height = 30;
 
+            this.addToScene(scoreSprite);
+
+            scoreSprite.position.set(position.x, position.y);
+
+            position.x -= 17;
+
             return scoreSprite;
         });
-
-        // create a start position
-        // const position = new Point(770, 10);
-        const position = positionDisplay;
-
-        // loop from end to start there sprites and render it to game scene with the position of last element is top right of game scene
-        // and the next sprites will be place left of last sprite
-        for (let i = scoreSpriteArray.length; i > 0 ; i--) {
-
-            // the last of number will have start position
-            scoreSpriteArray[i - 1].position.set(position.x, position.y);
-
-            // add this sprite to game scene
-            this.addToScene(scoreSpriteArray[i - 1]);
-
-            // next left score number will have a new position
-            position.x -= 17;
-        }
 
         // add new score array sprite
         this._scoreSpriteArray = scoreSpriteArray;
