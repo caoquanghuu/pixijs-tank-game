@@ -3,6 +3,7 @@ import { Direction } from '../type';
 import { BaseEngine } from '../Engine/BaseEngine';
 import { AssetsLoader } from '../../AssetsLoader';
 import { Point, Rectangle } from '@pixi/core';
+import { switchFn } from '../util';
 
 export class BaseObject {
     // a sprite
@@ -95,26 +96,58 @@ export class BaseObject {
 
         let nextX: number, nextY: number;
 
-        switch (direction) {
-            case Direction.UP:
-                nextY = (this.position.y) - ((this._speed * deltaTime) / 1000);
-                nextX = this.position.x;
-                break;
-            case Direction.DOWN:
-                nextY = (this.position.y) + ((this._speed * deltaTime) / 1000);
-                nextX = this.position.x;
-                break;
-            case Direction.LEFT:
-                nextY = this.position.y;
-                nextX = (this.position.x) - ((this._speed * deltaTime) / 1000);
-                break;
-            case Direction.RIGHT:
-                nextY = this.position.y;
-                nextX = (this.position.x) + ((this._speed * deltaTime) / 1000);
-                break;
-            default:
-                break;
-        }
+        const moveUp = () => {
+            nextY = (this.position.y) - ((this._speed * deltaTime) / 1000);
+            nextX = this.position.x;
+        };
+
+        const moveDown = () => {
+            nextY = (this.position.y) + ((this._speed * deltaTime) / 1000);
+            nextX = this.position.x;
+        };
+
+        const moveLeft = () => {
+            nextY = this.position.y;
+            nextX = (this.position.x) - ((this._speed * deltaTime) / 1000);
+        };
+
+        const moveRight = () => {
+            nextY = this.position.y;
+            nextX = (this.position.x) + ((this._speed * deltaTime) / 1000);
+        };
+
+        const moveList = {
+            1 : moveUp,
+            2 : moveDown,
+            3 : moveLeft,
+            4 : moveRight,
+            'default' : () => {}
+        };
+
+        const moveSwitch = switchFn(moveList, 'default');
+
+        moveSwitch(direction);
+
+        // switch (direction) {
+        //     case Direction.UP:
+        //         nextY = (this.position.y) - ((this._speed * deltaTime) / 1000);
+        //         nextX = this.position.x;
+        //         break;
+        //     case Direction.DOWN:
+        //         nextY = (this.position.y) + ((this._speed * deltaTime) / 1000);
+        //         nextX = this.position.x;
+        //         break;
+        //     case Direction.LEFT:
+        //         nextY = this.position.y;
+        //         nextX = (this.position.x) - ((this._speed * deltaTime) / 1000);
+        //         break;
+        //     case Direction.RIGHT:
+        //         nextY = this.position.y;
+        //         nextX = (this.position.x) + ((this._speed * deltaTime) / 1000);
+        //         break;
+        //     default:
+        //         break;
+        // }
 
         if (!isBullet) {
             if (nextX < 10) {

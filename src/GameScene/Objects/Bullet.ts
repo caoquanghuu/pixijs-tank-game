@@ -1,6 +1,6 @@
 import { BaseObject } from './BaseObject';
 import { BaseEngine } from '../Engine/BaseEngine';
-import { Direction } from '../type';
+import { switchFn } from '../util';
 
 export class Bullet extends BaseObject {
     // property define this bullet belong to player or bot tank
@@ -36,25 +36,52 @@ export class Bullet extends BaseObject {
      * @param bullet bullet which is's sprite will be rotate
      */
     private rotateSpriteFollowDirection() {
+        const rotateUp = () => {
+            this.sprite.angle = 180;
+        };
 
-        switch (this.moveEngine.direction) {
-            case Direction.UP: {
-                this.sprite.angle = 180;
-                break;
-            }
-            case Direction.DOWN: {
-                this.sprite.angle = 0;
-                break;
-            }
-            case Direction.LEFT: {
-                this.sprite.angle = 90;
-                break;
-            }
-            case Direction.RIGHT: {
-                this.sprite.angle = -90;
-                break;
-            }
-        }
+        const rotateDown = () => {
+            this.sprite.angle = 0;
+        };
+
+        const rotateLeft = () => {
+            this.sprite.angle = 90;
+        };
+
+        const rotateRight = () => {
+            this.sprite.angle = -90;
+        };
+
+        const rotateList = {
+            1 : rotateUp,
+            2 : rotateDown,
+            3 : rotateLeft,
+            4 : rotateRight,
+            'default' : () => {}
+        };
+
+        const rotateSwitch = switchFn(rotateList, 'default');
+
+        rotateSwitch(this.moveEngine.direction);
+
+        // switch (this.moveEngine.direction) {
+        //     case Direction.UP: {
+        //         this.sprite.angle = 180;
+        //         break;
+        //     }
+        //     case Direction.DOWN: {
+        //         this.sprite.angle = 0;
+        //         break;
+        //     }
+        //     case Direction.LEFT: {
+        //         this.sprite.angle = 90;
+        //         break;
+        //     }
+        //     case Direction.RIGHT: {
+        //         this.sprite.angle = -90;
+        //         break;
+        //     }
+        // }
     }
 
     update(dt: number) {

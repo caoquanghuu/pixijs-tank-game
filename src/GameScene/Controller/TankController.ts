@@ -2,7 +2,7 @@ import { Point } from '@pixi/core';
 import { Tank } from '../Objects/Tank';
 import { TankPool } from '../TankPool';
 import { AddToSceneFn, CreateNewRandomPositionFn, Direction, FireBulletFn, GameOverFn, RemoveFromSceneFn, SetNewScoreFn } from '../type';
-import { getRandomArbitrary, randomEnumKey } from '../util';
+import { getRandomArbitrary, randomEnumKey, switchFn } from '../util';
 
 export class TankController {
 
@@ -121,28 +121,60 @@ export class TankController {
         // check collision is allow tank move, if have collision then set tank can not move.
         tank.moveEngine.direction = Direction.STAND;
 
-        switch (direction) {
-            case Direction.UP: {
-                const newPosition = new Point(tank.position.x, tank.position.y + 2);
-                tank.position = newPosition;
-                break;
-            }
-            case Direction.DOWN: {
-                const newPosition = new Point(tank.position.x, tank.position.y - 2);
-                tank.position = newPosition;
-                break;
-            }
-            case Direction.LEFT: {
-                const newPosition = new Point(tank.position.x + 2, tank.position.y);
-                tank.position = newPosition;
-                break;
-            }
-            case Direction.RIGHT: {
-                const newPosition = new Point(tank.position.x - 2, tank.position.y);
-                tank.position = newPosition;
-                break;
-            }
-        }
+        const flitchUp = () => {
+            const newPosition = new Point(tank.position.x, tank.position.y + 2);
+            tank.position = newPosition;
+        };
+
+        const flitchDown = () => {
+            const newPosition = new Point(tank.position.x, tank.position.y - 2);
+            tank.position = newPosition;
+        };
+
+        const flitchLeft = () => {
+            const newPosition = new Point(tank.position.x + 2, tank.position.y);
+            tank.position = newPosition;
+        };
+
+        const flitchRight = () => {
+            const newPosition = new Point(tank.position.x - 2, tank.position.y);
+            tank.position = newPosition;
+        };
+
+        const directionList = {
+            1 : flitchUp,
+            2 : flitchDown,
+            3 : flitchLeft,
+            4 : flitchRight,
+            'default' : () => {}
+        };
+
+        const directionSwitch = switchFn(directionList, 'default');
+
+        directionSwitch(direction);
+
+        // switch (direction) {
+        //     case Direction.UP: {
+        //         const newPosition = new Point(tank.position.x, tank.position.y + 2);
+        //         tank.position = newPosition;
+        //         break;
+        //     }
+        //     case Direction.DOWN: {
+        //         const newPosition = new Point(tank.position.x, tank.position.y - 2);
+        //         tank.position = newPosition;
+        //         break;
+        //     }
+        //     case Direction.LEFT: {
+        //         const newPosition = new Point(tank.position.x + 2, tank.position.y);
+        //         tank.position = newPosition;
+        //         break;
+        //     }
+        //     case Direction.RIGHT: {
+        //         const newPosition = new Point(tank.position.x - 2, tank.position.y);
+        //         tank.position = newPosition;
+        //         break;
+        //     }
+        // }
 
         //change direction if tank is bot
         if (!tank.isPlayerTank) {

@@ -72,3 +72,5 @@ export function getDistanceOfTwoPosition(pos1: Point, pos2: Point) {
 export function isClassOf(target: object, targetCompare: object) {
     return target && typeof target === 'object' && (/^(object|array)$/i.test(target.constructor.name)) === (/^(object|array)$/i.test(targetCompare.constructor.name));
 }
+
+export const switchFn = (lookupObject, defaultCase = '_default') => expression => (lookupObject[expression] || lookupObject[defaultCase])();

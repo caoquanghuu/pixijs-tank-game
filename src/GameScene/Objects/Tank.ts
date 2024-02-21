@@ -29,6 +29,9 @@ export class Tank extends BaseObject {
         // set speed of tank
         this.speed = 100;
 
+        // set last direction of tank
+        this.lastDirection = Direction.UP;
+
         // set size of tank
         this.size = { w: 20, h: 20 };
 
@@ -90,47 +93,15 @@ export class Tank extends BaseObject {
      * @param direction new direction changed
      */
     private changeTextureFollowDirection(direction: Direction) {
+        const tankMoveTextures: string[] = ['tank-move-up', 'tank-move-down', 'tank-move-left', 'tank-move-right'];
+        const tankStandTextures: string[] = ['tank-stand-up', 'tank-stand-down', 'tank-stand-left', 'tank-stand-right'];
 
-        // when tank moving:
-        switch (direction) {
-            case Direction.UP: {
-                this.sprite = 'tank-move-up';
-                break;
-            }
-            case Direction.DOWN: {
-                this.sprite = 'tank-move-down';
-                break;
-            }
-            case Direction.RIGHT: {
-                this.sprite = 'tank-move-right';
-                break;
-            }
-            case Direction.LEFT: {
-                this.sprite = 'tank-move-left';
-                break;
-            }
-        }
+        // change texture when tank move
+        this.sprite = tankMoveTextures[direction - 1];
 
         // when tank stop move:
         if (direction === Direction.STAND) {
-            switch (this.lastDirection) {
-                case Direction.UP: {
-                    this.sprite = 'tank-stand-up';
-                    break;
-                }
-                case Direction.DOWN: {
-                    this.sprite = 'tank-stand-down';
-                    break;
-                }
-                case Direction.LEFT: {
-                    this.sprite = 'tank-stand-left';
-                    break;
-                }
-                case Direction.RIGHT: {
-                    this.sprite = 'tank-stand-right';
-                    break;
-                }
-            }
+            this.sprite = tankStandTextures[this.lastDirection - 1];
         }
     }
 
