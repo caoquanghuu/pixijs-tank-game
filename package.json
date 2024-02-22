@@ -22,6 +22,7 @@
     "@pixi/mixin-cache-as-bitmap": "^7.2.0",
     "@pixi/mixin-get-child-by-name": "^7.2.0",
     "@pixi/mixin-get-global-position": "^7.2.0",
+    "@pixi/sound": "^5.2.3",
     "@pixi/sprite": "^7.2.0",
     "@pixi/spritesheet": "^7.2.0",
     "@pixi/text": "^7.2.0",

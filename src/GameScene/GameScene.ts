@@ -11,6 +11,7 @@ import { Tank } from './Objects/Tank';
 import { Bullet } from './Objects/Bullet';
 import { BaseObject } from './Objects/BaseObject';
 import { Text } from '@pixi/text';
+import { sound } from '@pixi/sound';
 
 export class GameScene extends Container {
     private _playerScore: number = 0;
@@ -126,6 +127,9 @@ export class GameScene extends Container {
         btnSprite.position.y = 180;
 
         this.addToScene(mainBg);
+
+        sound.add('main-menu-music', 'sound/main-menu-music.mp3');
+        sound.play('main-menu-music');
     }
 
     /**
@@ -133,6 +137,7 @@ export class GameScene extends Container {
      */
     public startPlayGame() {
 
+        sound.stop('main-menu-music');
         // set a back ground of game
         const bg = new Sprite(AssetsLoader.getTexture('game-back-ground'));
         this.addChild(bg);

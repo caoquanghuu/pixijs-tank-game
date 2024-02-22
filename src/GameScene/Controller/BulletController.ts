@@ -2,6 +2,7 @@ import { Point } from '@pixi/core';
 import { Bullet } from '../Objects/Bullet';
 import { AddToSceneFn, Direction, RemoveFromSceneFn } from '../type';
 import { BaseObject } from '../Objects/BaseObject';
+import { sound } from '@pixi/sound';
 
 export class BulletController {
 
@@ -43,6 +44,12 @@ export class BulletController {
 
         // append bullet to game sense
         this._addBulletToSceneCallBack(bullet.sprite);
+
+        // add sound fire bullet if it is player fire
+        if (isPlayerBullet) {
+            sound.add('bullet-fire', 'sound/bullet-fire.mp3');
+            sound.play('bullet-fire');
+        }
     }
 
     /**
@@ -69,6 +76,13 @@ export class BulletController {
 
         // set position for it where bullet being remove
         explosion.position = bullet.position;
+
+        // set sound for explosion
+        if (bullet.isPlayerBullet) {
+            sound.add('explosion', 'sound/explosion.mp3');
+            sound.play('explosion');
+            sound.volume('explosion', 1);
+        }
 
         // remove this bullet after time
         setTimeout(() => { this._removeBulletFromSceneCallback(explosion.sprite); }, 100);

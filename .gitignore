@@ -29,3 +29,6 @@ shared_vars.sh
 build/games/*/*
 !build/games/*.json
 !build/games/*/logo.png
+
+#package lock
+package-lock.json
