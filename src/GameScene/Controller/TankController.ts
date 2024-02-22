@@ -69,7 +69,7 @@ export class TankController {
         this._addToScene(tank.HPBar.sprite);
 
         const direction = randomEnumKey(Direction);
-        tank.moveEngine.direction = direction;
+        tank.direction = direction;
     }
 
     public fireBullet(position: Point, direction: Direction, isPlayerBullet: boolean) {
@@ -96,7 +96,7 @@ export class TankController {
             this._setNewScoreCall(1);
 
             // set back hp for tank
-            tankDie.HPBar.HP = 1;
+            tankDie.HP = 1;
 
             //remove sprite from game scene
             this._removeFromScene(tankDie.sprite);
@@ -116,10 +116,10 @@ export class TankController {
     public handleTankMove(tank: Tank) {
 
         // get current direction of tank
-        const direction = tank.moveEngine.direction;
+        const direction = tank.direction;
 
         // check collision is allow tank move, if have collision then set tank can not move.
-        tank.moveEngine.direction = Direction.STAND;
+        tank.direction = Direction.STAND;
 
         const flitchUp = () => {
             const newPosition = new Point(tank.position.x, tank.position.y + 2);

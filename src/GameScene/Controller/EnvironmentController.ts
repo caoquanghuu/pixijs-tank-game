@@ -39,8 +39,7 @@ export class EnvironmentController {
         this._addToSceneCall(object.sprite);
 
         // set size */
-        object.sprite.width = 15;
-        object.sprite.height = 15;
+        object.spriteSize = { w: 15, h: 15 };
 
         // set size property
         object.size = { w: 15, h: 15 };
@@ -73,8 +72,8 @@ export class EnvironmentController {
             rewardObject.position = position;
 
             // set size
-            rewardObject.sprite.width = 20;
-            rewardObject.sprite.height = 20;
+            rewardObject.spriteSize = { w: 20, h: 20 };
+
             rewardObject.size = { w: 20, h : 20 };
 
             // add hp bag to game scene

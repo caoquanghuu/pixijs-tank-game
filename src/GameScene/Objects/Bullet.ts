@@ -1,6 +1,7 @@
 import { BaseObject } from './BaseObject';
 import { BaseEngine } from '../Engine/BaseEngine';
 import { switchFn } from '../util';
+import { Direction } from '../type';
 
 export class Bullet extends BaseObject {
     // property define this bullet belong to player or bot tank
@@ -24,8 +25,7 @@ export class Bullet extends BaseObject {
         this._isPlayerBullet = isPlayer;
 
         // resize bullet sprite
-        this.sprite.width = 10;
-        this.sprite.height = 15;
+        this.spriteSize = { w: 10, h: 15 };
 
         // fix size
         this.size = { w: 10, h: 15 };
@@ -92,5 +92,13 @@ export class Bullet extends BaseObject {
 
     get isPlayerBullet(): boolean {
         return this._isPlayerBullet;
+    }
+
+    get direction(): Direction {
+        return this._moveEngine.direction;
+    }
+
+    set direction(direction) {
+        this._moveEngine.direction = direction;
     }
 }

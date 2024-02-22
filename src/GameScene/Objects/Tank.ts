@@ -136,8 +136,24 @@ export class Tank extends BaseObject {
         }
     }
 
-    get HPBar() {
+    get HPBar(): HPBar {
         return this._HPBar;
+    }
+
+    get HP(): number {
+        return this._HPBar.HP;
+    }
+
+    set HP(hp: number) {
+        this._HPBar.HP = hp;
+    }
+
+    set direction(direction: Direction) {
+        this._moveEngine.direction = direction;
+    }
+
+    get direction(): Direction {
+        return this._moveEngine.direction;
     }
 
     get isPlayerTank(): boolean {

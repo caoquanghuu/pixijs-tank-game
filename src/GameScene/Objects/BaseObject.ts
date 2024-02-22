@@ -1,5 +1,5 @@
 import { Sprite } from '@pixi/sprite';
-import { Direction } from '../type';
+import { Direction, Size } from '../type';
 import { BaseEngine } from '../Engine/BaseEngine';
 import { AssetsLoader } from '../../AssetsLoader';
 import { Point, Rectangle } from '@pixi/core';
@@ -188,5 +188,11 @@ export class BaseObject {
 
     set size(size) {
         this._size = size;
+    }
+
+    // method to set width height of the image
+    set spriteSize(size: Size) {
+        this.sprite.width = size.w;
+        this.sprite.height = size.h;
     }
 }

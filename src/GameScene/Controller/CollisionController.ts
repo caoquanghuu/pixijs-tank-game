@@ -120,7 +120,7 @@ export class CollisionController {
                     if (isCollision) {
 
                         // have collision then hp of tank will reduce by 1
-                        tank.HPBar.HP -= 1;
+                        tank.HP -= 1;
 
                         // remove the bullet
                         this._removeBulletCall(bullet);
@@ -154,8 +154,8 @@ export class CollisionController {
                 if (isCollision) {
                     this._removeRewardObjectCall(object);
 
-                    if (tank.HPBar.HP < 5) {
-                        tank.HPBar.HP += 1;
+                    if (tank.HP < 5) {
+                        tank.HP += 1;
                     }
                 }
             });

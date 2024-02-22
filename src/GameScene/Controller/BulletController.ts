@@ -24,6 +24,7 @@ export class BulletController {
     get bullets(): Bullet[] {
         return this._bullets;
     }
+
     /**
      * fire a bullet when tank require
      * @param tankPosition position of tank require fire bullet
@@ -38,7 +39,7 @@ export class BulletController {
 
         // set position and direction for this bullet
         bullet.position = tankPosition;
-        bullet.moveEngine.direction = tankDirection;
+        bullet.direction = tankDirection;
 
         // append bullet to game sense
         this._addBulletToSceneCallBack(bullet.sprite);
@@ -61,8 +62,7 @@ export class BulletController {
         const explosion = new BaseObject('explosion');
 
         // set size for explosion sprite
-        explosion.sprite.width = 15;
-        explosion.sprite.height = 15;
+        explosion.spriteSize = { w: 15, h: 15 };
 
         // add this explosion to game
         this._addBulletToSceneCallBack(explosion.sprite);
