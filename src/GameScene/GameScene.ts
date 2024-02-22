@@ -24,6 +24,7 @@ export class GameScene extends Container {
         super();
 
         this.displayMainMenuGame();
+        // this.displayGameOver();
     }
 
     public getTankList(): Tank[] {
@@ -177,14 +178,39 @@ export class GameScene extends Container {
         });
         textYourScore.anchor.set(0.5);
 
+        // create a sprite which will be like a button
+        const btnReplay = new Sprite(AssetsLoader.getTexture('button-sprite'));
+        btnReplay.anchor.set(0.5);
+
+        const textReplay = new Text('replay', {
+            fontSize: 11,
+            fill: 0xff1010
+        });
+        textReplay.anchor.set(0.5);
+
+        btnReplay.addChild(textReplay);
+
+        // when player tap start game will start
+        btnReplay.eventMode = 'static';
+        btnReplay.cursor = 'pointer';
+
+        // player tap on start button to start play game
+        btnReplay.on('pointertap', () => {
+            // this.destroy({ children: true, texture: false, baseTexture: false });
+
+            this.displayMainMenuGame();
+        });
 
         // add there text to game over back ground and set position for it
-        overBg.addChild(textGameOver, textYourScore);
+        overBg.addChild(textGameOver, textYourScore, btnReplay);
         textGameOver.x = 180;
         textGameOver.y = 80;
 
         textYourScore.x = 180;
         textYourScore.y = 110;
+
+        btnReplay.x = 180;
+        btnReplay.y = 180;
 
         // add bg game to game scene
         this.addChild(overBg);
@@ -269,7 +295,7 @@ export class GameScene extends Container {
         }
     }
 
-    public destroy() {
-        console.log('GameScene destroy');
-    }
+    // public destroy(children) {
+    //     console.log('GameScene destroy');
+    // }
 }
