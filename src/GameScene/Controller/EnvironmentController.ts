@@ -1,7 +1,7 @@
 import { BaseObject } from '../Objects/BaseObject';
 import { AddToSceneFn, CreateNewRandomPositionFn, RemoveFromSceneFn } from '../type';
 import { Point } from '@pixi/core';
-import { getRandomArbitrary } from '../util';
+import { getRandomBoolean } from '../util';
 
 export class EnvironmentController {
 
@@ -60,10 +60,10 @@ export class EnvironmentController {
     private createRewardRandomly(position: Point) {
 
         // get a random number
-        const randomNumber = getRandomArbitrary(1, 10);
+        const randomBoolean = getRandomBoolean(10);
 
         // if random number === 1
-        if (randomNumber === 1) {
+        if (randomBoolean) {
 
             // create new object is hp bag
             const rewardObject = new BaseObject('medical-bag');

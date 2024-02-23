@@ -2,7 +2,7 @@ import { Point } from '@pixi/core';
 import { Tank } from '../Objects/Tank';
 import { TankPool } from '../TankPool';
 import { AddToSceneFn, CreateNewRandomPositionFn, Direction, FireBulletFn, GameOverFn, RemoveFromSceneFn, SetNewScoreFn } from '../type';
-import { getRandomArbitrary, randomEnumKey, switchFn } from '../util';
+import { getRandomArbitrary, getRandomBoolean, randomEnumKey, switchFn } from '../util';
 
 export class TankController {
 
@@ -53,6 +53,12 @@ export class TankController {
         // get a Tank from TankPool then display it.
         const tank = this._tankPool.releaseTank();
 
+        // random create boss tank
+        const isCreateBossTank = getRandomBoolean(50);
+        if (isCreateBossTank) {
+            this.createBossTank(tank);
+        }
+
         tank.rectangle = this._createNewRandomPositionCall(tank.size);
 
         // create new position based on rectangle
@@ -70,6 +76,17 @@ export class TankController {
 
         const direction = randomEnumKey(Direction);
         tank.direction = direction;
+    }
+
+    private createBossTank(tank: Tank) {
+        // tank have more hp
+        tank.HP = 3;
+
+        // colored tank
+        tank.sprite.tint = '106BEE';
+
+        // tank shoot faster
+        tank.fireBulletTime = 3000;
     }
 
     public fireBullet(position: Point, direction: Direction, isPlayerBullet: boolean) {
@@ -97,6 +114,12 @@ export class TankController {
 
             // set back hp for tank
             tankDie.HP = 1;
+
+            // set tank fire time back
+            tankDie.fireBulletTime = 5000;
+
+            // set back color for tank
+            tankDie.sprite.tint = 'F02468';
 
             //remove sprite from game scene
             this._removeFromScene(tankDie.sprite);

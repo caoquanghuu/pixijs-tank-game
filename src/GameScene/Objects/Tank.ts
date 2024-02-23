@@ -131,6 +131,14 @@ export class Tank extends BaseObject {
         }
     }
 
+    get fireBulletTime(): number {
+        return this._fireBulletTime;
+    }
+
+    set fireBulletTime(time: number) {
+        this._fireBulletTime = time;
+    }
+
     /**
      * Update tank
      * @param dt delta time from ticker

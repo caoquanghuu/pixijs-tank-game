@@ -74,3 +74,16 @@ export function isClassOf(target: object, targetCompare: object) {
 }
 
 export const switchFn = (lookupObject, defaultCase = '_default') => expression => (lookupObject[expression] || lookupObject[defaultCase])();
+
+/**
+ * function random return a boolean result base on percent
+ * @param percent percent want to take true result
+ */
+export function getRandomBoolean(percent: number) {
+    const randomNumber = getRandomArbitrary(1, 100);
+    if (randomNumber <= percent) {
+        return true;
+    } else {
+        return false;
+    }
+}

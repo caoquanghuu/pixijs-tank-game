@@ -26,6 +26,9 @@ export class GameScene extends Container {
 
         this.displayMainMenuGame();
         // this.displayGameOver();
+
+        // add main menu music
+        sound.add('main-menu-music', 'sound/main-menu-music.mp3');
     }
 
     public getTankList(): Tank[] {
@@ -128,8 +131,8 @@ export class GameScene extends Container {
 
         this.addToScene(mainBg);
 
-        sound.add('main-menu-music', 'sound/main-menu-music.mp3');
-        sound.play('main-menu-music', { volume: 0.5, loop: true });
+        // play game music
+        // sound.play('main-menu-music', { volume: 0.5, loop: true });
     }
 
     /**

@@ -19,11 +19,9 @@ export class HPBar extends BaseObject {
 
     private changeHPSpriteFollowHP() {
 
-        if (this._isPlayer) {
-            const hpTexture: string[] = ['1-hp', '2-hp', '3-hp', '4-hp', 'player-hp'];
+        const hpTexture: string[] = ['1-hp', '2-hp', '3-hp', '4-hp', 'player-hp'];
 
-            this.sprite = hpTexture[this._HP - 1];
-        }
+        this.sprite = hpTexture[this._HP - 1];
     }
 
     get HP(): number {
