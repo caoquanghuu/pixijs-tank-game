@@ -2,6 +2,7 @@ import { Point, Rectangle } from '@pixi/core';
 import { BaseObject } from '../Objects/BaseObject';
 import { GetBulletListFn, GetObjectListFn, GetRewardObjectsFn, GetTankListFn, HandleTankMoveFn, RemoveBulletFn, RemoveEnvironmentFn, RemoveRewardObjectFn, Size } from '../type';
 import { getDistanceOfTwoPosition, getRandomArbitrary } from '../util';
+import { sound } from '@pixi/sound';
 
 export class CollisionController {
     private _getTankListCall: GetTankListFn;
@@ -27,6 +28,7 @@ export class CollisionController {
         this._getRewardListCall = getRewardListCallBack;
 
         // add sound collect reward effect
+        sound.add('collect-reward-sound', 'sound/collect-reward-sound.mp3');
     }
 
     private getUsingObjectsList() {
@@ -155,6 +157,8 @@ export class CollisionController {
 
                 if (isCollision) {
                     this._removeRewardObjectCall(object);
+
+                    sound.play('collect-reward-sound');
 
                     if (tank.HP < 5) {
                         tank.HP += 1;
