@@ -20,6 +20,11 @@ export class BulletController {
         this._addBulletToSceneCallBack = addBulletToSceneCallBack;
         this._removeBulletFromSceneCallback = removeBulletFromSceneCallBack;
 
+        // add fire sound
+        sound.add('bullet-fire', 'sound/bullet-fire.mp3');
+
+        // add explosion sound
+        sound.add('explosion', 'sound/explosion.mp3');
     }
 
     get bullets(): Bullet[] {
@@ -47,8 +52,7 @@ export class BulletController {
 
         // add sound fire bullet if it is player fire
         if (isPlayerBullet) {
-            sound.add('bullet-fire', 'sound/bullet-fire.mp3');
-            sound.play('bullet-fire');
+            sound.play('bullet-fire', { volume: 0.2 });
         }
     }
 
@@ -79,9 +83,8 @@ export class BulletController {
 
         // set sound for explosion
         if (bullet.isPlayerBullet) {
-            sound.add('explosion', 'sound/explosion.mp3');
             sound.play('explosion');
-            sound.volume('explosion', 1);
+            sound.volume('explosion', 0.2);
         }
 
         // remove this bullet after time

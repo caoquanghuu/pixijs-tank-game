@@ -25,6 +25,8 @@ export class CollisionController {
         this._removeEnvironmentCall = removeEnvironmentCallBack;
         this._removeRewardObjectCall = removeRewardObjectCallBack;
         this._getRewardListCall = getRewardListCallBack;
+
+        // add sound collect reward effect
     }
 
     private getUsingObjectsList() {

@@ -6,6 +6,7 @@ import { AddToSceneFn, Direction, FireBulletFn, TankDieFn } from '../type';
 import { ControlEngine } from '../Engine/ControlEngine';
 import { getRandomArbitrary, keyboard } from '../util';
 import { HPBar } from './HPBar';
+import { sound } from '@pixi/sound';
 
 export class Tank extends BaseObject {
 
@@ -44,6 +45,9 @@ export class Tank extends BaseObject {
 
             //set control move
             this.moveEngine = new ControlEngine();
+
+            // set moving sound
+            sound.add('tank-moving-sound', 'sound/tank-moving.mp3');
 
             // set hp
             this._HPBar.HP = 5;
@@ -88,6 +92,28 @@ export class Tank extends BaseObject {
         }
     }
 
+    private playTankMovingSound(direction: Direction) {
+        // check sound only for player tank
+        if (!this.isPlayerTank) return;
+
+        // when tank moving
+        if (direction != Direction.STAND) {
+
+            // check sound is playing or not
+            const movingSound = sound.find('tank-moving-sound');
+
+            if (!movingSound.isPlaying) {
+
+                // if sound not playing then play
+                sound.play('tank-moving-sound', { volume: 0.1, loop: true });
+            }
+        } else {
+            // stop playing moving sound when tank stop
+            sound.stop('tank-moving-sound');
+        }
+
+    }
+
     /**
      * change texture and size of tank when direction of tank change
      * @param direction new direction changed
@@ -124,7 +150,10 @@ export class Tank extends BaseObject {
         this._HPBar.update(this.position);
 
         // change texture when direction of tank change
-        this.changeTextureFollowDirection(this.moveEngine.direction);
+        this.changeTextureFollowDirection(this.direction);
+
+        // // play tank moving sound
+        this.playTankMovingSound(this.direction);
 
         // set fire bullet call for bot tank
         if (!this._isPlayerTank) {
