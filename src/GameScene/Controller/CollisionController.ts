@@ -165,6 +165,13 @@ export class CollisionController {
                     }
                 }
             });
+
+            // handle tank vs game border
+            if (!tank.isPlayerTank) {
+                if (tank.position.x === 10 || tank.position.x === 790 || tank.position.y === 10 || tank.position.y === 590) {
+                    tank.moveEngine.forceChangeDirectionCall();
+                }
+            }
         });
 
 
