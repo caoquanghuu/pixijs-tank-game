@@ -48,3 +48,6 @@ export type RemoveRewardObjectFn = (rewardObject: BaseObject) => void;
 
 export type GetRewardObjectsFn = () => BaseObject[];
 
+export type GetBunkerFn = () => BaseObject;
+
+export type DisplayGameOverFn = () => void;

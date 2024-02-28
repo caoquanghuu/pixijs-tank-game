@@ -47,6 +47,10 @@ export class GameScene extends Container {
         return this._environmentController.rewardObjects;
     }
 
+    public getBunker(): BaseObject {
+        return this._environmentController.bunker;
+    }
+
     public removeEnvironmentCall(environment: BaseObject) {
         this._environmentController.removeEnvironmentObject(environment);
     }
@@ -54,7 +58,6 @@ export class GameScene extends Container {
     public removeRewardObjectCall(rewardObject: BaseObject) {
         this._environmentController.removeObject(rewardObject, this._environmentController.rewardObjects);
     }
-
 
     public removeBulletCall(bullet: Bullet) {
         this._bulletController.removeBullet(bullet);
@@ -154,7 +157,8 @@ export class GameScene extends Container {
         this.displayScore(positionDisplayScore);
 
         // constructor controller
-        this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this), this.removeEnvironmentCall.bind(this), this.removeRewardObjectCall.bind(this), this.getRewardList.bind(this));
+        this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this),
+            this.handleTankMoveCall.bind(this), this.removeEnvironmentCall.bind(this), this.removeRewardObjectCall.bind(this), this.getRewardList.bind(this), this.getBunker.bind(this), this.displayGameOver.bind(this));
 
         this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
 
@@ -204,8 +208,6 @@ export class GameScene extends Container {
 
         // player tap on start button to start play game
         btnReplay.on('pointertap', () => {
-            // this.destroy({ children: true, texture: false, baseTexture: false });
-
             this.displayMainMenuGame();
         });
 
@@ -303,7 +305,7 @@ export class GameScene extends Container {
         }
     }
 
-    // public destroy(children) {
+    // public destroy() {
     //     console.log('GameScene destroy');
     // }
 }

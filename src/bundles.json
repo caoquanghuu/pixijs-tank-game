@@ -141,6 +141,10 @@
             {
                 "name": "medical-bag",
                 "srcs": "assets/units/medic/medical-bag.png"
+            },
+            {
+                "name": "base-bunker",
+                "srcs": "assets/units/bunker/bunker.png"
             }
         ]
     }

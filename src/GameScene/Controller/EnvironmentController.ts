@@ -1,6 +1,6 @@
 import { BaseObject } from '../Objects/BaseObject';
 import { AddToSceneFn, CreateNewRandomPositionFn, RemoveFromSceneFn } from '../type';
-import { Point } from '@pixi/core';
+import { Point, Rectangle } from '@pixi/core';
 import { getRandomBoolean } from '../util';
 
 export class EnvironmentController {
@@ -8,6 +8,7 @@ export class EnvironmentController {
     // list of environment objects which will be create on map
     private _environmentObjects: BaseObject[] = [];
     private _rewardObjects: BaseObject[] = [];
+    private _bunker: BaseObject;
     private _addToSceneCall: AddToSceneFn;
     private _createNewRandomPositionCall: CreateNewRandomPositionFn;
     private _removeFromSceneCall: RemoveFromSceneFn;
@@ -18,7 +19,28 @@ export class EnvironmentController {
         this._removeFromSceneCall = removeFromSceneCallBack;
         this._createNewRandomPositionCall = createNewRandomPositionCallBack;
 
-        //create environment object with define from begin*/
+        // create a bunker
+        this._bunker = new BaseObject('base-bunker');
+        const position = new Point(400, 580);
+        this._bunker.position = position;
+        this._bunker.spriteSize = { w: 50, h: 50 };
+        this._addToSceneCall(this._bunker.sprite);
+        this._bunker.size = { w: 50, h: 50 };
+
+        // create tree around bunker
+        const pos1 = new Point(370, 590);
+        const pos2 = new Point(430, 590);
+        const pos3 = new Point(381, 550);
+        for (let i = 0; i < 6; i++) {
+            this.createEnvironmentObject('tree-1', pos1);
+            this.createEnvironmentObject('tree-1', pos2);
+            this.createEnvironmentObject('tree-1', pos3);
+            pos1.y -= 7.5;
+            pos2.y -= 7.5;
+            pos3.x += 7.5;
+        }
+
+        // create environment object with define from begin*/
         for (let i = 0; i < 30; i++) {
             this.createEnvironmentObject('tree-1');
             this.createEnvironmentObject('tree-2');
@@ -29,8 +51,9 @@ export class EnvironmentController {
     /**
      * create environment object to map
      * @param name name of object want create base on asset
+     * @param position set position for object if require
      */
-    private createEnvironmentObject(name: string) {
+    private createEnvironmentObject(name: string, position?: Point) {
 
         // use name to get image from asset
         const object = new BaseObject(name);
@@ -44,14 +67,21 @@ export class EnvironmentController {
         // set size property
         object.size = { w: 15, h: 15 };
 
-        // create a rectangle and check that position is available */
-        object.rectangle = this._createNewRandomPositionCall(object.size);
+        // set position if para is define
+        if (!position) {
+            // create a rectangle and check that position is available */
+            object.rectangle = this._createNewRandomPositionCall(object.size);
 
-        // create new position based on rectangle
-        const position = new Point(object.rectangle.x, object.rectangle.y);
+            // create new position based on rectangle
+            const newPosition = new Point(object.rectangle.x, object.rectangle.y);
 
-        // set position for object
-        object.position = position;
+            // set position for object
+            object.position = newPosition;
+        } else {
+            object.position = position;
+            const rectangle = new Rectangle(position.x, position.y);
+            object.rectangle = rectangle;
+        }
 
         // push it to this.environmentObject array
         this._environmentObjects.push(object);
@@ -108,6 +138,10 @@ export class EnvironmentController {
     // method for collision controller can access to get position of environment objects*/
     get environmentObjects(): BaseObject[] {
         return this._environmentObjects;
+    }
+
+    get bunker(): BaseObject {
+        return this._bunker;
     }
 
 }
