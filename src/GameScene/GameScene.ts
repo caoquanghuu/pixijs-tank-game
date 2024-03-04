@@ -1,3 +1,5 @@
+import 'pixi-spine';
+import '@pixi-spine/loader-3.8';
 import { Container, DisplayObject } from '@pixi/display';
 import { Sprite } from '@pixi/sprite';
 import { AssetsLoader } from '../AssetsLoader';

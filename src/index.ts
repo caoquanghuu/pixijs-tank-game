@@ -1,7 +1,11 @@
+
+import 'pixi-spine';
+
 import { Application } from './pixi';
 import bundles from './bundles.json';
 import { AssetsLoader } from './AssetsLoader';
 import { GameScene } from './GameScene/GameScene';
+import '@pixi-spine/loader-3.8';
 
 class Main {
 
