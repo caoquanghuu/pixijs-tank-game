@@ -196,11 +196,10 @@ export class CollisionController {
                 }
             });
 
-            if (!bullet.isPlayerBullet) {
-                const isCollision = this.checkCollision(bullet, bunker);
-                if (isCollision) {
-                    this._displayGameOverCall();
-                }
+            // check collision with bullet and bunker
+            const isCollision = this.checkCollision(bullet, bunker);
+            if (isCollision) {
+                this._displayGameOverCall();
             }
 
         });
