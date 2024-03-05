@@ -39,16 +39,19 @@ class Main {
         await AssetsLoader.loadBundle(bundles);
 
         // create scene
-        this._gameScene = new GameScene();
+        this.createNewGame();
+
+        // Update function
+        this._pixiApp.ticker.add(this._update.bind(this));
+    }
+
+    private createNewGame() {
+        this._gameScene = new GameScene(this.createNewGame.bind(this));
         this._gameScene.init();
         this._pixiApp.stage.eventMode = 'static';
 
         // Add scene to render stage
         this._pixiApp.stage.addChild(this._gameScene);
-
-
-        // Update function
-        this._pixiApp.ticker.add(this._update.bind(this));
     }
 
     private _update(deltaTime: number) {

@@ -51,3 +51,5 @@ export type GetRewardObjectsFn = () => BaseObject[];
 export type GetBunkerFn = () => BaseObject;
 
 export type DisplayGameOverFn = () => void;
+
+export type CreateNewGameFn = () => void;

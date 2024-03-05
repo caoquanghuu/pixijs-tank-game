@@ -6,7 +6,7 @@ import { AssetsLoader } from '../AssetsLoader';
 import { TankController } from './Controller/TankController';
 import { BulletController } from './Controller/BulletController';
 import { EnvironmentController } from './Controller/EnvironmentController';
-import { Direction, Size } from './type';
+import { CreateNewGameFn, Direction, Size } from './type';
 import { Point, Rectangle } from '@pixi/core';
 import { CollisionController } from './Controller/CollisionController';
 import { Tank } from './Objects/Tank';
@@ -14,6 +14,11 @@ import { Bullet } from './Objects/Bullet';
 import { BaseObject } from './Objects/BaseObject';
 import { Text } from '@pixi/text';
 import { sound } from '@pixi/sound';
+import { Assets } from '@pixi/assets';
+import { Spine } from 'pixi-spine';
+// import { Color } from '@pixi/core';
+// Color.shared.setValue(0xffffff).toHex(); // '#ffffff'
+
 
 export class GameScene extends Container {
     private _playerScore: number = 0;
@@ -22,15 +27,39 @@ export class GameScene extends Container {
     private _bulletController: BulletController;
     private _environmentController: EnvironmentController;
     private _collisionController: CollisionController;
+    private _createNewGameCall: CreateNewGameFn;
 
-    constructor() {
+    constructor(createNewGameCallBack: CreateNewGameFn) {
         super();
+
+        this._createNewGameCall = createNewGameCallBack;
 
         this.displayMainMenuGame();
         // this.displayGameOver();
-
         // add main menu music
         sound.add('main-menu-music', 'sound/main-menu-music.mp3');
+
+        Assets.load('assets/units/spine2d/spineboy-pro.json').then((resource) => {
+            const animation = new Spine(resource.spineData);
+            animation.width = 100;
+            animation.height = 200;
+            animation.position.x = 400;
+            animation.position.y = 300;
+
+            this.addToScene(animation);
+
+            // add the animation to the scene and render...
+            this.addToScene(animation);
+
+            if (animation.state.hasAnimation('run')) {
+                // run forever, little boy!
+                animation.state.setAnimation(0, 'run', true);
+                // dont run too fast
+                animation.state.timeScale = 1;
+                // update yourself
+                animation.autoUpdate = true;
+            }
+        });
     }
 
     public getTankList(): Tank[] {
@@ -210,7 +239,9 @@ export class GameScene extends Container {
 
         // player tap on start button to start play game
         btnReplay.on('pointertap', () => {
-            this.displayMainMenuGame();
+            this.destroy();
+            this._createNewGameCall();
+            // this.displayMainMenuGame();
         });
 
         // add there text to game over back ground and set position for it
