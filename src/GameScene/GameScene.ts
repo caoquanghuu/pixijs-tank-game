@@ -40,10 +40,10 @@ export class GameScene extends Container {
 
         // test spine object
         const spine = new SpineObject();
-        spine.loadBundle('assets/units/spine2d/spine-boy-pro.json').then(() => {
+        spine.loadBundle('assets/units/spine2d/tank/tank-pro.json').then(() => {
             spine.spine;
-            spine.animation = { trackIndex:0, animationName: 'run', loop: true };
-            spine.size = { w: 200, h: 300 };
+            spine.animation = { trackIndex:0, animationName: 'shoot', loop: true };
+            spine.size = { w: 200, h: 100 };
             spine.position = { x: 400, y: 400 };
             this.addToScene(spine.spine);
         }
