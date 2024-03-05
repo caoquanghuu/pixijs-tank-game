@@ -14,8 +14,7 @@ import { Bullet } from './Objects/Bullet';
 import { BaseObject } from './Objects/BaseObject';
 import { Text } from '@pixi/text';
 import { sound } from '@pixi/sound';
-import { Assets } from '@pixi/assets';
-import { Spine } from 'pixi-spine';
+import { SpineObject } from './Objects/SpineObject';
 // import { Color } from '@pixi/core';
 // Color.shared.setValue(0xffffff).toHex(); // '#ffffff'
 
@@ -39,27 +38,16 @@ export class GameScene extends Container {
         // add main menu music
         sound.add('main-menu-music', 'sound/main-menu-music.mp3');
 
-        Assets.load('assets/units/spine2d/spineboy-pro.json').then((resource) => {
-            const animation = new Spine(resource.spineData);
-            animation.width = 100;
-            animation.height = 200;
-            animation.position.x = 400;
-            animation.position.y = 300;
-
-            this.addToScene(animation);
-
-            // add the animation to the scene and render...
-            this.addToScene(animation);
-
-            if (animation.state.hasAnimation('run')) {
-                // run forever, little boy!
-                animation.state.setAnimation(0, 'run', true);
-                // dont run too fast
-                animation.state.timeScale = 1;
-                // update yourself
-                animation.autoUpdate = true;
-            }
-        });
+        // test spine object
+        const spine = new SpineObject();
+        spine.loadBundle('assets/units/spine2d/spine-boy-pro.json').then(() => {
+            spine.spine;
+            spine.animation = { trackIndex:0, animationName: 'run', loop: true };
+            spine.size = { w: 200, h: 300 };
+            spine.position = { x: 400, y: 400 };
+            this.addToScene(spine.spine);
+        }
+        );
     }
 
     public getTankList(): Tank[] {
@@ -304,15 +292,14 @@ export class GameScene extends Container {
         this._scoreSpriteArray = scoreSpriteArray;
     }
 
-    public init() {
+    public async init() {
         console.log('GameScene init');
+        // //
+        // const img = new Sprite(AssetsLoader.getTexture('tank'));
+        // img.position.set(100, 100);
 
-        //
-        const img = new Sprite(AssetsLoader.getTexture('tank'));
-        img.position.set(100, 100);
-
-        //
-        this.addChild(img);
+        // //
+        // this.addChild(img);
     }
 
     private addToScene(displayObject: DisplayObject) {
