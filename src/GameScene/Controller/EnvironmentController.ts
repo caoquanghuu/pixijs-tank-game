@@ -23,7 +23,7 @@ export class EnvironmentController {
         this._bunker = new BaseObject('base-bunker');
         const position = new Point(400, 580);
         this._bunker.position = position;
-        this._bunker.spriteSize = { w: 50, h: 50 };
+        this._bunker.setImageSize({ w: 50, h: 50 });
         this._addToSceneCall(this._bunker.sprite);
         this._bunker.size = { w: 50, h: 50 };
 
@@ -62,7 +62,7 @@ export class EnvironmentController {
         this._addToSceneCall(object.sprite);
 
         // set size */
-        object.spriteSize = { w: 15, h: 15 };
+        object.setImageSize({ w: 15, h: 15 });
 
         // set size property
         object.size = { w: 15, h: 15 };
@@ -102,7 +102,7 @@ export class EnvironmentController {
             rewardObject.position = position;
 
             // set size
-            rewardObject.spriteSize = { w: 20, h: 20 };
+            rewardObject.setImageSize({ w: 20, h: 20 });
 
             rewardObject.size = { w: 20, h : 20 };
 

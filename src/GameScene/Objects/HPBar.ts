@@ -32,7 +32,7 @@ export class HPBar extends BaseObject {
         this._HP = hp;
     }
 
-    update(position: Point) {
+    public update(position: Point) {
         const newPosition = new Point(position.x, position.y - 20);
         this.position = newPosition;
         this.changeHPSpriteFollowHP();

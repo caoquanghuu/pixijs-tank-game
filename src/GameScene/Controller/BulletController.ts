@@ -73,7 +73,7 @@ export class BulletController {
         const explosion = new BaseObject('explosion');
 
         // set size for explosion sprite
-        explosion.spriteSize = { w: 15, h: 15 };
+        explosion.setImageSize({ w: 15, h: 15 });
 
         // add this explosion to game
         this._addBulletToSceneCallBack(explosion.sprite);

@@ -28,7 +28,7 @@ export class BaseObject {
      * constructor a object with option
      * @param id name of object base on asset name, this ll be use to get image too
      */
-    constructor(id: string) {
+    constructor(id?: string) {
         // get image for sprite with id
         this._sprite = new Sprite(AssetsLoader.getTexture(id));
 
@@ -191,7 +191,7 @@ export class BaseObject {
     }
 
     // method to set width height of the image
-    set spriteSize(size: Size) {
+    public setImageSize(size: Size) {
         this.sprite.width = size.w;
         this.sprite.height = size.h;
     }

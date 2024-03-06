@@ -25,7 +25,7 @@ export class Bullet extends BaseObject {
         this._isPlayerBullet = isPlayer;
 
         // resize bullet sprite
-        this.spriteSize = { w: 10, h: 15 };
+        this.setImageSize({ w: 10, h: 15 });
 
         // fix size
         this.size = { w: 10, h: 15 };

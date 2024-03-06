@@ -18,7 +18,7 @@ export type Size = {
     h: number,
 };
 
-export type AddToSceneFn = (sprite: Sprite) => void;
+export type AddToSceneFn = (object: any) => void;
 
 export type RemoveFromSceneFn = (sprite: Sprite) => void;
 
