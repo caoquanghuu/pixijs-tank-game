@@ -8,7 +8,7 @@ import { Point } from '@pixi/core';
 export class SpineObject extends BaseObject {
     private _url: string;
     private _spineData: any;
-    private _spine: Spine;
+    protected _spine: Spine;
 
     constructor() {
         super();
@@ -23,6 +23,18 @@ export class SpineObject extends BaseObject {
         return this._spine;
     }
 
+    /**
+     * method to flip image
+     * @param isFlip set true to the face of character turn left, false to turn right
+     */
+    protected flipImage(isFlip: boolean) {
+        if (isFlip) {
+            this._spine.scale.x = -0.1;
+        } else {
+            this._spine.scale.x = 0.1;
+        }
+    }
+
     override set position(position: Point) {
         this._spine.position.x = position.x;
         this._spine.position.y = position.y;
@@ -33,11 +45,6 @@ export class SpineObject extends BaseObject {
         position.x = this._spine.position.x;
         position.y = this._spine.position.y;
         return position;
-    }
-
-    public override setImageSize(size: { w: number, h: number }) {
-        this._spine.width = size.w;
-        this._spine.height = size.h;
     }
 
     public async loadBundle(url: string) {

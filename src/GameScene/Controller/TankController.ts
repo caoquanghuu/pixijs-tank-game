@@ -3,7 +3,7 @@ import { Tank } from '../Objects/Tank';
 import { TankPool } from '../TankPool';
 import { AddToSceneFn, CreateNewRandomPositionFn, Direction, FireBulletFn, GameOverFn, RemoveFromSceneFn, SetNewScoreFn } from '../type';
 import { getRandomArbitrary, getRandomBoolean, randomEnumKey, switchFn } from '../util';
-import { SpineObject } from '../Objects/SpineObject';
+import { SpineBoy } from '../Objects/SpineBoy';
 
 export class TankController {
 
@@ -20,7 +20,7 @@ export class TankController {
     private _gameOverCall: GameOverFn;
 
     // test for spine object
-    private _spineBoy: SpineObject;
+    private _spineBoy: SpineBoy;
 
 
     constructor(addToSceneCallBack: AddToSceneFn, removeFromSceneCallBack: RemoveFromSceneFn, fireBulletCallBack: FireBulletFn,
@@ -48,10 +48,9 @@ export class TankController {
 
         this._playerTank.position = position;
         // test add spine boy on player tank
-        this._spineBoy = new SpineObject();
+        this._spineBoy = new SpineBoy();
         this._spineBoy.loadBundle('assets/units/spine2d/spine-boy/spine-boy-pro.json').then(() => {
             this._spineBoy.animation = { trackIndex:0, animationName: 'idle', loop: true };
-            this._spineBoy.setImageSize({ w: 100, h: 200 });
             this._spineBoy.position = this._playerTank.position;
             this._addToScene(this._spineBoy.spine);
         });
@@ -232,6 +231,9 @@ export class TankController {
         }
 
         this._usingTanks.forEach(tank => tank.update(dt));
+
+        // test update for spine boy
+        this._spineBoy.update(this._playerTank.position);
     }
 
     /**method get tank list for check collision can access */
