@@ -18,6 +18,16 @@ export type Size = {
     h: number,
 };
 
+export type AnimationOption = {
+    trackIndex: number,
+    animationName: string,
+    loop: boolean
+};
+
+export interface AddAnimationOption extends AnimationOption {
+    delay: number
+}
+
 export type AddToSceneFn = (object: any) => void;
 
 export type RemoveFromSceneFn = (sprite: Sprite) => void;
