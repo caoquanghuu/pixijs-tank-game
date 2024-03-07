@@ -42,6 +42,12 @@ export class GameScene extends Container {
         const spine = new SpineObject();
         spine.loadBundle('assets/units/spine2d/spine-boy/spine-boy-pro.json').then(() => {
             spine.setAnimation({ trackIndex:0, animationName: 'idle', loop: true });
+            spine.addAnimation({ trackIndex:0, animationName: 'aim', loop: false, delay:0.5 });
+            spine.addAnimation({ trackIndex:1, animationName: 'shoot', loop: false, delay:0.75 });
+            spine.addAnimation({ trackIndex:0, animationName: 'walk', loop: true, delay:1.1 });
+            spine.addAnimation({ trackIndex:0, animationName: 'run', loop: true, delay:1.5 });
+            spine.addAnimation({ trackIndex:0, animationName: 'idle', loop: true, delay:1.65 });
+            spine.addAnimation({ trackIndex:1, animationName: 'shoot', loop: false, delay:4.5 });
             spine.spine.scale = { x:-0.2, y:0.2 };
             const position = new Point(400, 400);
             spine.position = position;
