@@ -50,7 +50,7 @@ export class TankController {
         // test add spine boy on player tank
         this._spineBoy = new SpineBoy();
         this._spineBoy.loadBundle('assets/units/spine2d/spine-boy/spine-boy-pro.json').then(() => {
-            this._spineBoy.animation = { trackIndex:0, animationName: 'idle', loop: true };
+            this._spineBoy.setAnimation({ trackIndex:0, animationName: 'idle', loop: true });
             this._spineBoy.position = this._playerTank.position;
             this._addToScene(this._spineBoy.spine);
         });
@@ -102,6 +102,11 @@ export class TankController {
 
     public fireBullet(position: Point, direction: Direction, isPlayerBullet: boolean) {
         this._fireBulletCallback(position, direction, isPlayerBullet);
+
+        // animation fire for spine boy
+        if (isPlayerBullet) {
+            this._spineBoy.addAnimation({ trackIndex: 2, animationName: 'shoot', loop: false, delay:0 });
+        }
     }
 
     /**
