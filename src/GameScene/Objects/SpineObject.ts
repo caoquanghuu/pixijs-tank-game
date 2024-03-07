@@ -9,14 +9,20 @@ export class SpineObject extends BaseObject {
     private _url: string;
     private _spineData: any;
     protected _spine: Spine;
+    private _animationName: string;
 
     constructor() {
         super();
         this.speed = 1;
     }
 
-    set animation(option: {trackIndex: number, animationName: string, loop: boolean}) {
+    public setAnimation(option: {trackIndex: number, animationName: string, loop: boolean}) {
         this._spine.state.setAnimation(option.trackIndex, option.animationName, option.loop);
+        this._animationName = option.animationName;
+    }
+
+    get animationName() {
+        return this._animationName;
     }
 
     get spine(): Spine {

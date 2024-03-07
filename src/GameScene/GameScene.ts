@@ -41,7 +41,7 @@ export class GameScene extends Container {
         // test spine object
         const spine = new SpineObject();
         spine.loadBundle('assets/units/spine2d/spine-boy/spine-boy-pro.json').then(() => {
-            spine.animation = { trackIndex:0, animationName: 'idle', loop: true };
+            spine.setAnimation({ trackIndex:0, animationName: 'idle', loop: true });
             spine.spine.scale = { x:-0.2, y:0.2 };
             const position = new Point(400, 400);
             spine.position = position;
