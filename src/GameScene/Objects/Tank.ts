@@ -21,9 +21,10 @@ export class Tank extends BaseObject {
     private _fireBulletTime: number;
 
     constructor(isPlayer: boolean, fireBulletCallBack: FireBulletFn, tankDieCallBack: TankDieFn, addToSceneCallBack: AddToSceneFn) {
-
         // set image of tank is player tank or bot tank
         super('tank-stand-up');
+
+        // define methods need to call
         this._fireBulletCallBack = fireBulletCallBack;
         this._tankDieCall = tankDieCallBack;
 
@@ -128,14 +129,6 @@ export class Tank extends BaseObject {
         }
     }
 
-    get fireBulletTime(): number {
-        return this._fireBulletTime;
-    }
-
-    set fireBulletTime(time: number) {
-        this._fireBulletTime = time;
-    }
-
     /**
      * Update tank
      * @param dt delta time from ticker
@@ -178,19 +171,27 @@ export class Tank extends BaseObject {
         return this._HPBar.HP;
     }
 
-    set HP(hp: number) {
-        this._HPBar.HP = hp;
-    }
-
-    set direction(direction: Direction) {
-        this._moveEngine.direction = direction;
-    }
-
     get direction(): Direction {
         return this._moveEngine.direction;
     }
 
     get isPlayerTank(): boolean {
         return this._isPlayerTank;
+    }
+
+    get fireBulletTime(): number {
+        return this._fireBulletTime;
+    }
+
+    set fireBulletTime(time: number) {
+        this._fireBulletTime = time;
+    }
+
+    set HP(hp: number) {
+        this._HPBar.HP = hp;
+    }
+
+    set direction(direction: Direction) {
+        this._moveEngine.direction = direction;
     }
 }

@@ -192,29 +192,6 @@ export class TankController {
 
         directionSwitch(direction);
 
-        // switch (direction) {
-        //     case Direction.UP: {
-        //         const newPosition = new Point(tank.position.x, tank.position.y + 2);
-        //         tank.position = newPosition;
-        //         break;
-        //     }
-        //     case Direction.DOWN: {
-        //         const newPosition = new Point(tank.position.x, tank.position.y - 2);
-        //         tank.position = newPosition;
-        //         break;
-        //     }
-        //     case Direction.LEFT: {
-        //         const newPosition = new Point(tank.position.x + 2, tank.position.y);
-        //         tank.position = newPosition;
-        //         break;
-        //     }
-        //     case Direction.RIGHT: {
-        //         const newPosition = new Point(tank.position.x - 2, tank.position.y);
-        //         tank.position = newPosition;
-        //         break;
-        //     }
-        // }
-
         //change direction if tank is bot
         if (!tank.isPlayerTank) {
             tank.moveEngine.forceChangeDirectionCall();

@@ -16,7 +16,6 @@ export class SpineBoy extends SpineObject {
         isRight : false
     };
 
-
     constructor() {
         super();
         this.init().then(() => {

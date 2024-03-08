@@ -60,50 +60,6 @@ export class GameScene extends Container {
         );
     }
 
-    public getTankList(): Tank[] {
-        return this._tankController.usingTankList;
-    }
-
-    public getBulletList(): Bullet[] {
-        return this._bulletController.bullets;
-    }
-
-    public getEnvironmentList(): BaseObject[] {
-        return this._environmentController.environmentObjects;
-    }
-
-    public getRewardList(): BaseObject[] {
-        return this._environmentController.rewardObjects;
-    }
-
-    public getBunker(): BaseObject {
-        return this._environmentController.bunker;
-    }
-
-    public removeEnvironmentCall(environment: BaseObject) {
-        this._environmentController.removeEnvironmentObject(environment);
-    }
-
-    public removeRewardObjectCall(rewardObject: BaseObject) {
-        this._environmentController.removeObject(rewardObject, this._environmentController.rewardObjects);
-    }
-
-    public removeBulletCall(bullet: Bullet) {
-        this._bulletController.removeBullet(bullet);
-    }
-
-    public handleTankMoveCall(tank: Tank) {
-        this._tankController.handleTankMove(tank);
-    }
-
-    public createNewRandomPositionCall(size: Size): Rectangle {
-        return this._collisionController.createNewRandomPosition(size);
-    }
-
-    public displayGameOverCall() {
-        this._UIController.displayGameOver();
-    }
-
     /**
      * function to send request to bullet controller create a bullet
      * @param position position start of bullet which get from tank
@@ -130,7 +86,7 @@ export class GameScene extends Container {
 
         // set a back ground of game
         const bg = new Sprite(AssetsLoader.getTexture('game-back-ground'));
-        this.addChild(bg);
+        this.addToScene(bg);
         bg.width = 800;
         bg.height = 600;
 
@@ -140,7 +96,7 @@ export class GameScene extends Container {
         // display score
         this.displayScore(positionDisplayScore);
 
-        // constructor controller
+        // constructor controllers
         this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this), this.removeEnvironmentCall.bind(this), this.removeRewardObjectCall.bind(this), this.getRewardList.bind(this), this.getBunker.bind(this), this.displayGameOverCall.bind(this));
 
         this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
@@ -191,18 +147,6 @@ export class GameScene extends Container {
         this._scoreSpriteArray = scoreSpriteArray;
     }
 
-    public async init() {
-        console.log('GameScene init');
-    }
-
-    private addToScene(displayObject: DisplayObject) {
-        this.addChild(displayObject);
-    }
-
-    private removeFromScene(sprite: Sprite) {
-        this.removeChild(sprite);
-    }
-
     public update(deltaTime: number) {
         this._time += deltaTime;
         if (this._time > 1000) {
@@ -215,5 +159,61 @@ export class GameScene extends Container {
             this._bulletController.update(deltaTime);
             this._collisionController.update();
         }
+    }
+
+    public getTankList(): Tank[] {
+        return this._tankController.usingTankList;
+    }
+
+    public getBulletList(): Bullet[] {
+        return this._bulletController.bullets;
+    }
+
+    public getEnvironmentList(): BaseObject[] {
+        return this._environmentController.environmentObjects;
+    }
+
+    public getRewardList(): BaseObject[] {
+        return this._environmentController.rewardObjects;
+    }
+
+    public getBunker(): BaseObject {
+        return this._environmentController.bunker;
+    }
+
+    public removeEnvironmentCall(environment: BaseObject) {
+        this._environmentController.removeEnvironmentObject(environment);
+    }
+
+    public removeRewardObjectCall(rewardObject: BaseObject) {
+        this._environmentController.removeObject(rewardObject, this._environmentController.rewardObjects);
+    }
+
+    public removeBulletCall(bullet: Bullet) {
+        this._bulletController.removeBullet(bullet);
+    }
+
+    public handleTankMoveCall(tank: Tank) {
+        this._tankController.handleTankMove(tank);
+    }
+
+    public createNewRandomPositionCall(size: Size): Rectangle {
+        return this._collisionController.createNewRandomPosition(size);
+    }
+
+    public displayGameOverCall() {
+        this._UIController.displayGameOver();
+    }
+
+    private addToScene(displayObject: DisplayObject) {
+        this.addChild(displayObject);
+    }
+
+    private removeFromScene(sprite: Sprite) {
+        this.removeChild(sprite);
+    }
+
+    public async init() {
+        console.log('GameScene init');
     }
 }

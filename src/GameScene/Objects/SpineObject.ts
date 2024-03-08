@@ -20,6 +20,29 @@ export class SpineObject extends BaseObject {
         this._animationSpeed = 1;
     }
 
+    /** method to get current animation name */
+    get animationName(): string {
+        return this._animationName;
+    }
+
+    get spine(): Spine {
+        return this._spine;
+    }
+
+    /** method to set position of spine which override on base object set position */
+    override set position(position: Point) {
+        this._spine.position.x = position.x;
+        this._spine.position.y = position.y;
+    }
+
+    /** method to return position of spine */
+    override get position(): Point {
+        const position = new Point();
+        position.x = this._spine.position.x;
+        position.y = this._spine.position.y;
+        return position;
+    }
+
     /**
      * method to set animation for spine with option
      * @param option option for set animation
@@ -51,15 +74,6 @@ export class SpineObject extends BaseObject {
         this._spine.state.clearTrack(trackIndex);
     }
 
-    /** method to get current animation name */
-    get animationName(): string {
-        return this._animationName;
-    }
-
-    get spine(): Spine {
-        return this._spine;
-    }
-
     /**
      * method to flip image
      * @param isFlip set true to the face of character turn left, false to turn right
@@ -70,20 +84,6 @@ export class SpineObject extends BaseObject {
         } else {
             this._spine.scale.x = 0.1;
         }
-    }
-
-    /** method to set position of spine which override on base object set position */
-    override set position(position: Point) {
-        this._spine.position.x = position.x;
-        this._spine.position.y = position.y;
-    }
-
-    /** method to return position of spine */
-    override get position(): Point {
-        const position = new Point();
-        position.x = this._spine.position.x;
-        position.y = this._spine.position.y;
-        return position;
     }
 
     /**
