@@ -20,11 +20,6 @@ export class BulletController {
         this._addBulletToSceneCallBack = addBulletToSceneCallBack;
         this._removeBulletFromSceneCallback = removeBulletFromSceneCallBack;
 
-        // add fire sound
-        sound.add('bullet-fire', 'sound/bullet-fire.mp3');
-
-        // add explosion sound
-        sound.add('explosion', 'sound/explosion.mp3');
     }
 
     get bullets(): Bullet[] {

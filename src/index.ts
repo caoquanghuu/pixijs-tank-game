@@ -6,6 +6,7 @@ import bundles from './bundles.json';
 import { AssetsLoader } from './AssetsLoader';
 import { GameScene } from './GameScene/GameScene';
 import '@pixi-spine/loader-3.8';
+import { sound } from '@pixi/sound';
 
 class Main {
 
@@ -43,6 +44,20 @@ class Main {
 
         // Update function
         this._pixiApp.ticker.add(this._update.bind(this));
+
+        sound.add('main-menu-music', 'sound/main-menu-music.mp3');
+
+        // add sound collect reward effect
+        sound.add('collect-reward-sound', 'sound/collect-reward-sound.mp3');
+
+        // set moving sound
+        sound.add('tank-moving-sound', 'sound/tank-moving.mp3');
+
+        // add fire sound
+        sound.add('bullet-fire', 'sound/bullet-fire.mp3');
+
+        // add explosion sound
+        sound.add('explosion', 'sound/explosion.mp3');
     }
 
     private createNewGame() {

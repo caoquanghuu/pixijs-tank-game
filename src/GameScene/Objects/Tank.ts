@@ -46,9 +46,6 @@ export class Tank extends BaseObject {
             //set control move
             this.moveEngine = new ControlEngine();
 
-            // set moving sound
-            sound.add('tank-moving-sound', 'sound/tank-moving.mp3');
-
             // set hp
             this._HPBar.HP = 5;
 
