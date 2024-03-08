@@ -31,8 +31,6 @@ export class CollisionController {
         this._removeRewardObjectCall = removeRewardObjectCallBack;
         this._displayGameOverCall = displayGameOverCallBack;
 
-        // add sound collect reward effect
-        sound.add('collect-reward-sound', 'sound/collect-reward-sound.mp3');
     }
 
     private getUsingObjectsList() {
@@ -62,7 +60,7 @@ export class CollisionController {
         // create a new rectangle
         const rectangle = new Rectangle(null, null, size.w, size.h);
 
-        let isPositionAvailable = false;
+        let isPositionAvailable = true;
 
         do {
             // create a test position which will be compare
@@ -79,9 +77,7 @@ export class CollisionController {
                 const pos2 = new Point(object.rectangle.x, object.rectangle.y);
                 const distance = getDistanceOfTwoPosition(pos1, pos2);
 
-                if (distance > 70) {
-                    return true;
-                } else {
+                if (distance < 70) {
                     return false;
                 }
 
@@ -92,9 +88,6 @@ export class CollisionController {
                 // }
             });
 
-            if (isPositionAvailable) {
-                break;
-            }
         } while (isPositionAvailable);
 
         // return that rectangle which will ready to use
