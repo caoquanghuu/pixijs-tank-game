@@ -63,3 +63,9 @@ export type GetBunkerFn = () => BaseObject;
 export type DisplayGameOverFn = () => void;
 
 export type CreateNewGameFn = () => void;
+
+export type StartPlayGameFn = () => void;
+
+export type DestroyFn = () => void;
+
+export type DisplayScoreFn = (position: Point) => void;
