@@ -1,4 +1,5 @@
 import { Point } from '@pixi/core';
+import EventEmitter from 'eventemitter3';
 
 export const randomEnumKey = (enumeration: any) => {
     const keys = Object.keys(enumeration).filter(
@@ -87,3 +88,13 @@ export function getRandomBoolean(percent: number) {
         return false;
     }
 }
+
+const eventEmitter = new EventEmitter();
+const Emitter = {
+    on: (event: string, fn) => eventEmitter.on(event, fn),
+    once: (event: string, fn) => eventEmitter.once(event, fn),
+    off: (event: string, fn) => eventEmitter.off(event, fn),
+    emit: (event: string, payload) => eventEmitter.emit(event, payload),
+};
+Object.freeze(Emitter);
+export default Emitter;

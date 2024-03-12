@@ -131,5 +131,4 @@ export class UIController {
         const positionDisplayScore = new Point(400, 340);
         this._displayScoreCall(positionDisplayScore);
     }
-
 }

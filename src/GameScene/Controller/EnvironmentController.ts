@@ -27,14 +27,14 @@ export class EnvironmentController {
         this._addToSceneCall(this._bunker.sprite);
         this._bunker.size = { w: 50, h: 50 };
 
-        // create tree around bunker
-        const pos1 = new Point(370, 590);
-        const pos2 = new Point(430, 590);
-        const pos3 = new Point(381, 550);
+        // create rock around bunker
+        const pos1 = new Point(370, 600);
+        const pos2 = new Point(430, 600);
+        const pos3 = new Point(381, 560);
         for (let i = 0; i < 6; i++) {
-            this.createEnvironmentObject('tree-1', pos1);
-            this.createEnvironmentObject('tree-1', pos2);
-            this.createEnvironmentObject('tree-1', pos3);
+            this.createEnvironmentObject('rock', pos1);
+            this.createEnvironmentObject('rock', pos2);
+            this.createEnvironmentObject('rock', pos3);
             pos1.y -= 7.5;
             pos2.y -= 7.5;
             pos3.x += 7.5;

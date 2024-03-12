@@ -38,6 +38,7 @@
     "@pixi/text-html": "^7.2.0",
     "@pixi/ui": "^0.6.2",
     "axios": "^1.6.7",
+    "eventemitter3": "^5.0.1",
     "lodash": "^4.17.21",
     "pixi-spine": "^4.0.4"
   },

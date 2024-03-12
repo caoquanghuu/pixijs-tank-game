@@ -14,6 +14,7 @@ import { Bullet } from './Objects/Bullet';
 import { BaseObject } from './Objects/BaseObject';
 import { SpineObject } from './Objects/SpineObject';
 import { UIController } from './Controller/UIController';
+import { Assets } from '@pixi/assets';
 // import { Color } from '@pixi/core';
 // Color.shared.setValue(0xffffff).toHex(); // '#ffffff'
 
@@ -58,6 +59,14 @@ export class GameScene extends Container {
             this.addToScene(spine.spine);
         }
         );
+
+        // test animation file
+        Assets.load('assets/units/tree/animation-tree/animation-tree.json').then((resource) => {
+            const tree = new Sprite(resource);
+            tree.position.x = 400,
+            tree.position.y = 200;
+            this.addToScene(tree);
+        });
     }
 
     /**
