@@ -43,11 +43,18 @@ export class EnvironmentController {
             this.createEnvironmentObject('rock');
         }
 
+        this._useEventEffect();
+    }
+
+    private _useEventEffect() {
         Emitter.on('remove-environment', (environment: BaseObject) => {
             this.removeEnvironmentObject(environment);
         });
         Emitter.on('remove-reward', (rewardObject: BaseObject) => {
             this.removeObject(rewardObject, this._rewardObjects);
+        });
+        Emitter.on('get-environment-list', () => {
+            Emitter.emit('return-environment-list', this.environmentObjects);
         });
     }
 

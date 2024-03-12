@@ -1,21 +1,20 @@
 import { Point, Rectangle } from '@pixi/core';
 import { BaseObject } from '../Objects/BaseObject';
-import { GetBunkerFn, GetObjectListFn, GetRewardObjectsFn, Size } from '../type';
+import { GetBunkerFn, GetRewardObjectsFn, Size } from '../type';
 import Emitter, { getDistanceOfTwoPosition, getRandomArbitrary } from '../util';
 import { sound } from '@pixi/sound';
 import { Tank } from '../Objects/Tank';
 import { Bullet } from '../Objects/Bullet';
 
 export class CollisionController {
-    private _getEnvironmentListCall: GetObjectListFn;
     private _getRewardListCall: GetRewardObjectsFn;
     private _getBunker: GetBunkerFn;
     private _usingObjectsList: BaseObject[] = [];
     private _tankList: Tank[];
     private _bulletList: Bullet[];
+    private _environmentList: BaseObject[];
 
-    constructor(getEnvironmentListCallBack: GetObjectListFn, getRewardListCallBack: GetRewardObjectsFn, getBunkerCallBack: GetBunkerFn) {
-        this._getEnvironmentListCall = getEnvironmentListCallBack;
+    constructor(getRewardListCallBack: GetRewardObjectsFn, getBunkerCallBack: GetBunkerFn) {
         this._getRewardListCall = getRewardListCallBack;
         this._getBunker = getBunkerCallBack;
 
@@ -30,11 +29,14 @@ export class CollisionController {
         Emitter.on('return-bullet-list', (bulletList: Bullet[]) => {
             this._bulletList = bulletList;
         });
+        Emitter.on('return-environment-list', (environmentList: BaseObject[]) => {
+            this._environmentList = environmentList;
+        });
     }
 
     private getUsingObjectsList() {
         const tanksList = this._tankList;
-        const environmentsList = this._getEnvironmentListCall();
+        const environmentsList = this._environmentList;
         this._usingObjectsList = environmentsList.concat(tanksList);
     }
 
@@ -113,7 +115,7 @@ export class CollisionController {
         // get environments list from environment controller
         Emitter.emit('get-environment-list', null);
 
-        const environments = this._getEnvironmentListCall();
+        const environments = this._environmentList;
 
         // get reward list from environment controller
         const rewardObjects = this._getRewardListCall();

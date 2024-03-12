@@ -104,7 +104,7 @@ export class GameScene extends Container {
         this.displayScore(positionDisplayScore);
 
         // constructor controllers
-        this._collisionController = new CollisionController(this.getEnvironmentList.bind(this), this.getRewardList.bind(this), this.getBunker.bind(this));
+        this._collisionController = new CollisionController(this.getRewardList.bind(this), this.getBunker.bind(this));
 
         this._bulletController = new BulletController();
 
@@ -167,10 +167,6 @@ export class GameScene extends Container {
             this._bulletController.update(deltaTime);
             this._collisionController.update();
         }
-    }
-
-    public getEnvironmentList(): BaseObject[] {
-        return this._environmentController.environmentObjects;
     }
 
     public getRewardList(): BaseObject[] {
