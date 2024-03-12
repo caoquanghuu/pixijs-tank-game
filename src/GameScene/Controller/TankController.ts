@@ -48,20 +48,23 @@ export class TankController {
             this.handleTankMove(tank);
         });
 
-        this._getEffect();
-        this._useEffect();
+        this._sendEventEffect();
+        this._useEventEffect();
     }
 
-    private _useEffect() {
+    private _useEventEffect() {
         Emitter.on('fire-bullet', (option: {position: Point, direction: Direction, isPlayer: boolean}) => {
             this.fireBullet(option.position, option.direction, option.isPlayer);
         });
         Emitter.on('tank-die', (tank: Tank) => {
             this.tankDie(tank);
         });
+        Emitter.on('get-tank-list', () => {
+            Emitter.emit('return-tank-list', this.usingTankList);
+        });
     }
 
-    private _getEffect() {
+    private _sendEventEffect() {
         Emitter.emit('get-tanks-list', this.usingTankList);
     }
 

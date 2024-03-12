@@ -1,28 +1,39 @@
 import { Point, Rectangle } from '@pixi/core';
 import { BaseObject } from '../Objects/BaseObject';
-import { GetBulletListFn, GetBunkerFn, GetObjectListFn, GetRewardObjectsFn, GetTankListFn, Size } from '../type';
+import { GetBunkerFn, GetObjectListFn, GetRewardObjectsFn, Size } from '../type';
 import Emitter, { getDistanceOfTwoPosition, getRandomArbitrary } from '../util';
 import { sound } from '@pixi/sound';
+import { Tank } from '../Objects/Tank';
+import { Bullet } from '../Objects/Bullet';
 
 export class CollisionController {
-    private _getTankListCall: GetTankListFn;
-    private _getBulletListCall: GetBulletListFn;
     private _getEnvironmentListCall: GetObjectListFn;
     private _getRewardListCall: GetRewardObjectsFn;
     private _getBunker: GetBunkerFn;
     private _usingObjectsList: BaseObject[] = [];
+    private _tankList: Tank[];
+    private _bulletList: Bullet[];
 
-    constructor(getTankListCallBack: GetTankListFn, getBulletListCallBack: GetBulletListFn, getEnvironmentListCallBack: GetObjectListFn, getRewardListCallBack: GetRewardObjectsFn, getBunkerCallBack: GetBunkerFn) {
-        this._getTankListCall = getTankListCallBack;
-        this._getBulletListCall = getBulletListCallBack;
+    constructor(getEnvironmentListCallBack: GetObjectListFn, getRewardListCallBack: GetRewardObjectsFn, getBunkerCallBack: GetBunkerFn) {
         this._getEnvironmentListCall = getEnvironmentListCallBack;
         this._getRewardListCall = getRewardListCallBack;
         this._getBunker = getBunkerCallBack;
 
+        this._useEffect();
+
+    }
+
+    private _useEffect() {
+        Emitter.on('return-tank-list', (tankList: Tank[]) => {
+            this._tankList = tankList;
+        });
+        Emitter.on('return-bullet-list', (bulletList: Bullet[]) => {
+            this._bulletList = bulletList;
+        });
     }
 
     private getUsingObjectsList() {
-        const tanksList = this._getTankListCall();
+        const tanksList = this._tankList;
         const environmentsList = this._getEnvironmentListCall();
         this._usingObjectsList = environmentsList.concat(tanksList);
     }
@@ -87,12 +98,21 @@ export class CollisionController {
      */
     private handleCollision() {
         // get using tanks list from tank controller
-        const tanks = this._getTankListCall();
+        // const tanks = this._getTankListCall();
+
+        Emitter.emit('get-tank-list', null);
+
+        const tanks = this._tankList;
+
 
         // get bullets list from bullet controller
-        const bullets = this._getBulletListCall();
+        Emitter.emit('get-bullet-list', null);
+
+        const bullets = this._bulletList;
 
         // get environments list from environment controller
+        Emitter.emit('get-environment-list', null);
+
         const environments = this._getEnvironmentListCall();
 
         // get reward list from environment controller

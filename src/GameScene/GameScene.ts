@@ -9,8 +9,6 @@ import { EnvironmentController } from './Controller/EnvironmentController';
 import { Size } from './type';
 import { Point, Rectangle } from '@pixi/core';
 import { CollisionController } from './Controller/CollisionController';
-import { Tank } from './Objects/Tank';
-import { Bullet } from './Objects/Bullet';
 import { BaseObject } from './Objects/BaseObject';
 import { SpineObject } from './Objects/SpineObject';
 import { UIController } from './Controller/UIController';
@@ -106,7 +104,7 @@ export class GameScene extends Container {
         this.displayScore(positionDisplayScore);
 
         // constructor controllers
-        this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.getRewardList.bind(this), this.getBunker.bind(this));
+        this._collisionController = new CollisionController(this.getEnvironmentList.bind(this), this.getRewardList.bind(this), this.getBunker.bind(this));
 
         this._bulletController = new BulletController();
 
@@ -169,14 +167,6 @@ export class GameScene extends Container {
             this._bulletController.update(deltaTime);
             this._collisionController.update();
         }
-    }
-
-    public getTankList(): Tank[] {
-        return this._tankController.usingTankList;
-    }
-
-    public getBulletList(): Bullet[] {
-        return this._bulletController.bullets;
     }
 
     public getEnvironmentList(): BaseObject[] {

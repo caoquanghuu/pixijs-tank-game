@@ -21,6 +21,9 @@ export class BulletController {
         Emitter.on('remove-bullet', (bullet: Bullet) => {
             this.removeBullet(bullet);
         });
+        Emitter.on('get-bullet-list', () => {
+            Emitter.emit('return-bullet-list', this._bullets);
+        });
     }
 
     get bullets(): Bullet[] {
