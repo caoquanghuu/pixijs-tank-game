@@ -6,7 +6,7 @@ import { AssetsLoader } from '../AssetsLoader';
 import { TankController } from './Controller/TankController';
 import { BulletController } from './Controller/BulletController';
 import { EnvironmentController } from './Controller/EnvironmentController';
-import { CreateNewGameFn, Direction, Size } from './type';
+import { Direction, Size } from './type';
 import { Point, Rectangle } from '@pixi/core';
 import { CollisionController } from './Controller/CollisionController';
 import { Tank } from './Objects/Tank';
@@ -14,7 +14,7 @@ import { Bullet } from './Objects/Bullet';
 import { BaseObject } from './Objects/BaseObject';
 import { SpineObject } from './Objects/SpineObject';
 import { UIController } from './Controller/UIController';
-import { Assets } from '@pixi/assets';
+import Emitter from './util';
 // import { Color } from '@pixi/core';
 // Color.shared.setValue(0xffffff).toHex(); // '#ffffff'
 
@@ -28,20 +28,19 @@ export class GameScene extends Container {
     private _environmentController: EnvironmentController;
     private _collisionController: CollisionController;
     private _UIController: UIController;
-    private _createNewGameCall: CreateNewGameFn;
 
-    constructor(createNewGameCallBack: CreateNewGameFn) {
+    constructor() {
         super();
 
+        this._useEventEffect();
+
         // method to call create new game to index
-        this._createNewGameCall = createNewGameCallBack;
 
         // create class ui controller
-        this._UIController = new UIController(this.addToScene.bind(this), this.startPlayGame.bind(this), this.destroy.bind(this), this._createNewGameCall.bind(this), this.displayScore.bind(this));
+        this._UIController = new UIController();
 
         // display main menu
         this._UIController.displayMainMenuGame();
-
 
         // test spine object
         const spine = new SpineObject();
@@ -59,14 +58,6 @@ export class GameScene extends Container {
             this.addToScene(spine.spine);
         }
         );
-
-        // test animation file
-        Assets.load('assets/units/tree/animation-tree/animation-tree.json').then((resource) => {
-            const tree = new Sprite(resource);
-            tree.position.x = 400,
-            tree.position.y = 200;
-            this.addToScene(tree);
-        });
     }
 
     /**
@@ -79,13 +70,38 @@ export class GameScene extends Container {
         this._bulletController.createBullet(position, direction, isPlayerBullet);
     }
 
-
     public setNewScore(newScore: number) {
         this._playerScore += newScore;
 
         // call display score on changed score
         const positionDisplayScore = new Point(760, 10);
         this.displayScore(positionDisplayScore);
+    }
+
+    private _useEventEffect() {
+        Emitter.on('add-to-scene', (sprite: Sprite) => {
+            this.addToScene(sprite);
+        });
+        Emitter.on('remove-from-scene', (sprite: Sprite) => {
+            this.removeFromScene(sprite);
+        });
+        Emitter.on('start-play-game', () => {
+            this.startPlayGame();
+        });
+        Emitter.on('destroy', () => {
+            this.destroy();
+        });
+        Emitter.on('display-score', (position: Point) => {
+            this.displayScore(position);
+        });
+    }
+
+    private _getEventEffect() {
+        Emitter.emit('get-tank-list', this.getTankList());
+        Emitter.emit('get-bullet-list', this.getBulletList());
+        Emitter.emit('get-environment-list', this.getEnvironmentList());
+        Emitter.emit('get-reward-list', this.getRewardList());
+        Emitter.emit('get-bunker', this.getBunker());
     }
 
     /**
@@ -108,11 +124,13 @@ export class GameScene extends Container {
         // constructor controllers
         this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this), this.removeEnvironmentCall.bind(this), this.removeRewardObjectCall.bind(this), this.getRewardList.bind(this), this.getBunker.bind(this), this.displayGameOverCall.bind(this));
 
-        this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
+        this._bulletController = new BulletController();
 
-        this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this), this.displayGameOverCall.bind(this));
+        this._tankController = new TankController(this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this), this.displayGameOverCall.bind(this));
 
-        this._environmentController = new EnvironmentController(this.addToScene.bind(this), this.createNewRandomPositionCall.bind(this), this.removeFromScene.bind(this));
+        this._environmentController = new EnvironmentController(this.createNewRandomPositionCall.bind(this));
+
+        this._getEventEffect();
     }
 
     /**

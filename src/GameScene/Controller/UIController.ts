@@ -3,27 +3,16 @@ import { Sprite } from '@pixi/sprite';
 import { AssetsLoader } from '../../AssetsLoader';
 import { Text } from '@pixi/text';
 import { Point } from '@pixi/core';
-import { AddToSceneFn, CreateNewGameFn, DestroyFn, DisplayScoreFn, StartPlayGameFn } from '../type';
+import Emitter from '../util';
 
 export class UIController {
-    private _addToSceneCall: AddToSceneFn;
-    private _startPlayGameCall: StartPlayGameFn;
-    private _destroyCall: DestroyFn;
-    private _createNewGameCall: CreateNewGameFn;
-    private _displayScoreCall: DisplayScoreFn;
 
-
-    constructor(addToSceneCallBack: AddToSceneFn, startPlayGameCallBack: StartPlayGameFn, destroyCallBack: DestroyFn, createNewGameCallBack: CreateNewGameFn, displayScoreCallBack: DisplayScoreFn) {
-        this._addToSceneCall = addToSceneCallBack;
-        this._startPlayGameCall = startPlayGameCallBack;
-        this._destroyCall = destroyCallBack;
-        this._createNewGameCall = createNewGameCallBack;
-        this._displayScoreCall = displayScoreCallBack;
-    }
     /**
      * method to display main menu game
      */
     public displayMainMenuGame() {
+        // define event emitter
+
         // create a main game back ground
         const mainBg = new Sprite(AssetsLoader.getTexture('main-back-ground'));
         mainBg.width = 800;
@@ -52,7 +41,7 @@ export class UIController {
         btnSprite.cursor = 'pointer';
 
         // player tap on start button to start play game
-        btnSprite.on('pointertap', this._startPlayGameCall.bind(this));
+        btnSprite.on('pointertap', () => { Emitter.emit('start-play-game', null); });
 
         // set title and button in side main bg
         mainBg.addChild(title, btnSprite);
@@ -62,7 +51,8 @@ export class UIController {
         btnSprite.position.x = 180;
         btnSprite.position.y = 180;
 
-        this._addToSceneCall(mainBg);
+        // this._addToSceneCall(mainBg);
+        Emitter.emit('add-to-scene', mainBg);
 
         // play game music
         // sound.play('main-menu-music', { volume: 0.5, loop: true });
@@ -108,8 +98,9 @@ export class UIController {
 
         // player tap on start button to start play game
         btnReplay.on('pointertap', () => {
-            this._destroyCall();
-            this._createNewGameCall();
+            Emitter.emit('destroy', null);
+            // this._destroyCall();
+            Emitter.emit('create-new-game', null);
             // this.displayMainMenuGame();
         });
 
@@ -125,10 +116,11 @@ export class UIController {
         btnReplay.y = 180;
 
         // add bg game to game scene
-        this._addToSceneCall(overBg);
+        // this._addToSceneCall(overBg);
+        Emitter.emit('add-to-scene', overBg);
 
         // display score at position
         const positionDisplayScore = new Point(400, 340);
-        this._displayScoreCall(positionDisplayScore);
+        Emitter.emit('display-score', positionDisplayScore);
     }
 }

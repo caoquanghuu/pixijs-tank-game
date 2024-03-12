@@ -1,18 +1,16 @@
 import { Point } from '@pixi/core';
 import { BaseObject } from './BaseObject';
-import { AddToSceneFn } from '../type';
+import Emitter from '../util';
 
 export class HPBar extends BaseObject {
     private _isPlayer: boolean;
     private _HP: number;
-    private _addToSceneCall: AddToSceneFn;
 
-    constructor(isPlayer: boolean, addToSceneCallBack: AddToSceneFn) {
+    constructor(isPlayer: boolean) {
         super(isPlayer ? 'player-hp' : 'bot-hp');
 
-        this._addToSceneCall = addToSceneCallBack;
 
-        this._addToSceneCall(this.sprite);
+        Emitter.emit('add-to-scene', this.sprite);
 
         this._isPlayer = isPlayer;
     }

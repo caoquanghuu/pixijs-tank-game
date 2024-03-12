@@ -1,7 +1,7 @@
 import { BaseObject } from '../Objects/BaseObject';
-import { AddToSceneFn, CreateNewRandomPositionFn, RemoveFromSceneFn } from '../type';
+import { CreateNewRandomPositionFn } from '../type';
 import { Point, Rectangle } from '@pixi/core';
-import { getRandomBoolean } from '../util';
+import Emitter, { getRandomBoolean } from '../util';
 
 export class EnvironmentController {
 
@@ -9,14 +9,10 @@ export class EnvironmentController {
     private _environmentObjects: BaseObject[] = [];
     private _rewardObjects: BaseObject[] = [];
     private _bunker: BaseObject;
-    private _addToSceneCall: AddToSceneFn;
     private _createNewRandomPositionCall: CreateNewRandomPositionFn;
-    private _removeFromSceneCall: RemoveFromSceneFn;
 
-    constructor(addToSceneCallBack: AddToSceneFn, createNewRandomPositionCallBack: CreateNewRandomPositionFn, removeFromSceneCallBack: RemoveFromSceneFn) {
+    constructor(createNewRandomPositionCallBack: CreateNewRandomPositionFn) {
 
-        this._addToSceneCall = addToSceneCallBack;
-        this._removeFromSceneCall = removeFromSceneCallBack;
         this._createNewRandomPositionCall = createNewRandomPositionCallBack;
 
         // create a bunker
@@ -24,7 +20,7 @@ export class EnvironmentController {
         const position = new Point(400, 580);
         this._bunker.position = position;
         this._bunker.setImageSize({ w: 50, h: 50 });
-        this._addToSceneCall(this._bunker.sprite);
+        Emitter.emit('add-to-scene', this._bunker.sprite);
         this._bunker.size = { w: 50, h: 50 };
 
         // create rock around bunker
@@ -59,7 +55,7 @@ export class EnvironmentController {
         const object = new BaseObject(name);
 
         // add sprite to game scene
-        this._addToSceneCall(object.sprite);
+        Emitter.emit('add-to-scene', object.sprite);
 
         // set size */
         object.setImageSize({ w: 15, h: 15 });
@@ -107,7 +103,7 @@ export class EnvironmentController {
             rewardObject.size = { w: 20, h : 20 };
 
             // add hp bag to game scene
-            this._addToSceneCall(rewardObject.sprite);
+            Emitter.emit('add-to-scene', rewardObject.sprite);
 
             // push mid hp bag to list
             this._rewardObjects.push(rewardObject);
@@ -125,7 +121,7 @@ export class EnvironmentController {
     }
 
     public removeObject(object: BaseObject, objectList: BaseObject[]) {
-        this._removeFromSceneCall(object.sprite);
+        Emitter.emit('remove-from-scene', object.sprite);
 
         const p = objectList.findIndex(objects => objects === object);
         objectList.splice(p, 1);

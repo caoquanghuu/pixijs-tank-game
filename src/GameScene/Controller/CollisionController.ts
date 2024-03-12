@@ -34,7 +34,16 @@ export class CollisionController {
     }
 
     private getUsingObjectsList() {
+        // let tanksList: Tank[];
+        // Emitter.on('get-tanks-list', (tanks: Tank[]) => {
+        //     tanksList = tanks;
+        // });
         const tanksList = this._getTankListCall();
+
+        // let environmentsList: BaseObject[];
+        // Emitter.on('get-environment-list', (environments: BaseObject[]) => {
+        //     environmentsList = environments;
+        // });
         const environmentsList = this._getEnvironmentListCall();
         this._usingObjectsList = environmentsList.concat(tanksList);
     }
