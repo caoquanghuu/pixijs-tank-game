@@ -20,7 +20,7 @@ export class TankController {
 
     constructor(createNewRandomPositionCallBack: CreateNewRandomPositionFn) {
 
-        this._tankPool = new TankPool(this.fireBullet.bind(this), this.tankDie.bind(this));
+        this._tankPool = new TankPool();
 
         // spawnTank every spawnTankTime
         this._createNewRandomPositionCall = createNewRandomPositionCallBack;
@@ -28,7 +28,7 @@ export class TankController {
         this.spawnTank();
 
         // create a player tank
-        this._playerTank = new Tank(true, this.fireBullet.bind(this), this.tankDie.bind(this));
+        this._playerTank = new Tank(true);
         this._usingTanks.push(this._playerTank);
         Emitter.emit('add-to-scene', this._playerTank.sprite);
         this._playerTank.rectangle = this._createNewRandomPositionCall(this._playerTank.size);
@@ -47,6 +47,22 @@ export class TankController {
         Emitter.on('handle-tank-move', (tank: Tank) => {
             this.handleTankMove(tank);
         });
+
+        this._getEffect();
+        this._useEffect();
+    }
+
+    private _useEffect() {
+        Emitter.on('fire-bullet', (option: {position: Point, direction: Direction, isPlayer: boolean}) => {
+            this.fireBullet(option.position, option.direction, option.isPlayer);
+        });
+        Emitter.on('tank-die', (tank: Tank) => {
+            this.tankDie(tank);
+        });
+    }
+
+    private _getEffect() {
+        Emitter.emit('get-tanks-list', this.usingTankList);
     }
 
     /**

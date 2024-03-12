@@ -2,9 +2,9 @@
 import { Point } from '@pixi/core';
 import { RandomEngine } from '../Engine/RandomEngine';
 import { BaseObject } from './BaseObject';
-import { Direction, FireBulletFn, TankDieFn } from '../type';
+import { Direction } from '../type';
 import { ControlEngine } from '../Engine/ControlEngine';
-import { getRandomArbitrary, keyboard } from '../util';
+import Emitter, { getRandomArbitrary, keyboard } from '../util';
 import { HPBar } from './HPBar';
 import { sound } from '@pixi/sound';
 
@@ -16,17 +16,11 @@ export class Tank extends BaseObject {
     // hp of this tank
     private _HPBar: HPBar;
 
-    private _fireBulletCallBack: FireBulletFn;
-    private _tankDieCall: TankDieFn;
     private _fireBulletTime: number;
 
-    constructor(isPlayer: boolean, fireBulletCallBack: FireBulletFn, tankDieCallBack: TankDieFn) {
+    constructor(isPlayer: boolean) {
         // set image of tank is player tank or bot tank
         super('tank-stand-up');
-
-        // define methods need to call
-        this._fireBulletCallBack = fireBulletCallBack;
-        this._tankDieCall = tankDieCallBack;
 
         // set speed of tank
         this.speed = 100;
@@ -77,7 +71,8 @@ export class Tank extends BaseObject {
     public fire(position: Point, direction: Direction, isPlayer: boolean) {
 
         // call fire bullet to tank controller
-        this._fireBulletCallBack(position, direction, isPlayer);
+        // this._fireBulletCallBack(position, direction, isPlayer);
+        Emitter.emit('fire-bullet', { position, direction, isPlayer });
     }
 
     /**
@@ -86,7 +81,7 @@ export class Tank extends BaseObject {
     public destroy() {
         if (this.HPBar.HP === 0) {
             // call tank die to tank controller
-            this._tankDieCall(this);
+            Emitter.emit('tank-die', this);
         }
     }
 

@@ -1,5 +1,4 @@
 import { Tank } from './Objects/Tank';
-import { FireBulletFn, TankDieFn } from './type';
 
 export class TankPool {
     private static instance: TankPool;
@@ -9,19 +8,16 @@ export class TankPool {
 
     // a array to contain bot tank
     private _tanksPool: Tank[] = [];
-    private _fireBulletCallBack: FireBulletFn;
-    private _tankDieCall: TankDieFn;
 
     /**
      * constructor tank pool base on number of tank
      */
-    constructor(fireBulletCallBack: FireBulletFn, tankDieCallBack: TankDieFn) {
-        this._fireBulletCallBack = fireBulletCallBack;
-        this._tankDieCall = tankDieCallBack;
+    constructor() {
+
 
         // a loop to create tank and add it to tank pool
         for (let i = 0; i < this._maxTanks; i++) {
-            const tank = new Tank(false, this._fireBulletCallBack, this._tankDieCall);
+            const tank = new Tank(false);
             this._tanksPool.push(tank);
         }
     }
