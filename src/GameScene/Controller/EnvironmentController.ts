@@ -56,6 +56,12 @@ export class EnvironmentController {
         Emitter.on('get-environment-list', () => {
             Emitter.emit('return-environment-list', this.environmentObjects);
         });
+        Emitter.on('get-reward-list', () => {
+            Emitter.emit('return-reward-list', this.rewardObjects);
+        });
+        Emitter.on('get-bunker', () => {
+            Emitter.emit('return-bunker', this.bunker);
+        });
     }
 
     /**

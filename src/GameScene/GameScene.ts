@@ -9,7 +9,6 @@ import { EnvironmentController } from './Controller/EnvironmentController';
 import { Size } from './type';
 import { Point, Rectangle } from '@pixi/core';
 import { CollisionController } from './Controller/CollisionController';
-import { BaseObject } from './Objects/BaseObject';
 import { SpineObject } from './Objects/SpineObject';
 import { UIController } from './Controller/UIController';
 import Emitter from './util';
@@ -104,7 +103,7 @@ export class GameScene extends Container {
         this.displayScore(positionDisplayScore);
 
         // constructor controllers
-        this._collisionController = new CollisionController(this.getRewardList.bind(this), this.getBunker.bind(this));
+        this._collisionController = new CollisionController();
 
         this._bulletController = new BulletController();
 
@@ -167,14 +166,6 @@ export class GameScene extends Container {
             this._bulletController.update(deltaTime);
             this._collisionController.update();
         }
-    }
-
-    public getRewardList(): BaseObject[] {
-        return this._environmentController.rewardObjects;
-    }
-
-    public getBunker(): BaseObject {
-        return this._environmentController.bunker;
     }
 
     public createNewRandomPositionCall(size: Size): Rectangle {

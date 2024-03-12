@@ -1,25 +1,22 @@
 import { Point, Rectangle } from '@pixi/core';
 import { BaseObject } from '../Objects/BaseObject';
-import { GetBunkerFn, GetRewardObjectsFn, Size } from '../type';
+import { Size } from '../type';
 import Emitter, { getDistanceOfTwoPosition, getRandomArbitrary } from '../util';
 import { sound } from '@pixi/sound';
 import { Tank } from '../Objects/Tank';
 import { Bullet } from '../Objects/Bullet';
 
 export class CollisionController {
-    private _getRewardListCall: GetRewardObjectsFn;
-    private _getBunker: GetBunkerFn;
     private _usingObjectsList: BaseObject[] = [];
     private _tankList: Tank[];
     private _bulletList: Bullet[];
     private _environmentList: BaseObject[];
+    private _rewardList: BaseObject[];
+    private _bunker: BaseObject;
 
-    constructor(getRewardListCallBack: GetRewardObjectsFn, getBunkerCallBack: GetBunkerFn) {
-        this._getRewardListCall = getRewardListCallBack;
-        this._getBunker = getBunkerCallBack;
+    constructor() {
 
         this._useEffect();
-
     }
 
     private _useEffect() {
@@ -31,6 +28,12 @@ export class CollisionController {
         });
         Emitter.on('return-environment-list', (environmentList: BaseObject[]) => {
             this._environmentList = environmentList;
+        });
+        Emitter.on('return-reward-list', (rewardList: BaseObject[]) => {
+            this._rewardList = rewardList;
+        });
+        Emitter.on('return-bunker', (bunker: BaseObject) => {
+            this._bunker = bunker;
         });
     }
 
@@ -118,10 +121,13 @@ export class CollisionController {
         const environments = this._environmentList;
 
         // get reward list from environment controller
-        const rewardObjects = this._getRewardListCall();
+        Emitter.emit('get-reward-list', null);
+
+        const rewardObjects = this._rewardList;
 
         // get bunker
-        const bunker = this._getBunker();
+        Emitter.emit('get-bunker', null);
+        const bunker = this._bunker;
 
         tanks.forEach(tank => {
 
