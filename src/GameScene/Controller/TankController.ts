@@ -44,6 +44,9 @@ export class TankController {
             Emitter.emit('add-to-scene', this._spineBoy.spine);
         });
 
+        Emitter.on('handle-tank-move', (tank: Tank) => {
+            this.handleTankMove(tank);
+        });
     }
 
     /**

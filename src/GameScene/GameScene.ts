@@ -34,8 +34,6 @@ export class GameScene extends Container {
 
         this._useEventEffect();
 
-        // method to call create new game to index
-
         // create class ui controller
         this._UIController = new UIController();
 
@@ -59,16 +57,6 @@ export class GameScene extends Container {
         }
         );
     }
-
-    // /**
-    //  * function to send request to bullet controller create a bullet
-    //  * @param position position start of bullet which get from tank
-    //  * @param direction direction of bullet which get from tank last direction
-    //  * @param isPlayerBullet this bullet is player bullet or bot bullet
-    //  */
-    // public createBulletCall(position: Point, direction: Direction, isPlayerBullet: boolean) {
-    //     this._bulletController.createBullet(position, direction, isPlayerBullet);
-    // }
 
     public setNewScore(newScore: number) {
         this._playerScore += newScore;
@@ -96,9 +84,6 @@ export class GameScene extends Container {
         });
         Emitter.on('plus-score', (newScore: number) => {
             this.setNewScore(newScore);
-        });
-        Emitter.on('handle-tank-move', (tank: Tank) => {
-            this.handleTankMoveCall(tank);
         });
     }
 
@@ -204,10 +189,6 @@ export class GameScene extends Container {
 
     public getBunker(): BaseObject {
         return this._environmentController.bunker;
-    }
-
-    public handleTankMoveCall(tank: Tank) {
-        this._tankController.handleTankMove(tank);
     }
 
     public createNewRandomPositionCall(size: Size): Rectangle {
