@@ -42,6 +42,13 @@ export class EnvironmentController {
             this.createEnvironmentObject('tree-2');
             this.createEnvironmentObject('rock');
         }
+
+        Emitter.on('remove-environment', (environment: BaseObject) => {
+            this.removeEnvironmentObject(environment);
+        });
+        Emitter.on('remove-reward', (rewardObject: BaseObject) => {
+            this.removeObject(rewardObject, this._rewardObjects);
+        });
     }
 
     /**

@@ -1,7 +1,7 @@
 import { Point } from '@pixi/core';
 import { Tank } from '../Objects/Tank';
 import { TankPool } from '../TankPool';
-import { CreateNewRandomPositionFn, Direction, FireBulletFn, GameOverFn, SetNewScoreFn } from '../type';
+import { CreateNewRandomPositionFn, Direction } from '../type';
 import Emitter, { getRandomArbitrary, getRandomBoolean, randomEnumKey, switchFn } from '../util';
 import { SpineBoy } from '../Objects/SpineBoy';
 
@@ -12,25 +12,18 @@ export class TankController {
     private _playerTank: Tank;
     private _tankPool: TankPool;
 
-    private _fireBulletCallback: FireBulletFn;
     private _createNewRandomPositionCall: CreateNewRandomPositionFn;
-    private _setNewScoreCall: SetNewScoreFn;
-    private _gameOverCall: GameOverFn;
 
     // test for spine object
     private _spineBoy: SpineBoy;
 
 
-    constructor(fireBulletCallBack: FireBulletFn,
-        createNewRandomPositionCallBack: CreateNewRandomPositionFn, setNewScoreCallBack: SetNewScoreFn, gameOverCallBack: GameOverFn) {
+    constructor(createNewRandomPositionCallBack: CreateNewRandomPositionFn) {
 
         this._tankPool = new TankPool(this.fireBullet.bind(this), this.tankDie.bind(this));
 
         // spawnTank every spawnTankTime
-        this._fireBulletCallback = fireBulletCallBack;
         this._createNewRandomPositionCall = createNewRandomPositionCallBack;
-        this._setNewScoreCall = setNewScoreCallBack;
-        this._gameOverCall = gameOverCallBack;
 
         this.spawnTank();
 
@@ -50,6 +43,7 @@ export class TankController {
             this._spineBoy.position = this._playerTank.position;
             Emitter.emit('add-to-scene', this._spineBoy.spine);
         });
+
     }
 
     /**
@@ -97,7 +91,7 @@ export class TankController {
     }
 
     public fireBullet(position: Point, direction: Direction, isPlayerBullet: boolean) {
-        this._fireBulletCallback(position, direction, isPlayerBullet);
+        Emitter.emit('create-bullet', { position, direction, isPlayerBullet });
 
         // animation fire for spine boy
         if (isPlayerBullet) {
@@ -115,14 +109,14 @@ export class TankController {
         if (tankDie.isPlayerTank) {
 
             // call game over to game scene
-            this._gameOverCall();
+            Emitter.emit('display-game-over', null);
         } else {
 
             //return tank to tank pool
             this._tankPool.getTank(tankDie);
 
             // update score of player
-            this._setNewScoreCall(1);
+            Emitter.emit('plus-score', 1);
 
             // set back hp for tank
             tankDie.HP = 1;

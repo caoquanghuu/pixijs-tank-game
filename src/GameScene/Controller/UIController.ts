@@ -7,6 +7,12 @@ import Emitter from '../util';
 
 export class UIController {
 
+    constructor() {
+        Emitter.on('display-game-over', () => {
+            this.displayGameOver();
+        });
+    }
+
     /**
      * method to display main menu game
      */

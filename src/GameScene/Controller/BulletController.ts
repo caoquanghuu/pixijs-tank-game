@@ -10,6 +10,19 @@ export class BulletController {
     // bullets list which display on game sense
     private _bullets: Bullet [] = [];
 
+    constructor() {
+        this._useEventEffect();
+    }
+
+    private _useEventEffect() {
+        Emitter.on('create-bullet', (option: {position: Point, direction: Direction, isPlayerBullet: boolean}) => {
+            this.createBullet(option.position, option.direction, option.isPlayerBullet);
+        });
+        Emitter.on('remove-bullet', (bullet: Bullet) => {
+            this.removeBullet(bullet);
+        });
+    }
+
     get bullets(): Bullet[] {
         return this._bullets;
     }
