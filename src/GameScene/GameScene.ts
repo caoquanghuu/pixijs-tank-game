@@ -11,6 +11,7 @@ import { CollisionController } from './Controller/CollisionController';
 import { SpineObject } from './Objects/SpineObject';
 import { UIController } from './Controller/UIController';
 import Emitter from './util';
+import { AppConstants } from './constants';
 // import { Color } from '@pixi/core';
 // Color.shared.setValue(0xffffff).toHex(); // '#ffffff'
 
@@ -58,8 +59,7 @@ export class GameScene extends Container {
         this._playerScore += newScore;
 
         // call display score on changed score
-        const positionDisplayScore = new Point(760, 10);
-        this.displayScore(positionDisplayScore);
+        this.displayScore(AppConstants.defaultScoreDisplayPosition);
     }
 
     private _useEventEffect() {
@@ -92,14 +92,11 @@ export class GameScene extends Container {
         // set a back ground of game
         const bg = new Sprite(AssetsLoader.getTexture('game-back-ground'));
         this.addToScene(bg);
-        bg.width = 800;
-        bg.height = 600;
-
-        // set position where will display score
-        const positionDisplayScore = new Point(760, 10);
+        bg.width = AppConstants.screenWidth;
+        bg.height = AppConstants.screenHeight;
 
         // display score
-        this.displayScore(positionDisplayScore);
+        this.displayScore(AppConstants.defaultScoreDisplayPosition);
 
         // constructor controllers
         this._collisionController = new CollisionController();
@@ -137,14 +134,14 @@ export class GameScene extends Container {
             // get sprite match with number element
             const scoreSprite = new Sprite(AssetsLoader.getTexture(`score-number-${score}`));
 
-            scoreSprite.width = 30;
-            scoreSprite.height = 30;
+            scoreSprite.width = AppConstants.scoreSpriteWidth;
+            scoreSprite.height = AppConstants.scoreSpriteHeight;
 
             this.addToScene(scoreSprite);
 
             scoreSprite.position.set(position.x, position.y);
 
-            position.x -= 17;
+            position.x -= AppConstants.spaceBetweenScoresNumber;
 
             return scoreSprite;
         });

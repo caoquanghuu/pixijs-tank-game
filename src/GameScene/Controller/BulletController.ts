@@ -4,6 +4,7 @@ import { Direction } from '../type';
 import { BaseObject } from '../Objects/BaseObject';
 import { sound } from '@pixi/sound';
 import Emitter from '../util';
+import { AppConstants } from '../constants';
 
 export class BulletController {
 
@@ -51,7 +52,7 @@ export class BulletController {
 
         // add sound fire bullet if it is player fire
         if (isPlayerBullet) {
-            sound.play('bullet-fire', { volume: 0.2 });
+            sound.play('bullet-fire', { volume: AppConstants.volumeOfFireBullet });
         }
     }
 
@@ -72,7 +73,7 @@ export class BulletController {
         const explosion = new BaseObject('explosion');
 
         // set size for explosion sprite
-        explosion.setImageSize({ w: 15, h: 15 });
+        explosion.setImageSize(AppConstants.explosionSpriteSize);
 
         // add this explosion to game
         Emitter.emit('add-to-scene', explosion.sprite);
@@ -83,11 +84,11 @@ export class BulletController {
         // set sound for explosion
         if (bullet.isPlayerBullet) {
             sound.play('explosion');
-            sound.volume('explosion', 0.2);
+            sound.volume('explosion', AppConstants.volumeOfExplosion);
         }
 
         // remove this bullet after time
-        setTimeout(() => { Emitter.emit('remove-from-scene', explosion.sprite); }, 100);
+        setTimeout(() => { Emitter.emit('remove-from-scene', explosion.sprite); }, AppConstants.timeExplosionDisappear);
     }
 
 
@@ -102,7 +103,7 @@ export class BulletController {
 
             // check bullet position out of map yet?
             // if is it.
-            if ((bullet.position.x < 0 || bullet.position.x > 800) || ((bullet.position.y < 0) || (bullet.position.y > 600))) {
+            if ((bullet.position.x < 0 || bullet.position.x > AppConstants.screenWidth) || ((bullet.position.y < 0) || (bullet.position.y > AppConstants.screenHeight))) {
                 this.removeBullet(bullet);
             }
             // update bullet

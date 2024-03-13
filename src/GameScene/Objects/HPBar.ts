@@ -1,6 +1,7 @@
 import { Point } from '@pixi/core';
 import { BaseObject } from './BaseObject';
 import Emitter from '../util';
+import { AppConstants } from '../constants';
 
 export class HPBar extends BaseObject {
     private _isPlayer: boolean;
@@ -31,7 +32,7 @@ export class HPBar extends BaseObject {
     }
 
     public update(position: Point) {
-        const newPosition = new Point(position.x, position.y - 20);
+        const newPosition = new Point(position.x, position.y - AppConstants.distanceOfHpBarAndTank);
         this.position = newPosition;
         this.changeHPSpriteFollowHP();
     }

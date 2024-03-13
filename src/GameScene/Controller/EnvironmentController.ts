@@ -1,6 +1,7 @@
 import { BaseObject } from '../Objects/BaseObject';
 import { Point, Rectangle } from '@pixi/core';
 import Emitter, { getRandomBoolean } from '../util';
+import { AppConstants } from '../constants';
 
 export class EnvironmentController {
 
@@ -16,27 +17,26 @@ export class EnvironmentController {
 
         // create a bunker
         this._bunker = new BaseObject('base-bunker');
-        const position = new Point(400, 580);
-        this._bunker.position = position;
-        this._bunker.setImageSize({ w: 50, h: 50 });
+        this._bunker.position = AppConstants.positionOfBunker;
+        this._bunker.setImageSize(AppConstants.bunkerSpriteSize);
         Emitter.emit('add-to-scene', this._bunker.sprite);
-        this._bunker.size = { w: 50, h: 50 };
+        this._bunker.size = AppConstants.bunkerSpriteSize;
 
-        // create rock around bunker
-        const pos1 = new Point(370, 600);
-        const pos2 = new Point(430, 600);
-        const pos3 = new Point(381, 560);
+        // create rock like fence around bunker
+        const pos1 = AppConstants.fenceOfBunkerPosition1;
+        const pos2 = AppConstants.fenceOfBunkerPosition2;
+        const pos3 = AppConstants.fenceOfBunkerPosition3;
         for (let i = 0; i < 6; i++) {
             this.createEnvironmentObject('rock', pos1);
             this.createEnvironmentObject('rock', pos2);
             this.createEnvironmentObject('rock', pos3);
-            pos1.y -= 7.5;
-            pos2.y -= 7.5;
-            pos3.x += 7.5;
+            pos1.y -= AppConstants.spaceBetweenFences;
+            pos2.y -= AppConstants.spaceBetweenFences;
+            pos3.x += AppConstants.spaceBetweenFences;
         }
 
         // create environment object with define from begin*/
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < AppConstants.numbersOfEnvironmentObjects; i++) {
             this.createEnvironmentObject('tree-1');
             this.createEnvironmentObject('tree-2');
             this.createEnvironmentObject('rock');
@@ -79,10 +79,10 @@ export class EnvironmentController {
         Emitter.emit('add-to-scene', object.sprite);
 
         // set size */
-        object.setImageSize({ w: 15, h: 15 });
+        object.setImageSize(AppConstants.environmentSpriteSize);
 
         // set size property
-        object.size = { w: 15, h: 15 };
+        object.size = AppConstants.environmentSpriteSize;
 
         // set position if para is define
         if (!position) {
@@ -110,9 +110,9 @@ export class EnvironmentController {
     private createRewardRandomly(position: Point) {
 
         // get a random number
-        const randomBoolean = getRandomBoolean(10);
+        const randomBoolean = getRandomBoolean(AppConstants.ratioCreateReward);
 
-        // if random number === 1
+        // if random is true
         if (randomBoolean) {
 
             // create new object is hp bag
@@ -122,9 +122,9 @@ export class EnvironmentController {
             rewardObject.position = position;
 
             // set size
-            rewardObject.setImageSize({ w: 20, h: 20 });
+            rewardObject.setImageSize(AppConstants.rewardSpriteSize);
 
-            rewardObject.size = { w: 20, h : 20 };
+            rewardObject.size = AppConstants.rewardSpriteSize;
 
             // add hp bag to game scene
             Emitter.emit('add-to-scene', rewardObject.sprite);

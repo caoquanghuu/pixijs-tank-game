@@ -4,6 +4,7 @@ import { BaseEngine } from '../Engine/BaseEngine';
 import { AssetsLoader } from '../../AssetsLoader';
 import { Point, Rectangle } from '@pixi/core';
 import { switchFn } from '../util';
+import { AppConstants } from '../constants';
 
 export class BaseObject {
     // a sprite
@@ -19,7 +20,7 @@ export class BaseObject {
     protected _moveEngine: BaseEngine;
 
     // size of the image object for avoid wrong when check collision
-    private _size: {w: number, h: number};
+    private _size: Size;
 
     // rectangle of object */
     private _rectangle: Rectangle;
@@ -128,43 +129,23 @@ export class BaseObject {
 
         moveSwitch(direction);
 
-        // switch (direction) {
-        //     case Direction.UP:
-        //         nextY = (this.position.y) - ((this._speed * deltaTime) / 1000);
-        //         nextX = this.position.x;
-        //         break;
-        //     case Direction.DOWN:
-        //         nextY = (this.position.y) + ((this._speed * deltaTime) / 1000);
-        //         nextX = this.position.x;
-        //         break;
-        //     case Direction.LEFT:
-        //         nextY = this.position.y;
-        //         nextX = (this.position.x) - ((this._speed * deltaTime) / 1000);
-        //         break;
-        //     case Direction.RIGHT:
-        //         nextY = this.position.y;
-        //         nextX = (this.position.x) + ((this._speed * deltaTime) / 1000);
-        //         break;
-        //     default:
-        //         break;
-        // }
-
         if (!isBullet) {
-            if (nextX < 10) {
-                // cham trai
-                nextX = 10;
+            if (nextX < AppConstants.minScreenUseAbleWidth) {
+                // collision left
+                nextX = AppConstants.minScreenUseAbleWidth;
             }
-            if (nextX > 790) {
-                // cham phai
-                nextX = 790;
+            if (nextX > AppConstants.maxScreenUseAbleWidth) {
+                // collision right
+                nextX = AppConstants.maxScreenUseAbleWidth;
             }
 
-            if (nextY < 10) {
-                // cham tren
-                nextY = 10;
+            if (nextY < AppConstants.minScreenUseAbleHeight) {
+                // collision top
+                nextY = AppConstants.minScreenUseAbleHeight;
             }
-            if (nextY > 590) {
-                nextY = 590;
+            if (nextY > AppConstants.maxScreenUseAbleHeight) {
+                // collision bottom
+                nextY = AppConstants.maxScreenUseAbleHeight;
             }
         }
 

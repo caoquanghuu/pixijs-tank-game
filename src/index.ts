@@ -8,6 +8,7 @@ import { GameScene } from './GameScene/GameScene';
 import '@pixi-spine/loader-3.8';
 import { sound } from '@pixi/sound';
 import Emitter from './GameScene/util';
+import { AppConstants } from './GameScene/constants';
 
 class Main {
 
@@ -18,8 +19,8 @@ class Main {
 
         // Create application
         this._pixiApp = new Application({
-            width: 800,
-            height: 600,
+            width: AppConstants.screenWidth,
+            height: AppConstants.screenHeight,
             backgroundColor: 0xE8EAED,
             antialias: true,
             resolution: 1

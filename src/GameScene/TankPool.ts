@@ -1,10 +1,11 @@
 import { Tank } from './Objects/Tank';
+import { AppConstants } from './constants';
 
 export class TankPool {
     private static instance: TankPool;
 
     // a variable to limit bot tank pool
-    private _maxTanks: number = 20;
+    private _maxTanks: number = AppConstants.maxNumberOfAiTank;
 
     // a array to contain bot tank
     private _tanksPool: Tank[] = [];
