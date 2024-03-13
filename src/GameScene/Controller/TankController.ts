@@ -1,7 +1,7 @@
-import { Point } from '@pixi/core';
+import { Point, Rectangle } from '@pixi/core';
 import { Tank } from '../Objects/Tank';
 import { TankPool } from '../TankPool';
-import { CreateNewRandomPositionFn, Direction } from '../type';
+import { Direction } from '../type';
 import Emitter, { getRandomArbitrary, getRandomBoolean, randomEnumKey, switchFn } from '../util';
 import { SpineBoy } from '../Objects/SpineBoy';
 
@@ -11,27 +11,27 @@ export class TankController {
     private _spawnTankTime: number = 20000;
     private _playerTank: Tank;
     private _tankPool: TankPool;
-
-    private _createNewRandomPositionCall: CreateNewRandomPositionFn;
+    private _randomRectangle: Rectangle;
 
     // test for spine object
     private _spineBoy: SpineBoy;
 
 
-    constructor(createNewRandomPositionCallBack: CreateNewRandomPositionFn) {
+    constructor() {
 
         this._tankPool = new TankPool();
 
-        // spawnTank every spawnTankTime
-        this._createNewRandomPositionCall = createNewRandomPositionCallBack;
+        this._useEventEffect();
 
+        // spawnTank every spawnTankTime
         this.spawnTank();
 
         // create a player tank
         this._playerTank = new Tank(true);
         this._usingTanks.push(this._playerTank);
         Emitter.emit('add-to-scene', this._playerTank.sprite);
-        this._playerTank.rectangle = this._createNewRandomPositionCall(this._playerTank.size);
+        Emitter.emit('create-random-position', this._playerTank.size);
+        this._playerTank.rectangle = this._randomRectangle;
 
         const position = new Point(this._playerTank.rectangle.x, this._playerTank.rectangle.y);
 
@@ -44,12 +44,7 @@ export class TankController {
             Emitter.emit('add-to-scene', this._spineBoy.spine);
         });
 
-        Emitter.on('handle-tank-move', (tank: Tank) => {
-            this.handleTankMove(tank);
-        });
-
         this._sendEventEffect();
-        this._useEventEffect();
     }
 
     private _useEventEffect() {
@@ -61,6 +56,12 @@ export class TankController {
         });
         Emitter.on('get-tank-list', () => {
             Emitter.emit('return-tank-list', this.usingTankList);
+        });
+        Emitter.on('return-random-position', (rectangle: Rectangle) => {
+            this._randomRectangle = rectangle;
+        });
+        Emitter.on('handle-tank-move', (tank: Tank) => {
+            this.handleTankMove(tank);
         });
     }
 
@@ -82,7 +83,8 @@ export class TankController {
             this.createBossTank(tank);
         }
 
-        tank.rectangle = this._createNewRandomPositionCall(tank.size);
+        Emitter.emit('create-random-position', tank.size);
+        tank.rectangle = this._randomRectangle;
 
         // create new position based on rectangle
         const position = new Point(tank.rectangle.x, tank.rectangle.y);

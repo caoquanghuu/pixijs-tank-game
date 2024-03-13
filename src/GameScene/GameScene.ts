@@ -6,8 +6,7 @@ import { AssetsLoader } from '../AssetsLoader';
 import { TankController } from './Controller/TankController';
 import { BulletController } from './Controller/BulletController';
 import { EnvironmentController } from './Controller/EnvironmentController';
-import { Size } from './type';
-import { Point, Rectangle } from '@pixi/core';
+import { Point } from '@pixi/core';
 import { CollisionController } from './Controller/CollisionController';
 import { SpineObject } from './Objects/SpineObject';
 import { UIController } from './Controller/UIController';
@@ -107,9 +106,9 @@ export class GameScene extends Container {
 
         this._bulletController = new BulletController();
 
-        this._tankController = new TankController(this.createNewRandomPositionCall.bind(this));
+        this._tankController = new TankController();
 
-        this._environmentController = new EnvironmentController(this.createNewRandomPositionCall.bind(this));
+        this._environmentController = new EnvironmentController();
 
     }
 
@@ -166,10 +165,6 @@ export class GameScene extends Container {
             this._bulletController.update(deltaTime);
             this._collisionController.update();
         }
-    }
-
-    public createNewRandomPositionCall(size: Size): Rectangle {
-        return this._collisionController.createNewRandomPosition(size);
     }
 
     private addToScene(displayObject: DisplayObject) {

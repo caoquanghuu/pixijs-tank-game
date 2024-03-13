@@ -16,10 +16,10 @@ export class CollisionController {
 
     constructor() {
 
-        this._useEffect();
+        this._useEventEffect();
     }
 
-    private _useEffect() {
+    private _useEventEffect() {
         Emitter.on('return-tank-list', (tankList: Tank[]) => {
             this._tankList = tankList;
         });
@@ -34,6 +34,10 @@ export class CollisionController {
         });
         Emitter.on('return-bunker', (bunker: BaseObject) => {
             this._bunker = bunker;
+        });
+        Emitter.on('create-random-position', (size: Size) => {
+
+            Emitter.emit('return-random-position', this.createNewRandomPosition(size));
         });
     }
 

@@ -1,5 +1,4 @@
 import { BaseObject } from '../Objects/BaseObject';
-import { CreateNewRandomPositionFn } from '../type';
 import { Point, Rectangle } from '@pixi/core';
 import Emitter, { getRandomBoolean } from '../util';
 
@@ -9,11 +8,11 @@ export class EnvironmentController {
     private _environmentObjects: BaseObject[] = [];
     private _rewardObjects: BaseObject[] = [];
     private _bunker: BaseObject;
-    private _createNewRandomPositionCall: CreateNewRandomPositionFn;
+    private _randomRectangle: Rectangle;
 
-    constructor(createNewRandomPositionCallBack: CreateNewRandomPositionFn) {
+    constructor() {
 
-        this._createNewRandomPositionCall = createNewRandomPositionCallBack;
+        this._useEventEffect();
 
         // create a bunker
         this._bunker = new BaseObject('base-bunker');
@@ -43,7 +42,6 @@ export class EnvironmentController {
             this.createEnvironmentObject('rock');
         }
 
-        this._useEventEffect();
     }
 
     private _useEventEffect() {
@@ -61,6 +59,9 @@ export class EnvironmentController {
         });
         Emitter.on('get-bunker', () => {
             Emitter.emit('return-bunker', this.bunker);
+        });
+        Emitter.on('return-random-position', (rectangle: Rectangle) => {
+            this._randomRectangle = rectangle;
         });
     }
 
@@ -86,7 +87,10 @@ export class EnvironmentController {
         // set position if para is define
         if (!position) {
             // create a rectangle and check that position is available */
-            object.rectangle = this._createNewRandomPositionCall(object.size);
+            Emitter.emit('create-random-position', object.size);
+
+            // object.rectangle = this._position;
+            object.rectangle = this._randomRectangle;
 
             // create new position based on rectangle
             const newPosition = new Point(object.rectangle.x, object.rectangle.y);
