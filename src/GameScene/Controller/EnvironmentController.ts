@@ -23,9 +23,9 @@ export class EnvironmentController {
         this._bunker.size = AppConstants.bunkerSpriteSize;
 
         // create rock like fence around bunker
-        const pos1 = AppConstants.fenceOfBunkerPosition1;
-        const pos2 = AppConstants.fenceOfBunkerPosition2;
-        const pos3 = AppConstants.fenceOfBunkerPosition3;
+        const pos1 = new Point(370, 600);
+        const pos2 = new Point(430, 600);
+        const pos3 = new Point(381, 560);
         for (let i = 0; i < 6; i++) {
             this.createEnvironmentObject('rock', pos1);
             this.createEnvironmentObject('rock', pos2);

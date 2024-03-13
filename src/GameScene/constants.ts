@@ -14,9 +14,6 @@ export namespace AppConstants {
     export const maxScreenUseAbleHeight: number = 590;
 
     export const defaultScoreDisplayPosition: Point = new Point(760, 10);
-    export const fenceOfBunkerPosition1: Point = new Point(370, 600);
-    export const fenceOfBunkerPosition2: Point = new Point(430, 600);
-    export const fenceOfBunkerPosition3: Point = new Point(381, 560);
     export const positionOfBunker: Point = new Point(400, 580);
     export const textGameOverPosition: IPointData = { x: 180, y: 80 };
     export const textYourScorePosition: IPointData = { x: 180, y: 110 };
