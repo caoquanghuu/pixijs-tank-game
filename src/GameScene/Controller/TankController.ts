@@ -43,8 +43,6 @@ export class TankController {
             this._spineBoy.position = this._playerTank.position;
             Emitter.emit('add-to-scene', this._spineBoy.spine);
         });
-
-        this._sendEventEffect();
     }
 
     private _useEventEffect() {
@@ -63,10 +61,6 @@ export class TankController {
         Emitter.on('handle-tank-move', (tank: Tank) => {
             this.handleTankMove(tank);
         });
-    }
-
-    private _sendEventEffect() {
-        Emitter.emit('get-tanks-list', this.usingTankList);
     }
 
     /**

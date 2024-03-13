@@ -15,7 +15,6 @@ export class CollisionController {
     private _bunker: BaseObject;
 
     constructor() {
-
         this._useEventEffect();
     }
 
@@ -36,7 +35,6 @@ export class CollisionController {
             this._bunker = bunker;
         });
         Emitter.on('create-random-position', (size: Size) => {
-
             Emitter.emit('return-random-position', this.createNewRandomPosition(size));
         });
     }
@@ -107,8 +105,6 @@ export class CollisionController {
      */
     private handleCollision() {
         // get using tanks list from tank controller
-        // const tanks = this._getTankListCall();
-
         Emitter.emit('get-tank-list', null);
 
         const tanks = this._tankList;

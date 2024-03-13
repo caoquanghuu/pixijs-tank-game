@@ -8,6 +8,10 @@ import Emitter from '../util';
 export class UIController {
 
     constructor() {
+        this._useEventEffect();
+    }
+
+    private _useEventEffect() {
         Emitter.on('display-game-over', () => {
             this.displayGameOver();
         });
