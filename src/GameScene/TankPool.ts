@@ -1,5 +1,5 @@
 import { Tank } from './Objects/Tank';
-import { AppConstants } from './constants';
+import { AppConstants } from './Constants';
 
 export class TankPool {
     private static instance: TankPool;

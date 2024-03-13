@@ -8,7 +8,7 @@ import { GameScene } from './GameScene/GameScene';
 import '@pixi-spine/loader-3.8';
 import { sound } from '@pixi/sound';
 import Emitter from './GameScene/util';
-import { AppConstants } from './GameScene/constants';
+import { AppConstants } from './GameScene/Constants';
 
 class Main {
 

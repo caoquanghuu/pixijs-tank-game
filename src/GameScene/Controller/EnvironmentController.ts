@@ -1,7 +1,7 @@
 import { BaseObject } from '../Objects/BaseObject';
 import { Point, Rectangle } from '@pixi/core';
 import Emitter, { getRandomBoolean } from '../util';
-import { AppConstants } from '../constants';
+import { AppConstants } from '../Constants';
 
 export class EnvironmentController {
 

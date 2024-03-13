@@ -4,7 +4,7 @@ import { TankPool } from '../TankPool';
 import { Direction } from '../type';
 import Emitter, { getRandomArbitrary, getRandomBoolean, randomEnumKey, switchFn } from '../util';
 import { SpineBoy } from '../Objects/SpineBoy';
-import { AppConstants } from '../constants';
+import { AppConstants } from '../Constants';
 
 export class TankController {
 

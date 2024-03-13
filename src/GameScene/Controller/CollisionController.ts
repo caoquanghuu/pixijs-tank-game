@@ -5,7 +5,7 @@ import Emitter, { getDistanceOfTwoPosition, getRandomArbitrary } from '../util';
 import { sound } from '@pixi/sound';
 import { Tank } from '../Objects/Tank';
 import { Bullet } from '../Objects/Bullet';
-import { AppConstants } from '../constants';
+import { AppConstants } from '../Constants';
 
 export class CollisionController {
     private _usingObjectsList: BaseObject[] = [];

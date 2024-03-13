@@ -4,7 +4,7 @@ import { Direction } from '../type';
 import { BaseObject } from '../Objects/BaseObject';
 import { sound } from '@pixi/sound';
 import Emitter from '../util';
-import { AppConstants } from '../constants';
+import { AppConstants } from '../Constants';
 
 export class BulletController {
 

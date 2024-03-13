@@ -4,7 +4,7 @@ import { AssetsLoader } from '../../AssetsLoader';
 import { Text } from '@pixi/text';
 import { Point } from '@pixi/core';
 import Emitter from '../util';
-import { AppConstants } from '../constants';
+import { AppConstants } from '../Constants';
 
 export class UIController {
 

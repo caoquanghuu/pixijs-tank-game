@@ -1,7 +1,7 @@
 import { Point } from '@pixi/core';
 import { BaseObject } from './BaseObject';
 import Emitter from '../util';
-import { AppConstants } from '../constants';
+import { AppConstants } from '../Constants';
 
 export class HPBar extends BaseObject {
     private _isPlayer: boolean;

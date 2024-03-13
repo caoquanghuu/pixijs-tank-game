@@ -7,7 +7,7 @@ import { ControlEngine } from '../Engine/ControlEngine';
 import Emitter, { getRandomArbitrary, keyboard } from '../util';
 import { HPBar } from './HPBar';
 import { sound } from '@pixi/sound';
-import { AppConstants } from '../constants';
+import { AppConstants } from '../Constants';
 
 export class Tank extends BaseObject {
 

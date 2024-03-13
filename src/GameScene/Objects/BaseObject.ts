@@ -4,7 +4,7 @@ import { BaseEngine } from '../Engine/BaseEngine';
 import { AssetsLoader } from '../../AssetsLoader';
 import { Point, Rectangle } from '@pixi/core';
 import { switchFn } from '../util';
-import { AppConstants } from '../constants';
+import { AppConstants } from '../Constants';
 
 export class BaseObject {
     // a sprite

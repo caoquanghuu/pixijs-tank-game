@@ -1,4 +1,4 @@
-import { AppConstants } from '../constants';
+import { AppConstants } from '../Constants';
 import { Direction } from '../type';
 import { randomEnumKey } from '../util';
 import { BaseEngine } from './BaseEngine';

@@ -11,7 +11,7 @@ import { CollisionController } from './Controller/CollisionController';
 import { SpineObject } from './Objects/SpineObject';
 import { UIController } from './Controller/UIController';
 import Emitter from './util';
-import { AppConstants } from './constants';
+import { AppConstants } from './Constants';
 // import { Color } from '@pixi/core';
 // Color.shared.setValue(0xffffff).toHex(); // '#ffffff'
 

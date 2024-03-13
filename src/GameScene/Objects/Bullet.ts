@@ -2,7 +2,7 @@ import { BaseObject } from './BaseObject';
 import { BaseEngine } from '../Engine/BaseEngine';
 import { switchFn } from '../util';
 import { Direction } from '../type';
-import { AppConstants } from '../constants';
+import { AppConstants } from '../Constants';
 
 export class Bullet extends BaseObject {
     // property define this bullet belong to player or bot tank

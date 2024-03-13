@@ -1,7 +1,7 @@
 import { Point } from '@pixi/core';
 import { SpineObject } from './SpineObject';
 import { keyboard } from '../util';
-import { AppConstants } from '../constants';
+import { AppConstants } from '../Constants';
 
 export class SpineBoy extends SpineObject {
 
