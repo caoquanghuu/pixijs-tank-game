@@ -7,8 +7,6 @@ import { AssetsLoader } from './AssetsLoader';
 import { GameScene } from './GameScene/GameScene';
 import '@pixi-spine/loader-3.8';
 import { sound } from '@pixi/sound';
-import Emitter from './GameScene/util';
-import { AppConstants } from './GameScene/Constants';
 
 class Main {
 
@@ -19,8 +17,8 @@ class Main {
 
         // Create application
         this._pixiApp = new Application({
-            width: AppConstants.screenWidth,
-            height: AppConstants.screenHeight,
+            width: 800,
+            height: 600,
             backgroundColor: 0xE8EAED,
             antialias: true,
             resolution: 1
@@ -60,23 +58,15 @@ class Main {
 
         // add explosion sound
         sound.add('explosion', 'sound/explosion.mp3');
-
-        this._useEventEffect();
     }
 
     private createNewGame() {
-        this._gameScene = new GameScene();
+        this._gameScene = new GameScene(this.createNewGame.bind(this));
         this._gameScene.init();
         this._pixiApp.stage.eventMode = 'static';
 
         // Add scene to render stage
         this._pixiApp.stage.addChild(this._gameScene);
-    }
-
-    private _useEventEffect() {
-        Emitter.on('create-new-game', () => {
-            this.createNewGame();
-        });
     }
 
     private _update(deltaTime: number) {

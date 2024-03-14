@@ -1,24 +1,30 @@
+
 import { Tank } from './Objects/Tank';
-import { AppConstants } from './Constants';
+import { AddToSceneFn, FireBulletFn, TankDieFn } from './type';
 
 export class TankPool {
     private static instance: TankPool;
 
     // a variable to limit bot tank pool
-    private _maxTanks: number = AppConstants.maxNumberOfAiTank;
+    private _maxTanks: number = 20;
 
     // a array to contain bot tank
     private _tanksPool: Tank[] = [];
+    private _fireBulletCallBack: FireBulletFn;
+    private _tankDieCall: TankDieFn;
+    private _addToSceneCall: AddToSceneFn;
 
     /**
      * constructor tank pool base on number of tank
      */
-    constructor() {
-
+    constructor(fireBulletCallBack: FireBulletFn, tankDieCallBack: TankDieFn, addToSceneCallBack: AddToSceneFn) {
+        this._fireBulletCallBack = fireBulletCallBack;
+        this._tankDieCall = tankDieCallBack;
+        this._addToSceneCall = addToSceneCallBack;
 
         // a loop to create tank and add it to tank pool
         for (let i = 0; i < this._maxTanks; i++) {
-            const tank = new Tank(false);
+            const tank = new Tank(false, this._fireBulletCallBack, this._tankDieCall, this._addToSceneCall);
             this._tanksPool.push(tank);
         }
     }

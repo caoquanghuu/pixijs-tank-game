@@ -1,7 +1,7 @@
 import { BaseObject } from '../Objects/BaseObject';
+import { AddToSceneFn, CreateNewRandomPositionFn, RemoveFromSceneFn } from '../type';
 import { Point, Rectangle } from '@pixi/core';
-import Emitter, { getRandomBoolean } from '../util';
-import { AppConstants } from '../Constants';
+import { getRandomBoolean } from '../util';
 
 export class EnvironmentController {
 
@@ -9,60 +9,43 @@ export class EnvironmentController {
     private _environmentObjects: BaseObject[] = [];
     private _rewardObjects: BaseObject[] = [];
     private _bunker: BaseObject;
-    private _randomRectangle: Rectangle;
+    private _addToSceneCall: AddToSceneFn;
+    private _createNewRandomPositionCall: CreateNewRandomPositionFn;
+    private _removeFromSceneCall: RemoveFromSceneFn;
 
-    constructor() {
+    constructor(addToSceneCallBack: AddToSceneFn, createNewRandomPositionCallBack: CreateNewRandomPositionFn, removeFromSceneCallBack: RemoveFromSceneFn) {
 
-        this._useEventEffect();
+        this._addToSceneCall = addToSceneCallBack;
+        this._removeFromSceneCall = removeFromSceneCallBack;
+        this._createNewRandomPositionCall = createNewRandomPositionCallBack;
 
         // create a bunker
         this._bunker = new BaseObject('base-bunker');
-        this._bunker.position = AppConstants.positionOfBunker;
-        this._bunker.setImageSize(AppConstants.bunkerSpriteSize);
-        Emitter.emit('add-to-scene', this._bunker.sprite);
-        this._bunker.size = AppConstants.bunkerSpriteSize;
+        const position = new Point(400, 580);
+        this._bunker.position = position;
+        this._bunker.setImageSize({ w: 50, h: 50 });
+        this._addToSceneCall(this._bunker.sprite);
+        this._bunker.size = { w: 50, h: 50 };
 
-        // create rock like fence around bunker
-        const pos1 = new Point(370, 600);
-        const pos2 = new Point(430, 600);
-        const pos3 = new Point(381, 560);
+        // create tree around bunker
+        const pos1 = new Point(370, 590);
+        const pos2 = new Point(430, 590);
+        const pos3 = new Point(381, 550);
         for (let i = 0; i < 6; i++) {
-            this.createEnvironmentObject('rock', pos1);
-            this.createEnvironmentObject('rock', pos2);
-            this.createEnvironmentObject('rock', pos3);
-            pos1.y -= AppConstants.spaceBetweenFences;
-            pos2.y -= AppConstants.spaceBetweenFences;
-            pos3.x += AppConstants.spaceBetweenFences;
+            this.createEnvironmentObject('tree-1', pos1);
+            this.createEnvironmentObject('tree-1', pos2);
+            this.createEnvironmentObject('tree-1', pos3);
+            pos1.y -= 7.5;
+            pos2.y -= 7.5;
+            pos3.x += 7.5;
         }
 
         // create environment object with define from begin*/
-        for (let i = 0; i < AppConstants.numbersOfEnvironmentObjects; i++) {
+        for (let i = 0; i < 30; i++) {
             this.createEnvironmentObject('tree-1');
             this.createEnvironmentObject('tree-2');
             this.createEnvironmentObject('rock');
         }
-
-    }
-
-    private _useEventEffect() {
-        Emitter.on('remove-environment', (environment: BaseObject) => {
-            this.removeEnvironmentObject(environment);
-        });
-        Emitter.on('remove-reward', (rewardObject: BaseObject) => {
-            this.removeObject(rewardObject, this._rewardObjects);
-        });
-        Emitter.on('get-environment-list', () => {
-            Emitter.emit('return-environment-list', this.environmentObjects);
-        });
-        Emitter.on('get-reward-list', () => {
-            Emitter.emit('return-reward-list', this.rewardObjects);
-        });
-        Emitter.on('get-bunker', () => {
-            Emitter.emit('return-bunker', this.bunker);
-        });
-        Emitter.on('return-random-position', (rectangle: Rectangle) => {
-            this._randomRectangle = rectangle;
-        });
     }
 
     /**
@@ -76,21 +59,18 @@ export class EnvironmentController {
         const object = new BaseObject(name);
 
         // add sprite to game scene
-        Emitter.emit('add-to-scene', object.sprite);
+        this._addToSceneCall(object.sprite);
 
         // set size */
-        object.setImageSize(AppConstants.environmentSpriteSize);
+        object.setImageSize({ w: 15, h: 15 });
 
         // set size property
-        object.size = AppConstants.environmentSpriteSize;
+        object.size = { w: 15, h: 15 };
 
         // set position if para is define
         if (!position) {
             // create a rectangle and check that position is available */
-            Emitter.emit('create-random-position', object.size);
-
-            // object.rectangle = this._position;
-            object.rectangle = this._randomRectangle;
+            object.rectangle = this._createNewRandomPositionCall(object.size);
 
             // create new position based on rectangle
             const newPosition = new Point(object.rectangle.x, object.rectangle.y);
@@ -110,9 +90,9 @@ export class EnvironmentController {
     private createRewardRandomly(position: Point) {
 
         // get a random number
-        const randomBoolean = getRandomBoolean(AppConstants.ratioCreateReward);
+        const randomBoolean = getRandomBoolean(10);
 
-        // if random is true
+        // if random number === 1
         if (randomBoolean) {
 
             // create new object is hp bag
@@ -122,12 +102,12 @@ export class EnvironmentController {
             rewardObject.position = position;
 
             // set size
-            rewardObject.setImageSize(AppConstants.rewardSpriteSize);
+            rewardObject.setImageSize({ w: 20, h: 20 });
 
-            rewardObject.size = AppConstants.rewardSpriteSize;
+            rewardObject.size = { w: 20, h : 20 };
 
             // add hp bag to game scene
-            Emitter.emit('add-to-scene', rewardObject.sprite);
+            this._addToSceneCall(rewardObject.sprite);
 
             // push mid hp bag to list
             this._rewardObjects.push(rewardObject);
@@ -145,7 +125,7 @@ export class EnvironmentController {
     }
 
     public removeObject(object: BaseObject, objectList: BaseObject[]) {
-        Emitter.emit('remove-from-scene', object.sprite);
+        this._removeFromSceneCall(object.sprite);
 
         const p = objectList.findIndex(objects => objects === object);
         objectList.splice(p, 1);

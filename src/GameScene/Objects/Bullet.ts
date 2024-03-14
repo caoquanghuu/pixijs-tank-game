@@ -2,7 +2,6 @@ import { BaseObject } from './BaseObject';
 import { BaseEngine } from '../Engine/BaseEngine';
 import { switchFn } from '../util';
 import { Direction } from '../type';
-import { AppConstants } from '../Constants';
 
 export class Bullet extends BaseObject {
     // property define this bullet belong to player or bot tank
@@ -17,7 +16,7 @@ export class Bullet extends BaseObject {
         super('bullet');
 
         // set speed of bullet
-        this.speed = AppConstants.speedOfBullet;
+        this.speed = 200;
 
         // set move engine for bullet
         this.moveEngine = new BaseEngine();
@@ -26,10 +25,10 @@ export class Bullet extends BaseObject {
         this._isPlayerBullet = isPlayer;
 
         // resize bullet sprite
-        this.setImageSize(AppConstants.bulletSpriteSize);
+        this.setImageSize({ w: 10, h: 15 });
 
         // fix size
-        this.size = AppConstants.bulletSpriteSize;
+        this.size = { w: 10, h: 15 };
     }
 
     /**
@@ -64,6 +63,25 @@ export class Bullet extends BaseObject {
         const rotateSwitch = switchFn(rotateList, 'default');
 
         rotateSwitch(this.moveEngine.direction);
+
+        // switch (this.moveEngine.direction) {
+        //     case Direction.UP: {
+        //         this.sprite.angle = 180;
+        //         break;
+        //     }
+        //     case Direction.DOWN: {
+        //         this.sprite.angle = 0;
+        //         break;
+        //     }
+        //     case Direction.LEFT: {
+        //         this.sprite.angle = 90;
+        //         break;
+        //     }
+        //     case Direction.RIGHT: {
+        //         this.sprite.angle = -90;
+        //         break;
+        //     }
+        // }
     }
 
     update(dt: number) {

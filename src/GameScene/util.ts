@@ -95,6 +95,7 @@ const Emitter = {
     once: (event: string, fn) => eventEmitter.once(event, fn),
     off: (event: string, fn) => eventEmitter.off(event, fn),
     emit: (event: string, payload) => eventEmitter.emit(event, payload),
+    remove: () => eventEmitter.removeAllListeners(),
 };
 Object.freeze(Emitter);
 export default Emitter;

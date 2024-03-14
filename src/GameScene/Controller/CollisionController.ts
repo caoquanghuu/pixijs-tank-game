@@ -1,48 +1,41 @@
 import { Point, Rectangle } from '@pixi/core';
 import { BaseObject } from '../Objects/BaseObject';
-import { Size } from '../type';
-import Emitter, { getDistanceOfTwoPosition, getRandomArbitrary } from '../util';
+import { GetBulletListFn, GetBunkerFn, GetObjectListFn, GetRewardObjectsFn, GetTankListFn, HandleTankMoveFn, RemoveBulletFn, RemoveEnvironmentFn, RemoveRewardObjectFn, Size, DisplayGameOverFn } from '../type';
+import { getDistanceOfTwoPosition, getRandomArbitrary } from '../util';
 import { sound } from '@pixi/sound';
-import { Tank } from '../Objects/Tank';
-import { Bullet } from '../Objects/Bullet';
-import { AppConstants } from '../Constants';
 
 export class CollisionController {
+    private _getTankListCall: GetTankListFn;
+    private _getBulletListCall: GetBulletListFn;
+    private _getEnvironmentListCall: GetObjectListFn;
+    private _getRewardListCall: GetRewardObjectsFn;
+    private _getBunker: GetBunkerFn;
+    private _removeBulletCall: RemoveBulletFn;
+    private _handleTankMoveCall: HandleTankMoveFn;
+    private _removeEnvironmentCall: RemoveEnvironmentFn;
+    private _removeRewardObjectCall: RemoveRewardObjectFn;
+    private _displayGameOverCall: DisplayGameOverFn;
     private _usingObjectsList: BaseObject[] = [];
-    private _tankList: Tank[];
-    private _bulletList: Bullet[];
-    private _environmentList: BaseObject[];
-    private _rewardList: BaseObject[];
-    private _bunker: BaseObject;
 
-    constructor() {
-        this._useEventEffect();
-    }
+    constructor(getTankListCallBack: GetTankListFn, getBulletListCallBack: GetBulletListFn, getEnvironmentListCallBack: GetObjectListFn,
+        removeBulletCallBack: RemoveBulletFn, handleTankMoveCallBack: HandleTankMoveFn, removeEnvironmentCallBack: RemoveEnvironmentFn,
+        removeRewardObjectCallBack: RemoveRewardObjectFn, getRewardListCallBack: GetRewardObjectsFn, getBunkerCallBack: GetBunkerFn, displayGameOverCallBack: DisplayGameOverFn) {
+        this._getTankListCall = getTankListCallBack;
+        this._getBulletListCall = getBulletListCallBack;
+        this._getEnvironmentListCall = getEnvironmentListCallBack;
+        this._getRewardListCall = getRewardListCallBack;
+        this._getBunker = getBunkerCallBack;
+        this._removeBulletCall = removeBulletCallBack;
+        this._handleTankMoveCall = handleTankMoveCallBack;
+        this._removeEnvironmentCall = removeEnvironmentCallBack;
+        this._removeRewardObjectCall = removeRewardObjectCallBack;
+        this._displayGameOverCall = displayGameOverCallBack;
 
-    private _useEventEffect() {
-        Emitter.on('return-tank-list', (tankList: Tank[]) => {
-            this._tankList = tankList;
-        });
-        Emitter.on('return-bullet-list', (bulletList: Bullet[]) => {
-            this._bulletList = bulletList;
-        });
-        Emitter.on('return-environment-list', (environmentList: BaseObject[]) => {
-            this._environmentList = environmentList;
-        });
-        Emitter.on('return-reward-list', (rewardList: BaseObject[]) => {
-            this._rewardList = rewardList;
-        });
-        Emitter.on('return-bunker', (bunker: BaseObject) => {
-            this._bunker = bunker;
-        });
-        Emitter.on('create-random-position', (size: Size) => {
-            Emitter.emit('return-random-position', this.createNewRandomPosition(size));
-        });
     }
 
     private getUsingObjectsList() {
-        const tanksList = this._tankList;
-        const environmentsList = this._environmentList;
+        const tanksList = this._getTankListCall();
+        const environmentsList = this._getEnvironmentListCall();
         this._usingObjectsList = environmentsList.concat(tanksList);
     }
 
@@ -71,7 +64,7 @@ export class CollisionController {
 
         do {
             // create a test position which will be compare
-            const pos1: Point = new Point(getRandomArbitrary(AppConstants.minScreenUseAbleWidth, AppConstants.maxScreenUseAbleWidth), getRandomArbitrary(AppConstants.minScreenUseAbleHeight, AppConstants.maxScreenUseAbleHeight));
+            const pos1: Point = new Point(getRandomArbitrary(0, 790), getRandomArbitrary(0, 590));
 
             // try assign test position to rectangle
             rectangle.x = pos1.x;
@@ -84,7 +77,7 @@ export class CollisionController {
                 const pos2 = new Point(object.rectangle.x, object.rectangle.y);
                 const distance = getDistanceOfTwoPosition(pos1, pos2);
 
-                if (distance < AppConstants.distanceOfObjectsWhenCreate) {
+                if (distance < 70) {
                     return false;
                 }
 
@@ -106,29 +99,19 @@ export class CollisionController {
      */
     private handleCollision() {
         // get using tanks list from tank controller
-        Emitter.emit('get-tank-list', null);
-
-        const tanks = this._tankList;
-
+        const tanks = this._getTankListCall();
 
         // get bullets list from bullet controller
-        Emitter.emit('get-bullet-list', null);
-
-        const bullets = this._bulletList;
+        const bullets = this._getBulletListCall();
 
         // get environments list from environment controller
-        Emitter.emit('get-environment-list', null);
-
-        const environments = this._environmentList;
+        const environments = this._getEnvironmentListCall();
 
         // get reward list from environment controller
-        Emitter.emit('get-reward-list', null);
-
-        const rewardObjects = this._rewardList;
+        const rewardObjects = this._getRewardListCall();
 
         // get bunker
-        Emitter.emit('get-bunker', null);
-        const bunker = this._bunker;
+        const bunker = this._getBunker();
 
         tanks.forEach(tank => {
 
@@ -144,7 +127,7 @@ export class CollisionController {
                         tank.HP -= 1;
 
                         // remove the bullet
-                        Emitter.emit('remove-bullet', bullet);
+                        this._removeBulletCall(bullet);
                     }
                 }
             });
@@ -163,7 +146,7 @@ export class CollisionController {
                 if (isCollision) {
 
                     // handle move of tank
-                    Emitter.emit('handle-tank-move', tank);
+                    this._handleTankMoveCall(tank);
                 }
             });
 
@@ -173,11 +156,11 @@ export class CollisionController {
                 const isCollision = this.checkCollision(tank, object);
 
                 if (isCollision) {
-                    Emitter.emit('remove-reward', object);
+                    this._removeRewardObjectCall(object);
 
                     sound.play('collect-reward-sound');
 
-                    if (tank.HP < AppConstants.maxHpOfPlayerTank) {
+                    if (tank.HP < 5) {
                         tank.HP += 1;
                     }
                 }
@@ -185,7 +168,7 @@ export class CollisionController {
 
             // handle tank vs game border
             if (!tank.isPlayerTank) {
-                if (tank.position.x === AppConstants.minScreenUseAbleWidth || tank.position.x === AppConstants.maxScreenUseAbleWidth || tank.position.y === AppConstants.minScreenUseAbleHeight || tank.position.y === AppConstants.maxScreenUseAbleHeight) {
+                if (tank.position.x === 10 || tank.position.x === 790 || tank.position.y === 10 || tank.position.y === 590) {
                     tank.moveEngine.forceChangeDirectionCall();
                 }
             }
@@ -199,17 +182,17 @@ export class CollisionController {
                 if (isCollision) {
 
                     // remove the bullet
-                    Emitter.emit('remove-bullet', bullet);
+                    this._removeBulletCall(bullet);
 
                     // remove the environment
-                    Emitter.emit('remove-environment', environment);
+                    this._removeEnvironmentCall(environment);
                 }
             });
 
             // check collision with bullet and bunker
             const isCollision = this.checkCollision(bullet, bunker);
             if (isCollision) {
-                Emitter.emit('display-game-over', null);
+                this._displayGameOverCall();
             }
 
         });

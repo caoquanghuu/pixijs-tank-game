@@ -2,12 +2,11 @@
 import { Point } from '@pixi/core';
 import { RandomEngine } from '../Engine/RandomEngine';
 import { BaseObject } from './BaseObject';
-import { Direction } from '../type';
+import { AddToSceneFn, Direction, FireBulletFn, TankDieFn } from '../type';
 import { ControlEngine } from '../Engine/ControlEngine';
-import Emitter, { getRandomArbitrary, keyboard } from '../util';
+import { getRandomArbitrary, keyboard } from '../util';
 import { HPBar } from './HPBar';
 import { sound } from '@pixi/sound';
-import { AppConstants } from '../Constants';
 
 export class Tank extends BaseObject {
 
@@ -17,11 +16,17 @@ export class Tank extends BaseObject {
     // hp of this tank
     private _HPBar: HPBar;
 
+    private _fireBulletCallBack: FireBulletFn;
+    private _tankDieCall: TankDieFn;
     private _fireBulletTime: number;
 
-    constructor(isPlayer: boolean) {
+    constructor(isPlayer: boolean, fireBulletCallBack: FireBulletFn, tankDieCallBack: TankDieFn, addToSceneCallBack: AddToSceneFn) {
         // set image of tank is player tank or bot tank
         super('tank-stand-up');
+
+        // define methods need to call
+        this._fireBulletCallBack = fireBulletCallBack;
+        this._tankDieCall = tankDieCallBack;
 
         // set speed of tank
         this.speed = 100;
@@ -30,11 +35,11 @@ export class Tank extends BaseObject {
         this.lastDirection = Direction.UP;
 
         // set size of tank
-        this.size = AppConstants.tankSpriteSize;
+        this.size = { w: 20, h: 20 };
 
         this._isPlayerTank = isPlayer;
 
-        this._HPBar = new HPBar(isPlayer);
+        this._HPBar = new HPBar(isPlayer, addToSceneCallBack.bind(this));
 
         // set move engine and type trigger fire bullet for tank base on is player or not
         if (isPlayer) {
@@ -43,7 +48,7 @@ export class Tank extends BaseObject {
             this.moveEngine = new ControlEngine();
 
             // set hp
-            this._HPBar.HP = AppConstants.maxHpOfPlayerTank;
+            this._HPBar.HP = 5;
 
             // set control fire key event by space keyboard
             const fire = keyboard(' ');
@@ -56,13 +61,13 @@ export class Tank extends BaseObject {
             this.moveEngine = new RandomEngine();
 
             //set hp
-            this._HPBar.HP = AppConstants.maxHpOfAiTank;
+            this._HPBar.HP = 1;
 
             //change color for bot tank
-            this.sprite.tint = AppConstants.colorOfAiTank;
+            this.sprite.tint = 'F02468';
 
             // set time for fire bullet
-            this._fireBulletTime = AppConstants.timeFireBulletOfAiTank;
+            this._fireBulletTime = 5000;
         }
     }
 
@@ -72,8 +77,7 @@ export class Tank extends BaseObject {
     public fire(position: Point, direction: Direction, isPlayer: boolean) {
 
         // call fire bullet to tank controller
-        // this._fireBulletCallBack(position, direction, isPlayer);
-        Emitter.emit('fire-bullet', { position, direction, isPlayer });
+        this._fireBulletCallBack(position, direction, isPlayer);
     }
 
     /**
@@ -82,7 +86,7 @@ export class Tank extends BaseObject {
     public destroy() {
         if (this.HPBar.HP === 0) {
             // call tank die to tank controller
-            Emitter.emit('tank-die', this);
+            this._tankDieCall(this);
         }
     }
 
@@ -99,7 +103,7 @@ export class Tank extends BaseObject {
             if (!movingSound.isPlaying) {
 
                 // if sound not playing then play
-                sound.play('tank-moving-sound', { volume: AppConstants.volumeOfTankMoving, loop: true });
+                sound.play('tank-moving-sound', { volume: 0.1, loop: true });
             }
         } else {
             // stop playing moving sound when tank stop

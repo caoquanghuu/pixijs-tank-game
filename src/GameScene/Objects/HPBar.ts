@@ -1,17 +1,18 @@
 import { Point } from '@pixi/core';
 import { BaseObject } from './BaseObject';
-import Emitter from '../util';
-import { AppConstants } from '../Constants';
+import { AddToSceneFn } from '../type';
 
 export class HPBar extends BaseObject {
     private _isPlayer: boolean;
     private _HP: number;
+    private _addToSceneCall: AddToSceneFn;
 
-    constructor(isPlayer: boolean) {
+    constructor(isPlayer: boolean, addToSceneCallBack: AddToSceneFn) {
         super(isPlayer ? 'player-hp' : 'bot-hp');
 
+        this._addToSceneCall = addToSceneCallBack;
 
-        Emitter.emit('add-to-scene', this.sprite);
+        this._addToSceneCall(this.sprite);
 
         this._isPlayer = isPlayer;
     }
@@ -32,7 +33,7 @@ export class HPBar extends BaseObject {
     }
 
     public update(position: Point) {
-        const newPosition = new Point(position.x, position.y - AppConstants.distanceOfHpBarAndTank);
+        const newPosition = new Point(position.x, position.y - 20);
         this.position = newPosition;
         this.changeHPSpriteFollowHP();
     }

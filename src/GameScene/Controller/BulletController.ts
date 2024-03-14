@@ -1,30 +1,25 @@
 import { Point } from '@pixi/core';
 import { Bullet } from '../Objects/Bullet';
-import { Direction } from '../type';
+import { AddToSceneFn, Direction, RemoveFromSceneFn } from '../type';
 import { BaseObject } from '../Objects/BaseObject';
 import { sound } from '@pixi/sound';
-import Emitter from '../util';
-import { AppConstants } from '../Constants';
 
 export class BulletController {
 
     // bullets list which display on game sense
     private _bullets: Bullet [] = [];
 
-    constructor() {
-        this._useEventEffect();
-    }
+    // function to call create child to game scene
+    private _addBulletToSceneCallBack: AddToSceneFn;
 
-    private _useEventEffect() {
-        Emitter.on('create-bullet', (option: {position: Point, direction: Direction, isPlayerBullet: boolean}) => {
-            this.createBullet(option.position, option.direction, option.isPlayerBullet);
-        });
-        Emitter.on('remove-bullet', (bullet: Bullet) => {
-            this.removeBullet(bullet);
-        });
-        Emitter.on('get-bullet-list', () => {
-            Emitter.emit('return-bullet-list', this._bullets);
-        });
+    // function to call remove child to game scene
+    private _removeBulletFromSceneCallback: RemoveFromSceneFn;
+
+    constructor(addBulletToSceneCallBack: AddToSceneFn, removeBulletFromSceneCallBack: RemoveFromSceneFn) {
+
+        this._addBulletToSceneCallBack = addBulletToSceneCallBack;
+        this._removeBulletFromSceneCallback = removeBulletFromSceneCallBack;
+
     }
 
     get bullets(): Bullet[] {
@@ -48,11 +43,11 @@ export class BulletController {
         bullet.direction = tankDirection;
 
         // append bullet to game sense
-        Emitter.emit('add-to-scene', bullet.sprite);
+        this._addBulletToSceneCallBack(bullet.sprite);
 
         // add sound fire bullet if it is player fire
         if (isPlayerBullet) {
-            sound.play('bullet-fire', { volume: AppConstants.volumeOfFireBullet });
+            sound.play('bullet-fire', { volume: 0.2 });
         }
     }
 
@@ -67,16 +62,16 @@ export class BulletController {
         this._bullets.splice(p, 1);
 
         // remove bullet in game sense
-        Emitter.emit('remove-from-scene', bullet.sprite);
+        this._removeBulletFromSceneCallback(bullet.sprite);
 
         // create a sprite with explosion
         const explosion = new BaseObject('explosion');
 
         // set size for explosion sprite
-        explosion.setImageSize(AppConstants.explosionSpriteSize);
+        explosion.setImageSize({ w: 15, h: 15 });
 
         // add this explosion to game
-        Emitter.emit('add-to-scene', explosion.sprite);
+        this._addBulletToSceneCallBack(explosion.sprite);
 
         // set position for it where bullet being remove
         explosion.position = bullet.position;
@@ -84,11 +79,11 @@ export class BulletController {
         // set sound for explosion
         if (bullet.isPlayerBullet) {
             sound.play('explosion');
-            sound.volume('explosion', AppConstants.volumeOfExplosion);
+            sound.volume('explosion', 0.2);
         }
 
         // remove this bullet after time
-        setTimeout(() => { Emitter.emit('remove-from-scene', explosion.sprite); }, AppConstants.timeExplosionDisappear);
+        setTimeout(() => { this._removeBulletFromSceneCallback(explosion.sprite); }, 100);
     }
 
 
@@ -103,7 +98,7 @@ export class BulletController {
 
             // check bullet position out of map yet?
             // if is it.
-            if ((bullet.position.x < 0 || bullet.position.x > AppConstants.screenWidth) || ((bullet.position.y < 0) || (bullet.position.y > AppConstants.screenHeight))) {
+            if ((bullet.position.x < 0 || bullet.position.x > 800) || ((bullet.position.y < 0) || (bullet.position.y > 600))) {
                 this.removeBullet(bullet);
             }
             // update bullet

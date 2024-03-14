@@ -3,39 +3,39 @@ import { Sprite } from '@pixi/sprite';
 import { AssetsLoader } from '../../AssetsLoader';
 import { Text } from '@pixi/text';
 import { Point } from '@pixi/core';
-import Emitter from '../util';
-import { AppConstants } from '../Constants';
+import { AddToSceneFn, CreateNewGameFn, DestroyFn, DisplayScoreFn, StartPlayGameFn } from '../type';
 
 export class UIController {
+    private _addToSceneCall: AddToSceneFn;
+    private _startPlayGameCall: StartPlayGameFn;
+    private _destroyCall: DestroyFn;
+    private _createNewGameCall: CreateNewGameFn;
+    private _displayScoreCall: DisplayScoreFn;
 
-    constructor() {
-        this._useEventEffect();
+
+    constructor(addToSceneCallBack: AddToSceneFn, startPlayGameCallBack: StartPlayGameFn, destroyCallBack: DestroyFn, createNewGameCallBack: CreateNewGameFn, displayScoreCallBack: DisplayScoreFn) {
+        this._addToSceneCall = addToSceneCallBack;
+        this._startPlayGameCall = startPlayGameCallBack;
+        this._destroyCall = destroyCallBack;
+        this._createNewGameCall = createNewGameCallBack;
+        this._displayScoreCall = displayScoreCallBack;
     }
-
-    private _useEventEffect() {
-        Emitter.on('display-game-over', () => {
-            this.displayGameOver();
-        });
-    }
-
     /**
      * method to display main menu game
      */
     public displayMainMenuGame() {
-        // define event emitter
-
         // create a main game back ground
         const mainBg = new Sprite(AssetsLoader.getTexture('main-back-ground'));
-        mainBg.width = AppConstants.screenWidth;
-        mainBg.height = AppConstants.screenHeight;
+        mainBg.width = 800;
+        mainBg.height = 600;
 
         const title = new Sprite(AssetsLoader.getTexture('title'));
         title.anchor.set(0.5);
 
         // create a text for start button
         const textStart = new Text('start', {
-            fontSize: AppConstants.fontSizeOfStartButton,
-            fill: AppConstants.colorOfStartButton,
+            fontSize: 14,
+            fill: 0xff1010,
             align: 'center'
         });
         textStart.anchor.set(0.5);
@@ -52,16 +52,17 @@ export class UIController {
         btnSprite.cursor = 'pointer';
 
         // player tap on start button to start play game
-        btnSprite.on('pointertap', () => { Emitter.emit('start-play-game', null); });
+        btnSprite.on('pointertap', this._startPlayGameCall.bind(this));
 
         // set title and button in side main bg
         mainBg.addChild(title, btnSprite);
-        title.position = AppConstants.mainMenuTitlePosition;
+        title.position.x = 180;
+        title.position.y = 60;
 
-        btnSprite.position = AppConstants.mainMenuButtonPosition;
+        btnSprite.position.x = 180;
+        btnSprite.position.y = 180;
 
-        // this._addToSceneCall(mainBg);
-        Emitter.emit('add-to-scene', mainBg);
+        this._addToSceneCall(mainBg);
 
         // play game music
         // sound.play('main-menu-music', { volume: 0.5, loop: true });
@@ -72,20 +73,20 @@ export class UIController {
 
         // game over back ground
         const overBg = new Sprite(AssetsLoader.getTexture('main-back-ground'));
-        overBg.width = AppConstants.screenWidth;
-        overBg.height = AppConstants.screenHeight;
+        overBg.width = 800;
+        overBg.height = 600;
 
         // create text content which will be display on game over bg
         const textGameOver = new Text('Game Over', {
-            fontSize: AppConstants.fontSizeOfGameOverText,
-            fill: AppConstants.colorOfGameOverText,
+            fontSize: 24,
+            fill: 0xff1010,
             align: 'center'
         });
         textGameOver.anchor.set(0.5);
 
         const textYourScore = new Text('your score:', {
-            fontSize: AppConstants.fontSizeOfYourScoreText,
-            fill: AppConstants.colorOfYourScoreText
+            fontSize: 14,
+            fill: 0xff1010
         });
         textYourScore.anchor.set(0.5);
 
@@ -94,8 +95,8 @@ export class UIController {
         btnReplay.anchor.set(0.5);
 
         const textReplay = new Text('replay', {
-            fontSize: AppConstants.fontSizeOfReplayText,
-            fill: AppConstants.colorOfReplayText
+            fontSize: 11,
+            fill: 0xff1010
         });
         textReplay.anchor.set(0.5);
 
@@ -107,23 +108,28 @@ export class UIController {
 
         // player tap on start button to start play game
         btnReplay.on('pointertap', () => {
-            Emitter.emit('destroy', null);
-            Emitter.emit('create-new-game', null);
+            this._destroyCall();
+            this._createNewGameCall();
+            // this.displayMainMenuGame();
         });
 
         // add there text to game over back ground and set position for it
         overBg.addChild(textGameOver, textYourScore, btnReplay);
-        textGameOver.position = AppConstants.textGameOverPosition;
+        textGameOver.x = 180;
+        textGameOver.y = 80;
 
-        textYourScore.position = AppConstants.textYourScorePosition;
+        textYourScore.x = 180;
+        textYourScore.y = 110;
 
-        btnReplay.position = AppConstants.buttonReplayPosition;
+        btnReplay.x = 180;
+        btnReplay.y = 180;
 
         // add bg game to game scene
-        Emitter.emit('add-to-scene', overBg);
+        this._addToSceneCall(overBg);
 
         // display score at position
         const positionDisplayScore = new Point(400, 340);
-        Emitter.emit('display-score', positionDisplayScore);
+        this._displayScoreCall(positionDisplayScore);
     }
+
 }

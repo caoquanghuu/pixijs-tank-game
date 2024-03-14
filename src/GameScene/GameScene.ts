@@ -6,12 +6,14 @@ import { AssetsLoader } from '../AssetsLoader';
 import { TankController } from './Controller/TankController';
 import { BulletController } from './Controller/BulletController';
 import { EnvironmentController } from './Controller/EnvironmentController';
-import { Point } from '@pixi/core';
+import { CreateNewGameFn, Direction, Size } from './type';
+import { Point, Rectangle } from '@pixi/core';
 import { CollisionController } from './Controller/CollisionController';
+import { Tank } from './Objects/Tank';
+import { Bullet } from './Objects/Bullet';
+import { BaseObject } from './Objects/BaseObject';
 import { SpineObject } from './Objects/SpineObject';
 import { UIController } from './Controller/UIController';
-import Emitter from './util';
-import { AppConstants } from './Constants';
 // import { Color } from '@pixi/core';
 // Color.shared.setValue(0xffffff).toHex(); // '#ffffff'
 
@@ -25,17 +27,20 @@ export class GameScene extends Container {
     private _environmentController: EnvironmentController;
     private _collisionController: CollisionController;
     private _UIController: UIController;
+    private _createNewGameCall: CreateNewGameFn;
 
-    constructor() {
+    constructor(createNewGameCallBack: CreateNewGameFn) {
         super();
 
-        this._useEventEffect();
+        // method to call create new game to index
+        this._createNewGameCall = createNewGameCallBack;
 
         // create class ui controller
-        this._UIController = new UIController();
+        this._UIController = new UIController(this.addToScene.bind(this), this.startPlayGame.bind(this), this.destroy.bind(this), this._createNewGameCall.bind(this), this.displayScore.bind(this));
 
         // display main menu
         this._UIController.displayMainMenuGame();
+
 
         // test spine object
         const spine = new SpineObject();
@@ -55,34 +60,24 @@ export class GameScene extends Container {
         );
     }
 
+    /**
+     * function to send request to bullet controller create a bullet
+     * @param position position start of bullet which get from tank
+     * @param direction direction of bullet which get from tank last direction
+     * @param isPlayerBullet this bullet is player bullet or bot bullet
+     */
+    public createBulletCall(position: Point, direction: Direction, isPlayerBullet: boolean) {
+        this._bulletController.createBullet(position, direction, isPlayerBullet);
+    }
+
+
     public setNewScore(newScore: number) {
         this._playerScore += newScore;
 
         // call display score on changed score
-        this.displayScore(AppConstants.defaultScoreDisplayPosition);
+        const positionDisplayScore = new Point(760, 10);
+        this.displayScore(positionDisplayScore);
     }
-
-    private _useEventEffect() {
-        Emitter.on('add-to-scene', (sprite: Sprite) => {
-            this.addToScene(sprite);
-        });
-        Emitter.on('remove-from-scene', (sprite: Sprite) => {
-            this.removeFromScene(sprite);
-        });
-        Emitter.on('start-play-game', () => {
-            this.startPlayGame();
-        });
-        Emitter.on('destroy', () => {
-            this.destroy();
-        });
-        Emitter.on('display-score', (position: Point) => {
-            this.displayScore(position);
-        });
-        Emitter.on('plus-score', (newScore: number) => {
-            this.setNewScore(newScore);
-        });
-    }
-
 
     /**
      * method to call start the game
@@ -92,21 +87,23 @@ export class GameScene extends Container {
         // set a back ground of game
         const bg = new Sprite(AssetsLoader.getTexture('game-back-ground'));
         this.addToScene(bg);
-        bg.width = AppConstants.screenWidth;
-        bg.height = AppConstants.screenHeight;
+        bg.width = 800;
+        bg.height = 600;
+
+        // set position where will display score
+        const positionDisplayScore = new Point(760, 10);
 
         // display score
-        this.displayScore(AppConstants.defaultScoreDisplayPosition);
+        this.displayScore(positionDisplayScore);
 
         // constructor controllers
-        this._collisionController = new CollisionController();
+        this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this), this.removeEnvironmentCall.bind(this), this.removeRewardObjectCall.bind(this), this.getRewardList.bind(this), this.getBunker.bind(this), this.displayGameOverCall.bind(this));
 
-        this._bulletController = new BulletController();
+        this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
 
-        this._tankController = new TankController();
+        this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this), this.displayGameOverCall.bind(this));
 
-        this._environmentController = new EnvironmentController();
-
+        this._environmentController = new EnvironmentController(this.addToScene.bind(this), this.createNewRandomPositionCall.bind(this), this.removeFromScene.bind(this));
     }
 
     /**
@@ -134,14 +131,14 @@ export class GameScene extends Container {
             // get sprite match with number element
             const scoreSprite = new Sprite(AssetsLoader.getTexture(`score-number-${score}`));
 
-            scoreSprite.width = AppConstants.scoreSpriteWidth;
-            scoreSprite.height = AppConstants.scoreSpriteHeight;
+            scoreSprite.width = 30;
+            scoreSprite.height = 30;
 
             this.addToScene(scoreSprite);
 
             scoreSprite.position.set(position.x, position.y);
 
-            position.x -= AppConstants.spaceBetweenScoresNumber;
+            position.x -= 17;
 
             return scoreSprite;
         });
@@ -162,6 +159,50 @@ export class GameScene extends Container {
             this._bulletController.update(deltaTime);
             this._collisionController.update();
         }
+    }
+
+    public getTankList(): Tank[] {
+        return this._tankController.usingTankList;
+    }
+
+    public getBulletList(): Bullet[] {
+        return this._bulletController.bullets;
+    }
+
+    public getEnvironmentList(): BaseObject[] {
+        return this._environmentController.environmentObjects;
+    }
+
+    public getRewardList(): BaseObject[] {
+        return this._environmentController.rewardObjects;
+    }
+
+    public getBunker(): BaseObject {
+        return this._environmentController.bunker;
+    }
+
+    public removeEnvironmentCall(environment: BaseObject) {
+        this._environmentController.removeEnvironmentObject(environment);
+    }
+
+    public removeRewardObjectCall(rewardObject: BaseObject) {
+        this._environmentController.removeObject(rewardObject, this._environmentController.rewardObjects);
+    }
+
+    public removeBulletCall(bullet: Bullet) {
+        this._bulletController.removeBullet(bullet);
+    }
+
+    public handleTankMoveCall(tank: Tank) {
+        this._tankController.handleTankMove(tank);
+    }
+
+    public createNewRandomPositionCall(size: Size): Rectangle {
+        return this._collisionController.createNewRandomPosition(size);
+    }
+
+    public displayGameOverCall() {
+        this._UIController.displayGameOver();
     }
 
     private addToScene(displayObject: DisplayObject) {
