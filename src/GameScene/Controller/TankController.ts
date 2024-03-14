@@ -1,7 +1,7 @@
 import { Point } from '@pixi/core';
 import { Tank } from '../Objects/Tank';
 import { TankPool } from '../TankPool';
-import { CreateNewRandomPositionFn, Direction, FireBulletFn, GameOverFn, SetNewScoreFn } from '../type';
+import { CreateNewRandomPositionFn, Direction, FireBulletFn, SetNewScoreFn } from '../type';
 import Emitter, { getRandomArbitrary, getRandomBoolean, randomEnumKey, switchFn } from '../util';
 import { SpineBoy } from '../Objects/SpineBoy';
 import { AppConstants } from '../Constants';
@@ -16,21 +16,19 @@ export class TankController {
     private _fireBulletCallback: FireBulletFn;
     private _createNewRandomPositionCall: CreateNewRandomPositionFn;
     private _setNewScoreCall: SetNewScoreFn;
-    private _gameOverCall: GameOverFn;
 
     // test for spine object
     private _spineBoy: SpineBoy;
 
 
     constructor(fireBulletCallBack: FireBulletFn,
-        createNewRandomPositionCallBack: CreateNewRandomPositionFn, setNewScoreCallBack: SetNewScoreFn, gameOverCallBack: GameOverFn) {
+        createNewRandomPositionCallBack: CreateNewRandomPositionFn, setNewScoreCallBack: SetNewScoreFn) {
 
         this._tankPool = new TankPool(this.fireBullet.bind(this), this.tankDie.bind(this));
 
         this._fireBulletCallback = fireBulletCallBack;
         this._createNewRandomPositionCall = createNewRandomPositionCallBack;
         this._setNewScoreCall = setNewScoreCallBack;
-        this._gameOverCall = gameOverCallBack;
 
         this.spawnTank();
 
@@ -119,8 +117,8 @@ export class TankController {
         // check tank die is player or AI tank
         if (tankDie.isPlayerTank) {
 
-            // call game over to game scene
-            this._gameOverCall();
+            // call game over to UI controller
+            Emitter.emit('display-game-over', null);
         } else {
 
             //return tank to tank pool

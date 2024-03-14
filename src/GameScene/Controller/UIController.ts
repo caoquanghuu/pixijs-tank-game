@@ -16,11 +16,20 @@ export class UIController {
 
 
     constructor(startPlayGameCallBack: StartPlayGameFn, destroyCallBack: DestroyFn, createNewGameCallBack: CreateNewGameFn, displayScoreCallBack: DisplayScoreFn) {
+        this._useEventEffect();
+
         this._startPlayGameCall = startPlayGameCallBack;
         this._destroyCall = destroyCallBack;
         this._createNewGameCall = createNewGameCallBack;
         this._displayScoreCall = displayScoreCallBack;
     }
+
+    private _useEventEffect() {
+        Emitter.on('display-game-over', () => {
+            this.displayGameOver();
+        });
+    }
+
     /**
      * method to display main menu game
      */

@@ -1,7 +1,7 @@
 import { IPointData, Rectangle } from '@pixi/core';
 import { BaseObject } from '../Objects/BaseObject';
-import { GetBulletListFn, GetBunkerFn, GetObjectListFn, GetRewardObjectsFn, GetTankListFn, HandleTankMoveFn, RemoveBulletFn, RemoveEnvironmentFn, RemoveRewardObjectFn, Size, DisplayGameOverFn } from '../type';
-import { checkCollision, getDistanceOfTwoPosition, getRandomArbitrary } from '../util';
+import { GetBulletListFn, GetBunkerFn, GetObjectListFn, GetRewardObjectsFn, GetTankListFn, HandleTankMoveFn, RemoveBulletFn, RemoveEnvironmentFn, RemoveRewardObjectFn, Size } from '../type';
+import Emitter, { checkCollision, getDistanceOfTwoPosition, getRandomArbitrary } from '../util';
 import { sound } from '@pixi/sound';
 import { AppConstants } from '../Constants';
 
@@ -15,12 +15,11 @@ export class CollisionController {
     private _handleTankMoveCall: HandleTankMoveFn;
     private _removeEnvironmentCall: RemoveEnvironmentFn;
     private _removeRewardObjectCall: RemoveRewardObjectFn;
-    private _displayGameOverCall: DisplayGameOverFn;
     private _usingObjectsList: BaseObject[] = [];
 
     constructor(getTankListCallBack: GetTankListFn, getBulletListCallBack: GetBulletListFn, getEnvironmentListCallBack: GetObjectListFn,
         removeBulletCallBack: RemoveBulletFn, handleTankMoveCallBack: HandleTankMoveFn, removeEnvironmentCallBack: RemoveEnvironmentFn,
-        removeRewardObjectCallBack: RemoveRewardObjectFn, getRewardListCallBack: GetRewardObjectsFn, getBunkerCallBack: GetBunkerFn, displayGameOverCallBack: DisplayGameOverFn) {
+        removeRewardObjectCallBack: RemoveRewardObjectFn, getRewardListCallBack: GetRewardObjectsFn, getBunkerCallBack: GetBunkerFn) {
         this._getTankListCall = getTankListCallBack;
         this._getBulletListCall = getBulletListCallBack;
         this._getEnvironmentListCall = getEnvironmentListCallBack;
@@ -30,7 +29,6 @@ export class CollisionController {
         this._handleTankMoveCall = handleTankMoveCallBack;
         this._removeEnvironmentCall = removeEnvironmentCallBack;
         this._removeRewardObjectCall = removeRewardObjectCallBack;
-        this._displayGameOverCall = displayGameOverCallBack;
 
     }
 
@@ -182,7 +180,7 @@ export class CollisionController {
             // check collision with bullet and bunker
             const isCollision = checkCollision(bullet, bunker);
             if (isCollision) {
-                this._displayGameOverCall();
+                Emitter.emit('display-game-over', null);
             }
 
         });
