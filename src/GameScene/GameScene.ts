@@ -32,9 +32,10 @@ export class GameScene extends Container {
 
     constructor() {
         super();
-
+        // create event effect
         this._useEventEffect();
 
+        // create controller
         this.init.bind(this);
 
         // test spine object
@@ -64,6 +65,9 @@ export class GameScene extends Container {
         });
     }
 
+    /**
+     * method to reset controller
+     */
     private _resetGameScene() {
         this._tankController.reset();
 
@@ -76,6 +80,9 @@ export class GameScene extends Container {
         this._playerScore = 0;
     }
 
+    /**
+     * method to create object to game scene
+     */
     private _createObjects() {
         this._tankController.init();
         this._environmentController.init();

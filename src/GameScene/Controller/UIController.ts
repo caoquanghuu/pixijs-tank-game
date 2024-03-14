@@ -70,6 +70,7 @@ export class UIController {
 
         Emitter.emit('add-to-scene', mainBg);
 
+        // stop update
         Emitter.emit('stop-update', null);
 
         // play game music
@@ -117,8 +118,13 @@ export class UIController {
 
         // player tap on start button to start play game
         btnReplay.on('pointertap', () => {
+            // remove bg
             Emitter.emit('remove-from-scene', overBg);
+
+            // call reset game
             this._resetGameSceneCall();
+
+            // call start game
             this._startPlayGameCall();
         });
 
