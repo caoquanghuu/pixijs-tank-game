@@ -29,29 +29,43 @@ export class TankController {
         this._createNewRandomPositionCall = createNewRandomPositionCallBack;
         this._setNewScoreCall = setNewScoreCallBack;
 
-        this.spawnTank();
-
         // create a player tank
         this._playerTank = new Tank(true, this.tankDie.bind(this));
         this._usingTanks.push(this._playerTank);
-        Emitter.emit('add-to-scene', this._playerTank.sprite);
-        this._playerTank.rectangle = this._createNewRandomPositionCall(this._playerTank.size);
 
-        const position = new Point(this._playerTank.rectangle.x, this._playerTank.rectangle.y);
-
-        this._playerTank.position = position;
         // test add spine boy on player tank
         this._spineBoy = new SpineBoy();
+
         this._spineBoy.loadBundle('assets/units/spine2d/spine-boy/spine-boy-pro.json').then(() => {
             this._spineBoy.setAnimation({ trackIndex:0, animationName: 'idle', loop: true });
-            this._spineBoy.position = this._playerTank.position;
-            Emitter.emit('add-to-scene', this._spineBoy.spine);
         });
     }
 
     /**method get tank list for check collision can access */
     get usingTankList(): Tank[] {
         return this._usingTanks;
+    }
+
+    public reset() {
+        Emitter.emit('remove-from-scene', this._spineBoy.spine);
+
+        this._usingTanks.forEach((tank) => {
+            if (!tank.isPlayerTank) {
+                this.tankDie(tank);
+            }
+        });
+    }
+
+    public init() {
+        Emitter.emit('add-to-scene', this._playerTank.sprite);
+        this._playerTank.rectangle = this._createNewRandomPositionCall(this._playerTank.size);
+
+        const position = new Point(this._playerTank.rectangle.x, this._playerTank.rectangle.y);
+
+        this._playerTank.position = position;
+
+        Emitter.emit('add-to-scene', this._spineBoy.spine);
+        this._spineBoy.position = this._playerTank.position;
     }
 
     private _useEventEffect() {

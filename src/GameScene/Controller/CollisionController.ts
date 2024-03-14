@@ -38,6 +38,10 @@ export class CollisionController {
         this._usingObjectsList = environmentsList.concat(tanksList);
     }
 
+    public reset() {
+        this._usingObjectsList = [];
+    }
+
     /**
      * method to return a new rectangle which have no collision with other objects on map
      * @param size size of object want to get rectangle

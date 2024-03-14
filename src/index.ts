@@ -8,11 +8,13 @@ import { GameScene } from './GameScene/GameScene';
 import '@pixi-spine/loader-3.8';
 import { sound } from '@pixi/sound';
 import { AppConstants } from './GameScene/Constants';
+import Emitter from './GameScene/util';
 
 class Main {
 
     private _gameScene: GameScene;
     private _pixiApp: Application;
+    private _isUpdate: boolean = true;
 
     constructor() {
 
@@ -40,6 +42,8 @@ class Main {
         new AssetsLoader();
         await AssetsLoader.loadBundle(bundles);
 
+        this._useEventEffect();
+
         // create scene
         this.createNewGame();
 
@@ -61,8 +65,17 @@ class Main {
         sound.add('explosion', 'sound/explosion.mp3');
     }
 
+    private _useEventEffect() {
+        Emitter.on('stop-update', () => {
+            this._isUpdate = false;
+        });
+        Emitter.on('start-update', () => {
+            this._isUpdate = true;
+        });
+    }
+
     private createNewGame() {
-        this._gameScene = new GameScene(this.createNewGame.bind(this));
+        this._gameScene = new GameScene();
         this._gameScene.init();
         this._pixiApp.stage.eventMode = 'static';
 
@@ -74,7 +87,9 @@ class Main {
 
         const dt = deltaTime / 60 * 1000;
 
-        this._gameScene.update(dt);
+        if (this._isUpdate) {
+            this._gameScene.update(dt);
+        }
     }
 }
 

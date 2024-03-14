@@ -3,25 +3,23 @@ import { Sprite } from '@pixi/sprite';
 import { AssetsLoader } from '../../AssetsLoader';
 import { Text } from '@pixi/text';
 import { Point } from '@pixi/core';
-import { CreateNewGameFn, DestroyFn, DisplayScoreFn, StartPlayGameFn } from '../type';
+import { DisplayScoreFn, ResetGameSceneFn, StartPlayGameFn } from '../type';
 import { AppConstants } from '../Constants';
 import Emitter from '../util';
 
 
 export class UIController {
     private _startPlayGameCall: StartPlayGameFn;
-    private _destroyCall: DestroyFn;
-    private _createNewGameCall: CreateNewGameFn;
     private _displayScoreCall: DisplayScoreFn;
+    private _resetGameSceneCall: ResetGameSceneFn;
 
 
-    constructor(startPlayGameCallBack: StartPlayGameFn, destroyCallBack: DestroyFn, createNewGameCallBack: CreateNewGameFn, displayScoreCallBack: DisplayScoreFn) {
+    constructor(startPlayGameCallBack: StartPlayGameFn, displayScoreCallBack: DisplayScoreFn, resetGameSceneCallBack: ResetGameSceneFn) {
         this._useEventEffect();
 
         this._startPlayGameCall = startPlayGameCallBack;
-        this._destroyCall = destroyCallBack;
-        this._createNewGameCall = createNewGameCallBack;
         this._displayScoreCall = displayScoreCallBack;
+        this._resetGameSceneCall = resetGameSceneCallBack;
     }
 
     private _useEventEffect() {
@@ -72,12 +70,15 @@ export class UIController {
 
         Emitter.emit('add-to-scene', mainBg);
 
+        Emitter.emit('stop-update', null);
+
         // play game music
         // sound.play('main-menu-music', { volume: AppConstants.volumeMainMenuMusic, loop: true });
     }
 
     public displayGameOver() {
-        // create a bg for display option when end game
+        // stop update
+        Emitter.emit('stop-update', null);
 
         // game over back ground
         const overBg = new Sprite(AssetsLoader.getTexture('main-back-ground'));
@@ -116,9 +117,9 @@ export class UIController {
 
         // player tap on start button to start play game
         btnReplay.on('pointertap', () => {
-            this._destroyCall();
-            this._createNewGameCall();
-            // this.displayMainMenuGame();
+            Emitter.emit('remove-from-scene', overBg);
+            this._resetGameSceneCall();
+            this._startPlayGameCall();
         });
 
         // add there text to game over back ground and set position for it

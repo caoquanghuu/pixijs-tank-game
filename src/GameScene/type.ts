@@ -69,3 +69,5 @@ export type StartPlayGameFn = () => void;
 export type DestroyFn = () => void;
 
 export type DisplayScoreFn = (position: Point) => void;
+
+export type ResetGameSceneFn = () => void;

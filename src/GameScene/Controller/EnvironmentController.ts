@@ -15,8 +15,22 @@ export class EnvironmentController {
     constructor(createNewRandomPositionCallBack: CreateNewRandomPositionFn) {
 
         this._createNewRandomPositionCall = createNewRandomPositionCallBack;
+    }
 
-        // create a bunker
+    get rewardObjects(): BaseObject[] {
+        return this._rewardObjects;
+    }
+
+    // method for collision controller can access to get position of environment objects*/
+    get environmentObjects(): BaseObject[] {
+        return this._environmentObjects;
+    }
+
+    get bunker(): BaseObject {
+        return this._bunker;
+    }
+
+    public init() {
         this._bunker = new BaseObject('base-bunker');
         const position = new Point(400, 580);
         this._bunker.position = position;
@@ -45,17 +59,14 @@ export class EnvironmentController {
         }
     }
 
-    get rewardObjects(): BaseObject[] {
-        return this._rewardObjects;
-    }
-
-    // method for collision controller can access to get position of environment objects*/
-    get environmentObjects(): BaseObject[] {
-        return this._environmentObjects;
-    }
-
-    get bunker(): BaseObject {
-        return this._bunker;
+    public reset() {
+        if (!this._environmentObjects) return;
+        if (!this.rewardObjects) return;
+        if (!this._bunker) return;
+        this._environmentObjects.forEach(object => this.removeObject(object, this._environmentObjects));
+        this._rewardObjects.forEach(object => this.removeObject(object, this.rewardObjects));
+        Emitter.emit('remove-from-scene', this._bunker.sprite);
+        this._bunker = null;
     }
 
     /**

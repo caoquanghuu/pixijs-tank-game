@@ -6,7 +6,7 @@ import { AssetsLoader } from '../AssetsLoader';
 import { TankController } from './Controller/TankController';
 import { BulletController } from './Controller/BulletController';
 import { EnvironmentController } from './Controller/EnvironmentController';
-import { CreateNewGameFn, Size } from './type';
+import { Size } from './type';
 import { Point, Rectangle } from '@pixi/core';
 import { CollisionController } from './Controller/CollisionController';
 import { Tank } from './Objects/Tank';
@@ -29,22 +29,13 @@ export class GameScene extends Container {
     private _environmentController: EnvironmentController;
     private _collisionController: CollisionController;
     private _UIController: UIController;
-    private _createNewGameCall: CreateNewGameFn;
 
-    constructor(createNewGameCallBack: CreateNewGameFn) {
+    constructor() {
         super();
 
         this._useEventEffect();
 
-        // method to call create new game to index
-        this._createNewGameCall = createNewGameCallBack;
-
-        // create class ui controller
-        this._UIController = new UIController(this.startPlayGame.bind(this), this.destroy.bind(this), this._createNewGameCall.bind(this), this.displayScore.bind(this));
-
-        // display main menu
-        this._UIController.displayMainMenuGame();
-
+        this.init.bind(this);
 
         // test spine object
         const spine = new SpineObject();
@@ -73,6 +64,23 @@ export class GameScene extends Container {
         });
     }
 
+    private _resetGameScene() {
+        this._tankController.reset();
+
+        this._environmentController.reset();
+
+        this._bulletController.reset();
+
+        this._collisionController.reset();
+
+        this._playerScore = 0;
+    }
+
+    private _createObjects() {
+        this._tankController.init();
+        this._environmentController.init();
+    }
+
     public setNewScore(newScore: number) {
         this._playerScore += newScore;
 
@@ -98,14 +106,9 @@ export class GameScene extends Container {
         // display score
         this.displayScore(positionDisplayScore);
 
-        // constructor controllers
-        this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this), this.removeEnvironmentCall.bind(this), this.removeRewardObjectCall.bind(this), this.getRewardList.bind(this), this.getBunker.bind(this));
+        this._createObjects();
 
-        this._bulletController = new BulletController();
-
-        this._tankController = new TankController(this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this));
-
-        this._environmentController = new EnvironmentController(this.createNewRandomPositionCall.bind(this));
+        Emitter.emit('start-update', null);
     }
 
     /**
@@ -217,5 +220,17 @@ export class GameScene extends Container {
 
     public async init() {
         console.log('GameScene init');
+        this._UIController = new UIController(this.startPlayGame.bind(this), this.displayScore.bind(this), this._resetGameScene.bind(this));
+
+        // // constructor controllers
+        this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this), this.removeEnvironmentCall.bind(this), this.removeRewardObjectCall.bind(this), this.getRewardList.bind(this), this.getBunker.bind(this));
+
+        this._bulletController = new BulletController();
+
+        this._tankController = new TankController(this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this));
+
+        this._environmentController = new EnvironmentController(this.createNewRandomPositionCall.bind(this));
+
+        this._UIController.displayMainMenuGame();
     }
 }

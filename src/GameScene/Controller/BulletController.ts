@@ -50,6 +50,13 @@ export class BulletController {
         });
     }
 
+    public reset() {
+        if (!this._bullets) return;
+        this._bullets.forEach(bullet => {
+            this.removeBullet(bullet);
+        });
+    }
+
     /**
      * remove bullet when require
      * @param bullet bullet which need to remove
