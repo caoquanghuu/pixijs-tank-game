@@ -1,10 +1,11 @@
+import { AppConstants } from '../Constants';
 import { Direction } from '../type';
 import { randomEnumKey } from '../util';
 import { BaseEngine } from './BaseEngine';
 
 export class RandomEngine extends BaseEngine {
-    private _directionChangeTime: number = 2000;
-    private _forceDirectionCountDown: number = 200;
+    private _directionChangeTime: number = AppConstants.directionChangeTime;
+    private _forceDirectionCountDown: number = AppConstants.forceDirectionCountDown;
 
     constructor() {
         super();
@@ -25,7 +26,7 @@ export class RandomEngine extends BaseEngine {
 
     public forceChangeDirection() {
         if (this._forceDirectionCountDown <= 0) {
-            this._forceDirectionCountDown = 200;
+            this._forceDirectionCountDown = AppConstants.forceDirectionCountDown;
             this._directionChangeTime = 0;
         }
     }
@@ -37,7 +38,7 @@ export class RandomEngine extends BaseEngine {
 
         // if it = 0 then set randomDirection again to get new direction.
         if (this._directionChangeTime <= 0) {
-            this._directionChangeTime = 2000;
+            this._directionChangeTime = AppConstants.directionChangeTime;
             this.randomDirection();
         }
 

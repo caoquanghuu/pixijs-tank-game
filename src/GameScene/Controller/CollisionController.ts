@@ -3,6 +3,7 @@ import { BaseObject } from '../Objects/BaseObject';
 import { GetBulletListFn, GetBunkerFn, GetObjectListFn, GetRewardObjectsFn, GetTankListFn, HandleTankMoveFn, RemoveBulletFn, RemoveEnvironmentFn, RemoveRewardObjectFn, Size, DisplayGameOverFn } from '../type';
 import { getDistanceOfTwoPosition, getRandomArbitrary } from '../util';
 import { sound } from '@pixi/sound';
+import { AppConstants } from '../Constants';
 
 export class CollisionController {
     private _getTankListCall: GetTankListFn;
@@ -64,7 +65,7 @@ export class CollisionController {
 
         do {
             // create a test position which will be compare
-            const pos1: Point = new Point(getRandomArbitrary(0, 790), getRandomArbitrary(0, 590));
+            const pos1: Point = new Point(getRandomArbitrary(AppConstants.minScreenUseAbleWidth, AppConstants.maxScreenUseAbleWidth), getRandomArbitrary(AppConstants.minScreenUseAbleHeight, AppConstants.maxScreenUseAbleHeight));
 
             // try assign test position to rectangle
             rectangle.x = pos1.x;
@@ -77,7 +78,7 @@ export class CollisionController {
                 const pos2 = new Point(object.rectangle.x, object.rectangle.y);
                 const distance = getDistanceOfTwoPosition(pos1, pos2);
 
-                if (distance < 70) {
+                if (distance < AppConstants.distanceOfObjectsWhenCreate) {
                     return false;
                 }
 
@@ -160,7 +161,7 @@ export class CollisionController {
 
                     sound.play('collect-reward-sound');
 
-                    if (tank.HP < 5) {
+                    if (tank.HP < AppConstants.maxHpOfPlayerTank) {
                         tank.HP += 1;
                     }
                 }
@@ -168,7 +169,7 @@ export class CollisionController {
 
             // handle tank vs game border
             if (!tank.isPlayerTank) {
-                if (tank.position.x === 10 || tank.position.x === 790 || tank.position.y === 10 || tank.position.y === 590) {
+                if (tank.position.x === AppConstants.minScreenUseAbleWidth || tank.position.x === AppConstants.maxScreenUseAbleWidth || tank.position.y === AppConstants.minScreenUseAbleHeight || tank.position.y === AppConstants.maxScreenUseAbleHeight) {
                     tank.moveEngine.forceChangeDirectionCall();
                 }
             }

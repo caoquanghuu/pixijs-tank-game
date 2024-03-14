@@ -1,6 +1,7 @@
 import { Point } from '@pixi/core';
 import { SpineObject } from './SpineObject';
 import { keyboard } from '../util';
+import { AppConstants } from '../Constants';
 
 export class SpineBoy extends SpineObject {
 
@@ -28,7 +29,7 @@ export class SpineBoy extends SpineObject {
      */
     private async init() {
         await this.loadBundle('assets/units/spine2d/spine-boy/spine-boy-pro.json').then(() => {
-            this._spine.scale = { x: 0.1, y: 0.1 };
+            this._spine.scale = AppConstants.scaleOfSpineBoy;
         });
     }
 

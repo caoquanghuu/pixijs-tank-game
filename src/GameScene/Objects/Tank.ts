@@ -7,6 +7,7 @@ import { ControlEngine } from '../Engine/ControlEngine';
 import { getRandomArbitrary, keyboard } from '../util';
 import { HPBar } from './HPBar';
 import { sound } from '@pixi/sound';
+import { AppConstants } from '../Constants';
 
 export class Tank extends BaseObject {
 
@@ -29,13 +30,13 @@ export class Tank extends BaseObject {
         this._tankDieCall = tankDieCallBack;
 
         // set speed of tank
-        this.speed = 100;
+        this.speed = AppConstants.speedOfTank;
 
         // set last direction of tank
         this.lastDirection = Direction.UP;
 
         // set size of tank
-        this.size = { w: 20, h: 20 };
+        this.size = AppConstants.tankSpriteSize;
 
         this._isPlayerTank = isPlayer;
 
@@ -48,7 +49,7 @@ export class Tank extends BaseObject {
             this.moveEngine = new ControlEngine();
 
             // set hp
-            this._HPBar.HP = 5;
+            this._HPBar.HP = AppConstants.maxHpOfPlayerTank;
 
             // set control fire key event by space keyboard
             const fire = keyboard(' ');
@@ -61,13 +62,13 @@ export class Tank extends BaseObject {
             this.moveEngine = new RandomEngine();
 
             //set hp
-            this._HPBar.HP = 1;
+            this._HPBar.HP = AppConstants.maxHpOfAiTank;
 
             //change color for bot tank
-            this.sprite.tint = 'F02468';
+            this.sprite.tint = AppConstants.colorOfAiTank;
 
             // set time for fire bullet
-            this._fireBulletTime = 5000;
+            this._fireBulletTime = AppConstants.timeFireBulletOfAiTank;
         }
     }
 
@@ -103,7 +104,7 @@ export class Tank extends BaseObject {
             if (!movingSound.isPlaying) {
 
                 // if sound not playing then play
-                sound.play('tank-moving-sound', { volume: 0.1, loop: true });
+                sound.play('tank-moving-sound', { volume: AppConstants.volumeOfTankMoving, loop: true });
             }
         } else {
             // stop playing moving sound when tank stop

@@ -14,6 +14,7 @@ import { Bullet } from './Objects/Bullet';
 import { BaseObject } from './Objects/BaseObject';
 import { SpineObject } from './Objects/SpineObject';
 import { UIController } from './Controller/UIController';
+import { AppConstants } from './Constants';
 // import { Color } from '@pixi/core';
 // Color.shared.setValue(0xffffff).toHex(); // '#ffffff'
 
@@ -75,7 +76,7 @@ export class GameScene extends Container {
         this._playerScore += newScore;
 
         // call display score on changed score
-        const positionDisplayScore = new Point(760, 10);
+        const positionDisplayScore = AppConstants.defaultScoreDisplayPosition;
         this.displayScore(positionDisplayScore);
     }
 
@@ -87,11 +88,11 @@ export class GameScene extends Container {
         // set a back ground of game
         const bg = new Sprite(AssetsLoader.getTexture('game-back-ground'));
         this.addToScene(bg);
-        bg.width = 800;
-        bg.height = 600;
+        bg.width = AppConstants.screenWidth;
+        bg.height = AppConstants.screenHeight;
 
         // set position where will display score
-        const positionDisplayScore = new Point(760, 10);
+        const positionDisplayScore = AppConstants.defaultScoreDisplayPosition;
 
         // display score
         this.displayScore(positionDisplayScore);
@@ -131,14 +132,14 @@ export class GameScene extends Container {
             // get sprite match with number element
             const scoreSprite = new Sprite(AssetsLoader.getTexture(`score-number-${score}`));
 
-            scoreSprite.width = 30;
-            scoreSprite.height = 30;
+            scoreSprite.width = AppConstants.scoreSpriteWidth;
+            scoreSprite.height = AppConstants.scoreSpriteHeight;
 
             this.addToScene(scoreSprite);
 
             scoreSprite.position.set(position.x, position.y);
 
-            position.x -= 17;
+            position.x -= AppConstants.spaceBetweenScoresNumber;
 
             return scoreSprite;
         });

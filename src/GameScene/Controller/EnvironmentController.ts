@@ -2,6 +2,7 @@ import { BaseObject } from '../Objects/BaseObject';
 import { AddToSceneFn, CreateNewRandomPositionFn, RemoveFromSceneFn } from '../type';
 import { Point, Rectangle } from '@pixi/core';
 import { getRandomBoolean } from '../util';
+import { AppConstants } from '../Constants';
 
 export class EnvironmentController {
 
@@ -23,9 +24,9 @@ export class EnvironmentController {
         this._bunker = new BaseObject('base-bunker');
         const position = new Point(400, 580);
         this._bunker.position = position;
-        this._bunker.setImageSize({ w: 50, h: 50 });
+        this._bunker.setImageSize(AppConstants.bunkerSpriteSize);
         this._addToSceneCall(this._bunker.sprite);
-        this._bunker.size = { w: 50, h: 50 };
+        this._bunker.size = AppConstants.bunkerSpriteSize;
 
         // create tree around bunker
         const pos1 = new Point(370, 590);
@@ -35,13 +36,13 @@ export class EnvironmentController {
             this.createEnvironmentObject('tree-1', pos1);
             this.createEnvironmentObject('tree-1', pos2);
             this.createEnvironmentObject('tree-1', pos3);
-            pos1.y -= 7.5;
-            pos2.y -= 7.5;
-            pos3.x += 7.5;
+            pos1.y -= AppConstants.spaceBetweenFences;
+            pos2.y -= AppConstants.spaceBetweenFences;
+            pos3.x += AppConstants.spaceBetweenFences;
         }
 
         // create environment object with define from begin*/
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < AppConstants.numbersOfEnvironmentObjects; i++) {
             this.createEnvironmentObject('tree-1');
             this.createEnvironmentObject('tree-2');
             this.createEnvironmentObject('rock');
@@ -62,10 +63,10 @@ export class EnvironmentController {
         this._addToSceneCall(object.sprite);
 
         // set size */
-        object.setImageSize({ w: 15, h: 15 });
+        object.setImageSize(AppConstants.environmentSpriteSize);
 
         // set size property
-        object.size = { w: 15, h: 15 };
+        object.size = AppConstants.environmentSpriteSize;
 
         // set position if para is define
         if (!position) {
@@ -102,9 +103,9 @@ export class EnvironmentController {
             rewardObject.position = position;
 
             // set size
-            rewardObject.setImageSize({ w: 20, h: 20 });
+            rewardObject.setImageSize(AppConstants.rewardSpriteSize);
 
-            rewardObject.size = { w: 20, h : 20 };
+            rewardObject.size = AppConstants.rewardSpriteSize;
 
             // add hp bag to game scene
             this._addToSceneCall(rewardObject.sprite);

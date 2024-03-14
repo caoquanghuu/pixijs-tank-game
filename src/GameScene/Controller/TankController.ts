@@ -4,11 +4,12 @@ import { TankPool } from '../TankPool';
 import { AddToSceneFn, CreateNewRandomPositionFn, Direction, FireBulletFn, GameOverFn, RemoveFromSceneFn, SetNewScoreFn } from '../type';
 import { getRandomArbitrary, getRandomBoolean, randomEnumKey, switchFn } from '../util';
 import { SpineBoy } from '../Objects/SpineBoy';
+import { AppConstants } from '../Constants';
 
 export class TankController {
 
     private _usingTanks: Tank[] = [];
-    private _spawnTankTime: number = 20000;
+    private _spawnTankTime: number = AppConstants.timeSpawnTank;
     private _playerTank: Tank;
     private _tankPool: TankPool;
 
@@ -91,13 +92,13 @@ export class TankController {
 
     private createBossTank(tank: Tank) {
         // tank have more hp
-        tank.HP = 3;
+        tank.HP = AppConstants.maxHpOfBossTank;
 
         // colored tank
-        tank.sprite.tint = '106BEE';
+        tank.sprite.tint = AppConstants.colorOfBossTank;
 
         // tank shoot faster
-        tank.fireBulletTime = 3000;
+        tank.fireBulletTime = AppConstants.timeFireBulletOfBossTank;
     }
 
     public fireBullet(position: Point, direction: Direction, isPlayerBullet: boolean) {
@@ -129,13 +130,13 @@ export class TankController {
             this._setNewScoreCall(1);
 
             // set back hp for tank
-            tankDie.HP = 1;
+            tankDie.HP = AppConstants.maxHpOfAiTank;
 
             // set tank fire time back
-            tankDie.fireBulletTime = 5000;
+            tankDie.fireBulletTime = AppConstants.timeFireBulletOfAiTank;
 
             // set back color for tank
-            tankDie.sprite.tint = 'F02468';
+            tankDie.sprite.tint = AppConstants.colorOfAiTank;
 
             //remove sprite from game scene
             this._removeFromScene(tankDie.sprite);
@@ -161,22 +162,22 @@ export class TankController {
         tank.direction = Direction.STAND;
 
         const flitchUp = () => {
-            const newPosition = new Point(tank.position.x, tank.position.y + 2);
+            const newPosition = new Point(tank.position.x, tank.position.y + AppConstants.distanceFlitchWhenHaveCollision);
             tank.position = newPosition;
         };
 
         const flitchDown = () => {
-            const newPosition = new Point(tank.position.x, tank.position.y - 2);
+            const newPosition = new Point(tank.position.x, tank.position.y - AppConstants.distanceFlitchWhenHaveCollision);
             tank.position = newPosition;
         };
 
         const flitchLeft = () => {
-            const newPosition = new Point(tank.position.x + 2, tank.position.y);
+            const newPosition = new Point(tank.position.x + AppConstants.distanceFlitchWhenHaveCollision, tank.position.y);
             tank.position = newPosition;
         };
 
         const flitchRight = () => {
-            const newPosition = new Point(tank.position.x - 2, tank.position.y);
+            const newPosition = new Point(tank.position.x - AppConstants.distanceFlitchWhenHaveCollision, tank.position.y);
             tank.position = newPosition;
         };
 
@@ -205,7 +206,7 @@ export class TankController {
 
         /** then spawn tank based on dt time */
         if (this._spawnTankTime <= 0) {
-            this._spawnTankTime = getRandomArbitrary(10000, 20000);
+            this._spawnTankTime = getRandomArbitrary(AppConstants.minTimeSpawnTank, AppConstants.timeSpawnTank);
             if (this._tankPool.tankPool.length != 0) {
                 this.spawnTank();
             }

@@ -4,6 +4,8 @@ import { Size } from './type';
 export namespace AppConstants {
     export const screenWidth: number = 800;
     export const screenHeight: number = 600;
+    export const minScreenWidth: number = 0;
+    export const minScreenHeight: number = 0;
 
     export const scoreSpriteWidth: number = 30;
     export const scoreSpriteHeight: number = 30;
@@ -27,6 +29,7 @@ export namespace AppConstants {
     export const volumeOfFireBullet: number = 0.2;
     export const volumeOfExplosion: number = 0.2;
     export const volumeOfTankMoving: number = 0.1;
+    export const volumeMainMenuMusic: number = 0.5;
 
     export const timeExplosionDisappear: number = 100;
 
@@ -48,6 +51,7 @@ export namespace AppConstants {
     export const ratioCreateBossTank: number = 50;
 
     export const timeSpawnTank: number = 20000;
+    export const minTimeSpawnTank: number = 10000;
     export const timeFireBulletOfBossTank: number = 3000;
     export const timeFireBulletOfAiTank: number = 5000;
     export const directionChangeTime: number = 2000;
@@ -74,4 +78,5 @@ export namespace AppConstants {
     export const forceDirectionCountDown: number = 200;
 
     export const speedOfBullet: number = 200;
+    export const speedOfTank: number = 100;
 }

@@ -3,6 +3,7 @@ import { Bullet } from '../Objects/Bullet';
 import { AddToSceneFn, Direction, RemoveFromSceneFn } from '../type';
 import { BaseObject } from '../Objects/BaseObject';
 import { sound } from '@pixi/sound';
+import { AppConstants } from '../Constants';
 
 export class BulletController {
 
@@ -47,7 +48,7 @@ export class BulletController {
 
         // add sound fire bullet if it is player fire
         if (isPlayerBullet) {
-            sound.play('bullet-fire', { volume: 0.2 });
+            sound.play('bullet-fire', { volume: AppConstants.volumeOfFireBullet });
         }
     }
 
@@ -68,7 +69,7 @@ export class BulletController {
         const explosion = new BaseObject('explosion');
 
         // set size for explosion sprite
-        explosion.setImageSize({ w: 15, h: 15 });
+        explosion.setImageSize(AppConstants.explosionSpriteSize);
 
         // add this explosion to game
         this._addBulletToSceneCallBack(explosion.sprite);
@@ -79,11 +80,11 @@ export class BulletController {
         // set sound for explosion
         if (bullet.isPlayerBullet) {
             sound.play('explosion');
-            sound.volume('explosion', 0.2);
+            sound.volume('explosion', AppConstants.volumeOfExplosion);
         }
 
         // remove this bullet after time
-        setTimeout(() => { this._removeBulletFromSceneCallback(explosion.sprite); }, 100);
+        setTimeout(() => { this._removeBulletFromSceneCallback(explosion.sprite); }, AppConstants.timeExplosionDisappear);
     }
 
 
@@ -98,7 +99,7 @@ export class BulletController {
 
             // check bullet position out of map yet?
             // if is it.
-            if ((bullet.position.x < 0 || bullet.position.x > 800) || ((bullet.position.y < 0) || (bullet.position.y > 600))) {
+            if ((bullet.position.x < AppConstants.minScreenWidth || bullet.position.x > AppConstants.screenWidth) || ((bullet.position.y < AppConstants.minScreenHeight) || (bullet.position.y > AppConstants.screenHeight))) {
                 this.removeBullet(bullet);
             }
             // update bullet
