@@ -1,4 +1,5 @@
 import { Assets, AssetsBundle } from '@pixi/assets';
+import { Texture } from '@pixi/core';
 import { get } from 'lodash';
 
 export class AssetsLoader {
@@ -30,7 +31,7 @@ export class AssetsLoader {
     }
 
     // static function get a texture
-    static getTexture(name: string) {
+    static getTexture(name: string): Texture {
         return AssetsLoader._resources[name];
     }
 

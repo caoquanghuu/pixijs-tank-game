@@ -57,8 +57,13 @@ export class BaseObject {
         this._moveEngine = moveEngine;
     }
 
-    set sprite(texture: string) {
-        this._sprite.texture = AssetsLoader.getTexture(texture);
+    set sprite(textureName: string) {
+        const assetsTexture = AssetsLoader.getTexture(textureName);
+        if (!assetsTexture) {
+            console.log('cant get' + `${textureName}`);
+        } else {
+            this._sprite.texture = assetsTexture;
+        }
     }
 
     set speed(speed: number) {
