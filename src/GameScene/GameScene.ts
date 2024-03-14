@@ -15,6 +15,7 @@ import { BaseObject } from './Objects/BaseObject';
 import { SpineObject } from './Objects/SpineObject';
 import { UIController } from './Controller/UIController';
 import { AppConstants } from './Constants';
+import Emitter from './util';
 // import { Color } from '@pixi/core';
 // Color.shared.setValue(0xffffff).toHex(); // '#ffffff'
 
@@ -32,6 +33,8 @@ export class GameScene extends Container {
 
     constructor(createNewGameCallBack: CreateNewGameFn) {
         super();
+
+        this._useEventEffect();
 
         // method to call create new game to index
         this._createNewGameCall = createNewGameCallBack;
@@ -59,6 +62,15 @@ export class GameScene extends Container {
             this.addToScene(spine.spine);
         }
         );
+    }
+
+    private _useEventEffect() {
+        Emitter.on('add-to-scene', (sprite: Sprite) => {
+            this.addToScene(sprite);
+        });
+        Emitter.on('remove-from-scene', (sprite: Sprite) => {
+            this.removeFromScene(sprite);
+        });
     }
 
     /**
@@ -100,11 +112,11 @@ export class GameScene extends Container {
         // constructor controllers
         this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this), this.removeEnvironmentCall.bind(this), this.removeRewardObjectCall.bind(this), this.getRewardList.bind(this), this.getBunker.bind(this), this.displayGameOverCall.bind(this));
 
-        this._bulletController = new BulletController(this.addToScene.bind(this), this.removeFromScene.bind(this));
+        this._bulletController = new BulletController();
 
-        this._tankController = new TankController(this.addToScene.bind(this), this.removeFromScene.bind(this), this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this), this.displayGameOverCall.bind(this));
+        this._tankController = new TankController(this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this), this.displayGameOverCall.bind(this));
 
-        this._environmentController = new EnvironmentController(this.addToScene.bind(this), this.createNewRandomPositionCall.bind(this), this.removeFromScene.bind(this));
+        this._environmentController = new EnvironmentController(this.createNewRandomPositionCall.bind(this));
     }
 
     /**

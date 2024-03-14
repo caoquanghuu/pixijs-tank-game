@@ -2,7 +2,7 @@
 import { Point } from '@pixi/core';
 import { RandomEngine } from '../Engine/RandomEngine';
 import { BaseObject } from './BaseObject';
-import { AddToSceneFn, Direction, FireBulletFn, TankDieFn } from '../type';
+import { Direction, FireBulletFn, TankDieFn } from '../type';
 import { ControlEngine } from '../Engine/ControlEngine';
 import { getRandomArbitrary, keyboard } from '../util';
 import { HPBar } from './HPBar';
@@ -21,7 +21,7 @@ export class Tank extends BaseObject {
     private _tankDieCall: TankDieFn;
     private _fireBulletTime: number;
 
-    constructor(isPlayer: boolean, fireBulletCallBack: FireBulletFn, tankDieCallBack: TankDieFn, addToSceneCallBack: AddToSceneFn) {
+    constructor(isPlayer: boolean, fireBulletCallBack: FireBulletFn, tankDieCallBack: TankDieFn) {
         // set image of tank is player tank or bot tank
         super('tank-stand-up');
 
@@ -40,7 +40,7 @@ export class Tank extends BaseObject {
 
         this._isPlayerTank = isPlayer;
 
-        this._HPBar = new HPBar(isPlayer, addToSceneCallBack.bind(this));
+        this._HPBar = new HPBar(isPlayer);
 
         // set move engine and type trigger fire bullet for tank base on is player or not
         if (isPlayer) {
