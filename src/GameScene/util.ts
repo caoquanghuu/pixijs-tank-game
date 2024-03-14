@@ -1,5 +1,6 @@
-import { Point } from '@pixi/core';
+import { Point, Rectangle } from '@pixi/core';
 import EventEmitter from 'eventemitter3';
+import { BaseObject } from './Objects/BaseObject';
 
 export const randomEnumKey = (enumeration: any) => {
     const keys = Object.keys(enumeration).filter(
@@ -87,6 +88,32 @@ export function getRandomBoolean(percent: number) {
     } else {
         return false;
     }
+}
+
+export function checkCollisionBetweenTwoRectangle(r1: Rectangle, r2: Rectangle) {
+
+    if (r1.x + r1.width / 2 >= r2.x - r2.width / 2 &&
+        r1.x - r1.width / 2 <= r2.x + r2.width / 2 &&
+        r1.y + r1.height / 2 >= r2.y - r2.height / 2 &&
+        r1.y - r1.height / 2 <= r2.y + r2.height / 2) {
+        return true;
+    }
+    return false;
+}
+
+/**
+     * check collision of 2 object
+     * @param object1 object list 1
+     * @param object2 object list 2
+     */
+export function checkCollision(object1: BaseObject, object2: BaseObject) {
+
+    const aBox = new Rectangle(object1.sprite.x, object1.sprite.y, object1.size.w, object1.size.h);
+    const bBox = new Rectangle(object2.sprite.x, object2.sprite.y, object2.size.w, object2.size.h);
+    // const aBox = object1.sprite.getBounds();
+    // const bBox = object2.sprite.getBounds();
+
+    return checkCollisionBetweenTwoRectangle(aBox, bBox);
 }
 
 const eventEmitter = new EventEmitter();

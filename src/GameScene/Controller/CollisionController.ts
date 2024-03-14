@@ -1,7 +1,7 @@
 import { Point, Rectangle } from '@pixi/core';
 import { BaseObject } from '../Objects/BaseObject';
 import { GetBulletListFn, GetBunkerFn, GetObjectListFn, GetRewardObjectsFn, GetTankListFn, HandleTankMoveFn, RemoveBulletFn, RemoveEnvironmentFn, RemoveRewardObjectFn, Size, DisplayGameOverFn } from '../type';
-import { getDistanceOfTwoPosition, getRandomArbitrary } from '../util';
+import { checkCollision, getDistanceOfTwoPosition, getRandomArbitrary } from '../util';
 import { sound } from '@pixi/sound';
 import { AppConstants } from '../Constants';
 
@@ -38,17 +38,6 @@ export class CollisionController {
         const tanksList = this._getTankListCall();
         const environmentsList = this._getEnvironmentListCall();
         this._usingObjectsList = environmentsList.concat(tanksList);
-    }
-
-    private checkCollisionBetweenTwoRectangle(r1: Rectangle, r2: Rectangle) {
-
-        if (r1.x + r1.width / 2 >= r2.x - r2.width / 2 &&
-            r1.x - r1.width / 2 <= r2.x + r2.width / 2 &&
-            r1.y + r1.height / 2 >= r2.y - r2.height / 2 &&
-            r1.y - r1.height / 2 <= r2.y + r2.height / 2) {
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -121,7 +110,7 @@ export class CollisionController {
 
                 // check collision with tank and bullet
                 if (tank.isPlayerTank != bullet.isPlayerBullet) {
-                    const isCollision = this.checkCollision(tank, bullet);
+                    const isCollision = checkCollision(tank, bullet);
                     if (isCollision) {
 
                         // have collision then hp of tank will reduce by 1
@@ -142,7 +131,7 @@ export class CollisionController {
                 // console.log('check', object instanceof Tank);
 
                 // start check 2 object have collision or not?
-                const isCollision = this.checkCollision(tank, object);
+                const isCollision = checkCollision(tank, object);
 
                 if (isCollision) {
 
@@ -154,7 +143,7 @@ export class CollisionController {
             // handle tank vs reward object
             rewardObjects.forEach(object => {
                 if (!tank.isPlayerTank) return;
-                const isCollision = this.checkCollision(tank, object);
+                const isCollision = checkCollision(tank, object);
 
                 if (isCollision) {
                     this._removeRewardObjectCall(object);
@@ -179,7 +168,7 @@ export class CollisionController {
         // check collision with bullet and environment
         bullets.forEach(bullet => {
             environments.forEach(environment => {
-                const isCollision = this.checkCollision(bullet, environment);
+                const isCollision = checkCollision(bullet, environment);
                 if (isCollision) {
 
                     // remove the bullet
@@ -191,27 +180,12 @@ export class CollisionController {
             });
 
             // check collision with bullet and bunker
-            const isCollision = this.checkCollision(bullet, bunker);
+            const isCollision = checkCollision(bullet, bunker);
             if (isCollision) {
                 this._displayGameOverCall();
             }
 
         });
-    }
-
-    /**
-     * check collision of 2 object
-     * @param object1 object list 1
-     * @param object2 object list 2
-     */
-    private checkCollision(object1: BaseObject, object2: BaseObject) {
-
-        const aBox = new Rectangle(object1.sprite.x, object1.sprite.y, object1.size.w, object1.size.h);
-        const bBox = new Rectangle(object2.sprite.x, object2.sprite.y, object2.size.w, object2.size.h);
-        // const aBox = object1.sprite.getBounds();
-        // const bBox = object2.sprite.getBounds();
-
-        return this.checkCollisionBetweenTwoRectangle(aBox, bBox);
     }
 
     public update() {
