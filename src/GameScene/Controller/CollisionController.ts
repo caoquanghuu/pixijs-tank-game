@@ -1,4 +1,4 @@
-import { Point, Rectangle } from '@pixi/core';
+import { IPointData, Rectangle } from '@pixi/core';
 import { BaseObject } from '../Objects/BaseObject';
 import { GetBulletListFn, GetBunkerFn, GetObjectListFn, GetRewardObjectsFn, GetTankListFn, HandleTankMoveFn, RemoveBulletFn, RemoveEnvironmentFn, RemoveRewardObjectFn, Size, DisplayGameOverFn } from '../type';
 import { checkCollision, getDistanceOfTwoPosition, getRandomArbitrary } from '../util';
@@ -54,7 +54,7 @@ export class CollisionController {
 
         do {
             // create a test position which will be compare
-            const pos1: Point = new Point(getRandomArbitrary(AppConstants.minScreenUseAbleWidth, AppConstants.maxScreenUseAbleWidth), getRandomArbitrary(AppConstants.minScreenUseAbleHeight, AppConstants.maxScreenUseAbleHeight));
+            const pos1: IPointData = { x: getRandomArbitrary(AppConstants.minScreenUseAbleWidth, AppConstants.maxScreenUseAbleWidth), y: getRandomArbitrary(AppConstants.minScreenUseAbleHeight, AppConstants.maxScreenUseAbleHeight) };
 
             // try assign test position to rectangle
             rectangle.x = pos1.x;
@@ -64,7 +64,7 @@ export class CollisionController {
             isPositionAvailable = this._usingObjectsList.some(object => {
 
                 // use calculate distance to get random position
-                const pos2 = new Point(object.rectangle.x, object.rectangle.y);
+                const pos2: IPointData = { x: object.rectangle.x, y: object.rectangle.y };
                 const distance = getDistanceOfTwoPosition(pos1, pos2);
 
                 if (distance < AppConstants.distanceOfObjectsWhenCreate) {

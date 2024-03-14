@@ -1,4 +1,4 @@
-import { Point, Rectangle } from '@pixi/core';
+import { IPointData, Point, Rectangle } from '@pixi/core';
 import EventEmitter from 'eventemitter3';
 import { BaseObject } from './Objects/BaseObject';
 
@@ -64,7 +64,7 @@ export function keyboard(value: any) {
     return key;
 }
 
-export function getDistanceOfTwoPosition(pos1: Point, pos2: Point) {
+export function getDistanceOfTwoPosition(pos1: IPointData, pos2: IPointData) {
     const distance: number = Math.sqrt(
         Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2)
     );
