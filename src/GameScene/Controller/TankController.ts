@@ -1,7 +1,7 @@
 import { Point } from '@pixi/core';
 import { Tank } from '../Objects/Tank';
 import { TankPool } from '../TankPool';
-import { CreateNewRandomPositionFn, Direction, FireBulletFn, SetNewScoreFn } from '../type';
+import { CreateNewRandomPositionFn, Direction, SetNewScoreFn } from '../type';
 import Emitter, { getRandomArbitrary, getRandomBoolean, randomEnumKey, switchFn } from '../util';
 import { SpineBoy } from '../Objects/SpineBoy';
 import { AppConstants } from '../Constants';
@@ -13,7 +13,6 @@ export class TankController {
     private _playerTank: Tank;
     private _tankPool: TankPool;
 
-    private _fireBulletCallback: FireBulletFn;
     private _createNewRandomPositionCall: CreateNewRandomPositionFn;
     private _setNewScoreCall: SetNewScoreFn;
 
@@ -21,19 +20,19 @@ export class TankController {
     private _spineBoy: SpineBoy;
 
 
-    constructor(fireBulletCallBack: FireBulletFn,
-        createNewRandomPositionCallBack: CreateNewRandomPositionFn, setNewScoreCallBack: SetNewScoreFn) {
+    constructor(createNewRandomPositionCallBack: CreateNewRandomPositionFn, setNewScoreCallBack: SetNewScoreFn) {
 
-        this._tankPool = new TankPool(this.fireBullet.bind(this), this.tankDie.bind(this));
+        this._tankPool = new TankPool(this.tankDie.bind(this));
 
-        this._fireBulletCallback = fireBulletCallBack;
+        this._useEventEffect();
+
         this._createNewRandomPositionCall = createNewRandomPositionCallBack;
         this._setNewScoreCall = setNewScoreCallBack;
 
         this.spawnTank();
 
         // create a player tank
-        this._playerTank = new Tank(true, this.fireBullet.bind(this), this.tankDie.bind(this));
+        this._playerTank = new Tank(true, this.tankDie.bind(this));
         this._usingTanks.push(this._playerTank);
         Emitter.emit('add-to-scene', this._playerTank.sprite);
         this._playerTank.rectangle = this._createNewRandomPositionCall(this._playerTank.size);
@@ -53,6 +52,12 @@ export class TankController {
     /**method get tank list for check collision can access */
     get usingTankList(): Tank[] {
         return this._usingTanks;
+    }
+
+    private _useEventEffect() {
+        Emitter.on('fire-bullet', (option: {position: Point, direction: Direction, isPlayer: boolean}) => {
+            this.fireBulletOfSpineBoy(option.position, option.direction, option.isPlayer);
+        });
     }
 
     /**
@@ -99,9 +104,7 @@ export class TankController {
         tank.fireBulletTime = AppConstants.timeFireBulletOfBossTank;
     }
 
-    public fireBullet(position: Point, direction: Direction, isPlayerBullet: boolean) {
-        this._fireBulletCallback(position, direction, isPlayerBullet);
-
+    public fireBulletOfSpineBoy(position: Point, direction: Direction, isPlayerBullet: boolean) {
         // animation fire for spine boy
         if (isPlayerBullet) {
             this._spineBoy.addAnimation({ trackIndex: 2, animationName: 'shoot', loop: false, delay:0 });

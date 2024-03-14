@@ -6,7 +6,7 @@ import { AssetsLoader } from '../AssetsLoader';
 import { TankController } from './Controller/TankController';
 import { BulletController } from './Controller/BulletController';
 import { EnvironmentController } from './Controller/EnvironmentController';
-import { CreateNewGameFn, Direction, Size } from './type';
+import { CreateNewGameFn, Size } from './type';
 import { Point, Rectangle } from '@pixi/core';
 import { CollisionController } from './Controller/CollisionController';
 import { Tank } from './Objects/Tank';
@@ -73,17 +73,6 @@ export class GameScene extends Container {
         });
     }
 
-    /**
-     * function to send request to bullet controller create a bullet
-     * @param position position start of bullet which get from tank
-     * @param direction direction of bullet which get from tank last direction
-     * @param isPlayerBullet this bullet is player bullet or bot bullet
-     */
-    public createBulletCall(position: Point, direction: Direction, isPlayerBullet: boolean) {
-        this._bulletController.createBullet(position, direction, isPlayerBullet);
-    }
-
-
     public setNewScore(newScore: number) {
         this._playerScore += newScore;
 
@@ -114,7 +103,7 @@ export class GameScene extends Container {
 
         this._bulletController = new BulletController();
 
-        this._tankController = new TankController(this.createBulletCall.bind(this), this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this));
+        this._tankController = new TankController(this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this));
 
         this._environmentController = new EnvironmentController(this.createNewRandomPositionCall.bind(this));
     }

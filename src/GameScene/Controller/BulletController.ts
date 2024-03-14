@@ -11,6 +11,10 @@ export class BulletController {
     // bullets list which display on game sense
     private _bullets: Bullet [] = [];
 
+    constructor() {
+        this._useEventEffect();
+    }
+
     get bullets(): Bullet[] {
         return this._bullets;
     }
@@ -38,6 +42,12 @@ export class BulletController {
         if (isPlayerBullet) {
             sound.play('bullet-fire', { volume: AppConstants.volumeOfFireBullet });
         }
+    }
+
+    private _useEventEffect() {
+        Emitter.on('fire-bullet', (option: {position: Point, direction: Direction, isPlayer: boolean}) => {
+            this.createBullet(option.position, option.direction, option.isPlayer);
+        });
     }
 
     /**
