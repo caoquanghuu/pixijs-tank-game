@@ -3,20 +3,19 @@ import { Sprite } from '@pixi/sprite';
 import { AssetsLoader } from '../../AssetsLoader';
 import { Text } from '@pixi/text';
 import { Point } from '@pixi/core';
-import { AddToSceneFn, CreateNewGameFn, DestroyFn, DisplayScoreFn, StartPlayGameFn } from '../type';
+import { CreateNewGameFn, DestroyFn, DisplayScoreFn, StartPlayGameFn } from '../type';
 import { AppConstants } from '../Constants';
+import Emitter from '../util';
 
 
 export class UIController {
-    private _addToSceneCall: AddToSceneFn;
     private _startPlayGameCall: StartPlayGameFn;
     private _destroyCall: DestroyFn;
     private _createNewGameCall: CreateNewGameFn;
     private _displayScoreCall: DisplayScoreFn;
 
 
-    constructor(addToSceneCallBack: AddToSceneFn, startPlayGameCallBack: StartPlayGameFn, destroyCallBack: DestroyFn, createNewGameCallBack: CreateNewGameFn, displayScoreCallBack: DisplayScoreFn) {
-        this._addToSceneCall = addToSceneCallBack;
+    constructor(startPlayGameCallBack: StartPlayGameFn, destroyCallBack: DestroyFn, createNewGameCallBack: CreateNewGameFn, displayScoreCallBack: DisplayScoreFn) {
         this._startPlayGameCall = startPlayGameCallBack;
         this._destroyCall = destroyCallBack;
         this._createNewGameCall = createNewGameCallBack;
@@ -62,7 +61,7 @@ export class UIController {
 
         btnSprite.position = AppConstants.mainMenuButtonPosition;
 
-        this._addToSceneCall(mainBg);
+        Emitter.emit('add-to-scene', mainBg);
 
         // play game music
         // sound.play('main-menu-music', { volume: AppConstants.volumeMainMenuMusic, loop: true });
@@ -122,7 +121,7 @@ export class UIController {
         btnReplay.position = AppConstants.buttonReplayPosition;
 
         // add bg game to game scene
-        this._addToSceneCall(overBg);
+        Emitter.emit('add-to-scene', overBg);
 
         // display score at position
         const positionDisplayScore = new Point(400, 340);

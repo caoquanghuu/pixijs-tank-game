@@ -40,7 +40,7 @@ export class GameScene extends Container {
         this._createNewGameCall = createNewGameCallBack;
 
         // create class ui controller
-        this._UIController = new UIController(this.addToScene.bind(this), this.startPlayGame.bind(this), this.destroy.bind(this), this._createNewGameCall.bind(this), this.displayScore.bind(this));
+        this._UIController = new UIController(this.startPlayGame.bind(this), this.destroy.bind(this), this._createNewGameCall.bind(this), this.displayScore.bind(this));
 
         // display main menu
         this._UIController.displayMainMenuGame();
