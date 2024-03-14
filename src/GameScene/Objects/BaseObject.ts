@@ -77,6 +77,20 @@ export class BaseObject {
         this._rectangle = rectangle;
     }
 
+    // method to get this sprite for get position or some thing else
+    get sprite(): Sprite {
+        return this._sprite;
+    }
+
+    // method to get size of this object for check collision
+    get size() {
+        return this._size;
+    }
+
+    set size(size) {
+        this._size = size;
+    }
+
     public move(deltaTime: number, isBullet) {
         if (!this.moveEngine) {
             return;
@@ -155,20 +169,6 @@ export class BaseObject {
 
         //set next position for sprite
         this.position = newPosition;
-    }
-
-    // method to get this sprite for get position or some thing else
-    get sprite(): Sprite {
-        return this._sprite;
-    }
-
-    // method to get size of this object for check collision
-    get size() {
-        return this._size;
-    }
-
-    set size(size) {
-        this._size = size;
     }
 
     // method to set width height of the image

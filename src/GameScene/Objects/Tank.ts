@@ -72,6 +72,38 @@ export class Tank extends BaseObject {
         }
     }
 
+    get HPBar(): HPBar {
+        return this._HPBar;
+    }
+
+    get HP(): number {
+        return this._HPBar.HP;
+    }
+
+    get direction(): Direction {
+        return this._moveEngine.direction;
+    }
+
+    get isPlayerTank(): boolean {
+        return this._isPlayerTank;
+    }
+
+    get fireBulletTime(): number {
+        return this._fireBulletTime;
+    }
+
+    set fireBulletTime(time: number) {
+        this._fireBulletTime = time;
+    }
+
+    set HP(hp: number) {
+        this._HPBar.HP = hp;
+    }
+
+    set direction(direction: Direction) {
+        this._moveEngine.direction = direction;
+    }
+
     /**
      * tank start to fire bullet
      */
@@ -162,37 +194,5 @@ export class Tank extends BaseObject {
                 this._fireBulletTime = getRandomArbitrary(3000, 5000);
             }
         }
-    }
-
-    get HPBar(): HPBar {
-        return this._HPBar;
-    }
-
-    get HP(): number {
-        return this._HPBar.HP;
-    }
-
-    get direction(): Direction {
-        return this._moveEngine.direction;
-    }
-
-    get isPlayerTank(): boolean {
-        return this._isPlayerTank;
-    }
-
-    get fireBulletTime(): number {
-        return this._fireBulletTime;
-    }
-
-    set fireBulletTime(time: number) {
-        this._fireBulletTime = time;
-    }
-
-    set HP(hp: number) {
-        this._HPBar.HP = hp;
-    }
-
-    set direction(direction: Direction) {
-        this._moveEngine.direction = direction;
     }
 }

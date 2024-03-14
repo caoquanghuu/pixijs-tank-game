@@ -32,6 +32,18 @@ export class Bullet extends BaseObject {
         this.size = AppConstants.bulletSpriteSize;
     }
 
+    get isPlayerBullet(): boolean {
+        return this._isPlayerBullet;
+    }
+
+    get direction(): Direction {
+        return this._moveEngine.direction;
+    }
+
+    set direction(direction) {
+        this._moveEngine.direction = direction;
+    }
+
     /**
      * rotate sprite follow direction
      * @param bullet bullet which is's sprite will be rotate
@@ -70,17 +82,5 @@ export class Bullet extends BaseObject {
         //bullet move
         this.move(dt, true);
         this.rotateSpriteFollowDirection();
-    }
-
-    get isPlayerBullet(): boolean {
-        return this._isPlayerBullet;
-    }
-
-    get direction(): Direction {
-        return this._moveEngine.direction;
-    }
-
-    set direction(direction) {
-        this._moveEngine.direction = direction;
     }
 }

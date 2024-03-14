@@ -49,6 +49,19 @@ export class EnvironmentController {
         }
     }
 
+    get rewardObjects(): BaseObject[] {
+        return this._rewardObjects;
+    }
+
+    // method for collision controller can access to get position of environment objects*/
+    get environmentObjects(): BaseObject[] {
+        return this._environmentObjects;
+    }
+
+    get bunker(): BaseObject {
+        return this._bunker;
+    }
+
     /**
      * create environment object to map
      * @param name name of object want create base on asset
@@ -131,18 +144,4 @@ export class EnvironmentController {
         const p = objectList.findIndex(objects => objects === object);
         objectList.splice(p, 1);
     }
-
-    get rewardObjects(): BaseObject[] {
-        return this._rewardObjects;
-    }
-
-    // method for collision controller can access to get position of environment objects*/
-    get environmentObjects(): BaseObject[] {
-        return this._environmentObjects;
-    }
-
-    get bunker(): BaseObject {
-        return this._bunker;
-    }
-
 }

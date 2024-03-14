@@ -18,19 +18,19 @@ export class HPBar extends BaseObject {
         this._isPlayer = isPlayer;
     }
 
-    private changeHPSpriteFollowHP() {
-
-        const hpTexture: string[] = ['1-hp', '2-hp', '3-hp', '4-hp', 'player-hp'];
-
-        this.sprite = hpTexture[this._HP - 1];
-    }
-
     get HP(): number {
         return this._HP;
     }
 
     set HP(hp: number) {
         this._HP = hp;
+    }
+
+    private changeHPSpriteFollowHP() {
+
+        const hpTexture: string[] = ['1-hp', '2-hp', '3-hp', '4-hp', 'player-hp'];
+
+        this.sprite = hpTexture[this._HP - 1];
     }
 
     public update(position: Point) {

@@ -57,6 +57,11 @@ export class TankController {
         });
     }
 
+    /**method get tank list for check collision can access */
+    get usingTankList(): Tank[] {
+        return this._usingTanks;
+    }
+
     /**
      * spawn a enemy tank
      */
@@ -219,8 +224,4 @@ export class TankController {
         this._spineBoy.update(this._playerTank.position);
     }
 
-    /**method get tank list for check collision can access */
-    get usingTankList(): Tank[] {
-        return this._usingTanks;
-    }
 }
