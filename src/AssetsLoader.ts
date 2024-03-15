@@ -1,5 +1,4 @@
-import { Assets, AssetsBundle } from '@pixi/assets';
-import { Texture } from '@pixi/core';
+import { Assets, AssetsBundle, Texture } from './pixi';
 import { get } from 'lodash';
 
 export class AssetsLoader {

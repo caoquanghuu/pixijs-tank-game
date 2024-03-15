@@ -1,4 +1,4 @@
-import { IPointData, Rectangle } from '@pixi/core';
+import { IPointData, Rectangle } from '../../pixi';
 import { BaseObject } from '../Objects/BaseObject';
 import { GetBulletListFn, GetBunkerFn, GetObjectListFn, GetRewardObjectsFn, GetTankListFn, HandleTankMoveFn, RemoveBulletFn, RemoveEnvironmentFn, RemoveRewardObjectFn, Size } from '../type';
 import Emitter, { checkCollision, getDistanceOfTwoPosition, getRandomArbitrary } from '../util';
@@ -180,7 +180,7 @@ export class CollisionController {
             // check collision with bullet and bunker
             const isCollision = checkCollision(bullet, bunker);
             if (isCollision) {
-                Emitter.emit('display-game-over', null);
+                Emitter.emit(AppConstants.displayGameOverEvent, null);
             }
 
         });

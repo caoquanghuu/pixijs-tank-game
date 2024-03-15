@@ -21,6 +21,6 @@ import { TickerPlugin } from '@pixi/core';
 extensions.add(TickerPlugin);
 
 // Loader plugins
-
 import { spritesheetAsset } from '@pixi/spritesheet';
 extensions.add(spritesheetAsset);
+

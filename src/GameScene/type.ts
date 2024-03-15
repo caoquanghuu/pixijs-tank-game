@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Point, Rectangle } from '@pixi/core';
-import { Sprite } from '@pixi/sprite';
+import { Point, Rectangle } from '../pixi';
 import { BaseObject } from './Objects/BaseObject';
 import { Tank } from './Objects/Tank';
 import { Bullet } from './Objects/Bullet';
@@ -28,10 +27,6 @@ export interface AddAnimationOption extends AnimationOption {
     delay: number
 }
 
-export type AddToSceneFn = (object: any) => void;
-
-export type RemoveFromSceneFn = (sprite: Sprite) => void;
-
 export type GetObjectListFn = () => BaseObject[];
 
 export type GetTankListFn = () => Tank[];
@@ -50,8 +45,6 @@ export type CreateNewRandomPositionFn = (size: Size) => Rectangle;
 
 export type SetNewScoreFn = (newScore: number) => void;
 
-export type GameOverFn = () => void;
-
 export type RemoveEnvironmentFn = (environment: BaseObject) => void;
 
 export type RemoveRewardObjectFn = (rewardObject: BaseObject) => void;
@@ -60,13 +53,9 @@ export type GetRewardObjectsFn = () => BaseObject[];
 
 export type GetBunkerFn = () => BaseObject;
 
-export type DisplayGameOverFn = () => void;
-
 export type CreateNewGameFn = () => void;
 
 export type StartPlayGameFn = () => void;
-
-export type DestroyFn = () => void;
 
 export type DisplayScoreFn = (position: Point) => void;
 

@@ -1,4 +1,4 @@
-import { IPointData } from '@pixi/core';
+import { IPointData } from '../../pixi';
 import { SpineObject } from './SpineObject';
 import { keyboard } from '../util';
 import { AppConstants } from '../Constants';

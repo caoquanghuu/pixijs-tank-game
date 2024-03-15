@@ -1,4 +1,4 @@
-import { IPointData, Rectangle } from '@pixi/core';
+import { IPointData, Rectangle } from '../pixi';
 import EventEmitter from 'eventemitter3';
 import { BaseObject } from './Objects/BaseObject';
 
