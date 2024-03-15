@@ -44,7 +44,7 @@ export class SpineBoy extends SpineObject {
 
         this._left.press = () => {
             this.setAnimation({ trackIndex:1, animationName: 'run', loop: true });
-            this.flipImage(true);
+            this.flip = true;
             this._keyHandler.isLeft = true;
         };
         this._left.release = () => {
@@ -52,7 +52,7 @@ export class SpineBoy extends SpineObject {
         };
         this._right.press = () => {
             this.setAnimation({ trackIndex:1, animationName: 'run', loop: true });
-            this.flipImage(false);
+            this.flip = false;
             this._keyHandler.isRight = true;
         };
         this._right.release = () => {

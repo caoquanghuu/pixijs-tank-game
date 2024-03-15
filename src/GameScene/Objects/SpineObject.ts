@@ -86,12 +86,8 @@ export class SpineObject extends BaseObject {
      * method to flip image
      * @param isFlip set true to the face of character turn left, false to turn right
      */
-    protected flipImage(isFlip: boolean) {
-        if (isFlip) {
-            this._spine.scale.x = -0.1;
-        } else {
-            this._spine.scale.x = 0.1;
-        }
+    public set flip(flip: boolean) {
+        this._spine.scale.x = (flip ? - 1 : 1) * Math.abs(this._spine.scale.x);
     }
 
     /**
