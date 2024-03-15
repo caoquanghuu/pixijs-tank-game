@@ -114,7 +114,7 @@ export class Tank extends BaseObject {
     /**
      *  tank hp reduce to 0 and tank will be destroy
      */
-    public destroy() {
+    public checkHPOfTank() {
         if (this.HPBar.HP === 0) {
             // call tank die to tank controller
             this._tankDieCall(this);
@@ -170,7 +170,7 @@ export class Tank extends BaseObject {
         this.move(dt, false);
 
         // check hp tank and destroy it if hp = 0
-        this.destroy();
+        this.checkHPOfTank();
 
         // update new direction for random move
         this.moveEngine.update(dt);
