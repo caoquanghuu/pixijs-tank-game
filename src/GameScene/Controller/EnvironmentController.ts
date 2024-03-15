@@ -43,8 +43,6 @@ export class EnvironmentController {
         this._bunker.position = position;
         this.bunker.show();
 
-        console.log(this._environmentPool.objectList);
-
         // create tree around bunker
         const pos1: IPointData = { x: 370, y: 600 };
         const pos2: IPointData = { x: 430, y: 600 };

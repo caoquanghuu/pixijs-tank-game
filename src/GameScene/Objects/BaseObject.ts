@@ -56,8 +56,12 @@ export class BaseObject {
 
     set sprite(textureName: string) {
         const assetsTexture = AssetsLoader.getTexture(textureName);
+
+        // avoid duplicate set texture
+        if (this.sprite.texture === assetsTexture) return;
+
         if (!assetsTexture) {
-            console.log('cant get' + `${textureName}`);
+            return;
         } else {
             this._sprite.texture = assetsTexture;
         }

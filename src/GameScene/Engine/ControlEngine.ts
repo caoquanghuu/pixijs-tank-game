@@ -56,6 +56,8 @@ export class ControlEngine extends BaseEngine {
     }
 
     public update() {
+        // avoid duplicate set direction
+        if (this.direction === Direction.STAND) return;
         if (!this._keyHandler.isUp && !this._keyHandler.isDown && !this._keyHandler.isLeft && !this._keyHandler.isRight) {
             this.direction = Direction.STAND;
         }
