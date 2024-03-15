@@ -1,7 +1,7 @@
 
-import { AppConstants } from './Constants';
-import { Tank } from './Objects/Tank';
-import { TankDieFn } from './type';
+import { AppConstants } from '../Constants';
+import { Tank } from '../Objects/Tank';
+import { TankDieFn } from '../type';
 
 export class TankPool {
     private static instance: TankPool;

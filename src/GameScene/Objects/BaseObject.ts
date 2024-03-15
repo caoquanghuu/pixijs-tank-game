@@ -2,7 +2,7 @@ import { Sprite } from '@pixi/sprite';
 import { Direction, Size } from '../type';
 import { BaseEngine } from '../Engine/BaseEngine';
 import { AssetsLoader } from '../../AssetsLoader';
-import { Point, Rectangle } from '@pixi/core';
+import { IPointData, Point, Rectangle } from '@pixi/core';
 import { switchFn } from '../util';
 import { AppConstants } from '../Constants';
 
@@ -38,14 +38,12 @@ export class BaseObject {
         this._size = { w: this._sprite.width, h: this._sprite.height };
     }
 
-    get position(): Point {
-        const position = new Point();
-        position.x = this.sprite.position.x;
-        position.y = this.sprite.position.y;
+    get position(): IPointData {
+        const position = this.sprite.position;
         return position;
     }
 
-    set position(position: Point) {
+    set position(position: IPointData) {
         this.sprite.position = position;
     }
 

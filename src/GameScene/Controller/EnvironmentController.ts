@@ -1,13 +1,15 @@
 import { BaseObject } from '../Objects/BaseObject';
 import { CreateNewRandomPositionFn } from '../type';
-import { Point, Rectangle } from '@pixi/core';
+import { IPointData } from '@pixi/core';
 import Emitter, { getRandomBoolean } from '../util';
 import { AppConstants } from '../Constants';
+import { EnvironmentPool } from '../ObjectPool.ts/EnvironmentPool';
 
 export class EnvironmentController {
+    private _environmentPool: EnvironmentPool;
 
     // list of environment objects which will be create on map
-    private _environmentObjects: BaseObject[] = [];
+    private _usingEnvironmentObjects: BaseObject[] = [];
     private _rewardObjects: BaseObject[] = [];
     private _bunker: BaseObject;
     private _createNewRandomPositionCall: CreateNewRandomPositionFn;
@@ -15,6 +17,12 @@ export class EnvironmentController {
     constructor(createNewRandomPositionCallBack: CreateNewRandomPositionFn) {
 
         this._createNewRandomPositionCall = createNewRandomPositionCallBack;
+
+        this._environmentPool = new EnvironmentPool();
+
+        this._bunker = new BaseObject('base-bunker');
+        this._bunker.setImageSize(AppConstants.bunkerSpriteSize);
+        this._bunker.size = AppConstants.bunkerSpriteSize;
     }
 
     get rewardObjects(): BaseObject[] {
@@ -23,7 +31,7 @@ export class EnvironmentController {
 
     // method for collision controller can access to get position of environment objects*/
     get environmentObjects(): BaseObject[] {
-        return this._environmentObjects;
+        return this._usingEnvironmentObjects;
     }
 
     get bunker(): BaseObject {
@@ -31,84 +39,65 @@ export class EnvironmentController {
     }
 
     public init() {
-        this._bunker = new BaseObject('base-bunker');
-        const position = new Point(400, 580);
+        const position: IPointData = { x: 400, y: 580 };
         this._bunker.position = position;
-        this._bunker.setImageSize(AppConstants.bunkerSpriteSize);
         Emitter.emit('add-to-scene', this._bunker.sprite);
-        this._bunker.size = AppConstants.bunkerSpriteSize;
+
+        console.log(this._environmentPool.objectList);
 
         // create tree around bunker
-        const pos1 = new Point(370, 590);
-        const pos2 = new Point(430, 590);
-        const pos3 = new Point(381, 550);
+        const pos1: IPointData = { x: 370, y: 600 };
+        const pos2: IPointData = { x: 430, y: 600 };
+        const pos3: IPointData = { x: 381, y: 560 };
         for (let i = 0; i < 6; i++) {
-            this.createEnvironmentObject('tree-1', pos1);
-            this.createEnvironmentObject('tree-1', pos2);
-            this.createEnvironmentObject('tree-1', pos3);
+            const object1 = this._environmentPool.releaseObject();
+            const object2 = this._environmentPool.releaseObject();
+            const object3 = this._environmentPool.releaseObject();
+            object1.position = pos1;
+            object2.position = pos2;
+            object3.position = pos3;
             pos1.y -= AppConstants.spaceBetweenFences;
             pos2.y -= AppConstants.spaceBetweenFences;
             pos3.x += AppConstants.spaceBetweenFences;
+            this._usingEnvironmentObjects.push(object1);
+            this._usingEnvironmentObjects.push(object2);
+            this._usingEnvironmentObjects.push(object3);
+            Emitter.emit('add-to-scene', object1.sprite);
+            Emitter.emit('add-to-scene', object2.sprite);
+            Emitter.emit('add-to-scene', object3.sprite);
         }
 
-        // create environment object with define from begin*/
-        for (let i = 0; i < AppConstants.numbersOfEnvironmentObjects; i++) {
-            this.createEnvironmentObject('tree-1');
-            this.createEnvironmentObject('tree-2');
-            this.createEnvironmentObject('rock');
+        for (let i = 0; i < AppConstants.numbersOfEnvironmentObjects * 2; i ++) {
+            const object = this._environmentPool.releaseObject();
+            Emitter.emit('add-to-scene', object.sprite);
+            const rectangle = this._createNewRandomPositionCall(object.size);
+            object.rectangle = rectangle;
+            const position: IPointData = { x: rectangle.x, y: rectangle.y };
+            object.position = position;
+            this._usingEnvironmentObjects.push(object);
         }
+
     }
 
     public reset() {
-        if (!this._environmentObjects) return;
-        if (!this.rewardObjects) return;
-        if (!this._bunker) return;
-        this._environmentObjects.forEach(object => this.removeObject(object, this._environmentObjects));
-        this._rewardObjects.forEach(object => this.removeObject(object, this.rewardObjects));
+
+        this._usingEnvironmentObjects.forEach(object => {
+            Emitter.emit('remove-from-scene', object.sprite);
+            this._environmentPool.getObject(object);
+        });
+
+        this._rewardObjects.forEach(rewardObject => {
+            Emitter.emit('remove-from-scene', rewardObject.sprite);
+        });
+
         Emitter.emit('remove-from-scene', this._bunker.sprite);
-        this._bunker = null;
+
+        this._usingEnvironmentObjects = [];
+        this._rewardObjects = [];
     }
 
-    /**
-     * create environment object to map
-     * @param name name of object want create base on asset
-     * @param position set position for object if require
-     */
-    private createEnvironmentObject(name: string, position?: Point) {
 
-        // use name to get image from asset
-        const object = new BaseObject(name);
-
-        // add sprite to game scene
-        Emitter.emit('add-to-scene', object.sprite);
-
-        // set size */
-        object.setImageSize(AppConstants.environmentSpriteSize);
-
-        // set size property
-        object.size = AppConstants.environmentSpriteSize;
-
-        // set position if para is define
-        if (!position) {
-            // create a rectangle and check that position is available */
-            object.rectangle = this._createNewRandomPositionCall(object.size);
-
-            // create new position based on rectangle
-            const newPosition = new Point(object.rectangle.x, object.rectangle.y);
-
-            // set position for object
-            object.position = newPosition;
-        } else {
-            object.position = position;
-            const rectangle = new Rectangle(position.x, position.y);
-            object.rectangle = rectangle;
-        }
-
-        // push it to this.environmentObject array
-        this._environmentObjects.push(object);
-    }
-
-    private createRewardRandomly(position: Point) {
+    private createRewardRandomly(position: IPointData) {
 
         // get a random number
         const randomBoolean = getRandomBoolean(10);
@@ -137,9 +126,11 @@ export class EnvironmentController {
 
     public removeEnvironmentObject(environment: BaseObject) {
 
-        this.removeObject(environment, this._environmentObjects);
+        this._environmentPool.getObject(environment);
 
-        const position: Point = environment.position;
+        this.removeObject(environment, this._usingEnvironmentObjects);
+
+        const position: IPointData = environment.position;
 
         // create reward randomly
         this.createRewardRandomly(position);

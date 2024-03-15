@@ -38,10 +38,6 @@ export class CollisionController {
         this._usingObjectsList = environmentsList.concat(tanksList);
     }
 
-    public reset() {
-        this._usingObjectsList = [];
-    }
-
     /**
      * method to return a new rectangle which have no collision with other objects on map
      * @param size size of object want to get rectangle
@@ -66,7 +62,7 @@ export class CollisionController {
             isPositionAvailable = this._usingObjectsList.some(object => {
 
                 // use calculate distance to get random position
-                const pos2: IPointData = { x: object.rectangle.x, y: object.rectangle.y };
+                const pos2: IPointData = { x: object.position.x, y: object.position.y };
                 const distance = getDistanceOfTwoPosition(pos1, pos2);
 
                 if (distance < AppConstants.distanceOfObjectsWhenCreate) {

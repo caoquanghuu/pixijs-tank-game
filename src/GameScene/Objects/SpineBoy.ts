@@ -1,4 +1,4 @@
-import { Point } from '@pixi/core';
+import { IPointData } from '@pixi/core';
 import { SpineObject } from './SpineObject';
 import { keyboard } from '../util';
 import { AppConstants } from '../Constants';
@@ -78,7 +78,7 @@ export class SpineBoy extends SpineObject {
      * method for update spine boy
      * @param position cause testing then the position of spine now be getting by player tank position
      */
-    public update(position: Point) {
+    public update(position: IPointData) {
         // spine boy have position of player tank
         this.position = position;
 

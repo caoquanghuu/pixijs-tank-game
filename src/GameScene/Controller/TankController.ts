@@ -1,6 +1,6 @@
 import { Point } from '@pixi/core';
 import { Tank } from '../Objects/Tank';
-import { TankPool } from '../TankPool';
+import { TankPool } from '../ObjectPool.ts/TankPool';
 import { CreateNewRandomPositionFn, Direction, SetNewScoreFn } from '../type';
 import Emitter, { getRandomArbitrary, getRandomBoolean, randomEnumKey, switchFn } from '../util';
 import { SpineBoy } from '../Objects/SpineBoy';

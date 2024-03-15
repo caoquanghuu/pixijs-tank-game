@@ -75,8 +75,6 @@ export class GameScene extends Container {
 
         this._bulletController.reset();
 
-        this._collisionController.reset();
-
         this._playerScore = 0;
     }
 

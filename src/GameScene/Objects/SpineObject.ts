@@ -3,7 +3,7 @@ import '@pixi-spine/loader-3.8';
 import { Assets } from '@pixi/assets';
 import { Spine } from 'pixi-spine';
 import { BaseObject } from './BaseObject';
-import { Point } from '@pixi/core';
+import { IPointData } from '@pixi/core';
 import { AddAnimationOption, AnimationOption } from '../type';
 
 export class SpineObject extends BaseObject {
@@ -30,16 +30,14 @@ export class SpineObject extends BaseObject {
     }
 
     /** method to set position of spine which override on base object set position */
-    override set position(position: Point) {
+    override set position(position: IPointData) {
         this._spine.position.x = position.x;
         this._spine.position.y = position.y;
     }
 
     /** method to return position of spine */
-    override get position(): Point {
-        const position = new Point();
-        position.x = this._spine.position.x;
-        position.y = this._spine.position.y;
+    override get position(): IPointData {
+        const position = this._spine.position;
         return position;
     }
 
