@@ -215,10 +215,25 @@ export class GameScene extends Container {
 
     public async init() {
         console.log('GameScene init');
-        this._UIController = new UIController(this.startPlayGame.bind(this), this.displayScore.bind(this), this._resetGameScene.bind(this));
+
+        this._UIController = new UIController({
+            startPlayGameCallBack: this.startPlayGame.bind(this),
+            displayScoreCallBack: this.displayScore.bind(this),
+            resetGameSceneCallBack: this._resetGameScene.bind(this)
+        });
 
         // // constructor controllers
-        this._collisionController = new CollisionController(this.getTankList.bind(this), this.getBulletList.bind(this), this.getEnvironmentList.bind(this), this.removeBulletCall.bind(this), this.handleTankMoveCall.bind(this), this.removeEnvironmentCall.bind(this), this.removeRewardObjectCall.bind(this), this.getRewardList.bind(this), this.getBunker.bind(this));
+        this._collisionController = new CollisionController({
+            getTankListCallBack: this.getTankList.bind(this),
+            getBulletListCallBack: this.getBulletList.bind(this),
+            getEnvironmentListCallBack: this.getEnvironmentList.bind(this),
+            removeBulletCallBack: this.removeBulletCall.bind(this),
+            handleTankMoveCallBack: this.handleTankMoveCall.bind(this),
+            removeEnvironmentCallBack: this.removeEnvironmentCall.bind(this),
+            removeRewardObjectCallBack: this.removeRewardObjectCall.bind(this),
+            getRewardListCallBack: this.getRewardList.bind(this),
+            getBunkerCallBack: this.getBunker.bind(this)
+        });
 
         this._bulletController = new BulletController();
 

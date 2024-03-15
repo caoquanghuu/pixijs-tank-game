@@ -13,7 +13,16 @@ export class UIController {
     private _resetGameSceneCall: ResetGameSceneFn;
 
 
-    constructor(startPlayGameCallBack: StartPlayGameFn, displayScoreCallBack: DisplayScoreFn, resetGameSceneCallBack: ResetGameSceneFn) {
+    constructor({
+        startPlayGameCallBack,
+        displayScoreCallBack,
+        resetGameSceneCallBack
+    }: {
+        startPlayGameCallBack: StartPlayGameFn,
+        displayScoreCallBack: DisplayScoreFn,
+        resetGameSceneCallBack: ResetGameSceneFn
+    }) {
+
         this._useEventEffect();
 
         this._startPlayGameCall = startPlayGameCallBack;

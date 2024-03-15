@@ -17,9 +17,27 @@ export class CollisionController {
     private _removeRewardObjectCall: RemoveRewardObjectFn;
     private _usingObjectsList: BaseObject[] = [];
 
-    constructor(getTankListCallBack: GetTankListFn, getBulletListCallBack: GetBulletListFn, getEnvironmentListCallBack: GetObjectListFn,
-        removeBulletCallBack: RemoveBulletFn, handleTankMoveCallBack: HandleTankMoveFn, removeEnvironmentCallBack: RemoveEnvironmentFn,
-        removeRewardObjectCallBack: RemoveRewardObjectFn, getRewardListCallBack: GetRewardObjectsFn, getBunkerCallBack: GetBunkerFn) {
+    constructor({ getTankListCallBack,
+        getBulletListCallBack,
+        getEnvironmentListCallBack,
+        removeBulletCallBack,
+        handleTankMoveCallBack,
+        removeEnvironmentCallBack,
+        removeRewardObjectCallBack,
+        getRewardListCallBack,
+        getBunkerCallBack
+    }: {
+        getTankListCallBack: GetTankListFn,
+        getBulletListCallBack: GetBulletListFn,
+        getEnvironmentListCallBack: GetObjectListFn,
+        removeBulletCallBack: RemoveBulletFn,
+        handleTankMoveCallBack: HandleTankMoveFn,
+        removeEnvironmentCallBack: RemoveEnvironmentFn,
+        removeRewardObjectCallBack: RemoveRewardObjectFn,
+        getRewardListCallBack: GetRewardObjectsFn,
+        getBunkerCallBack: GetBunkerFn
+    }) {
+
         this._getTankListCall = getTankListCallBack;
         this._getBulletListCall = getBulletListCallBack;
         this._getEnvironmentListCall = getEnvironmentListCallBack;
