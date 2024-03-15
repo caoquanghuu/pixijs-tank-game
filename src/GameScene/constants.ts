@@ -86,4 +86,9 @@ export namespace AppConstants {
     export const fireBulletEvent: string = 'fire-bullet';
 
     export const displayGameOverEvent: string = 'display-game-over';
+
+    export const tankMoveTexturesName: string[] = ['tank-move-up', 'tank-move-down', 'tank-move-left', 'tank-move-right'];
+    export const tankStandTexturesName: string[] = ['tank-stand-up', 'tank-stand-down', 'tank-stand-left', 'tank-stand-right'];
+    export const hpTexturesName: string[] = ['1-hp', '2-hp', '3-hp', '4-hp', 'player-hp'];
+
 }

@@ -25,9 +25,9 @@ export class HPBar extends BaseObject {
 
     private changeHPSpriteFollowHP() {
 
-        const hpTexture: string[] = ['1-hp', '2-hp', '3-hp', '4-hp', 'player-hp'];
+        const hpTextureName: string[] = AppConstants.hpTexturesName;
 
-        this.sprite = hpTexture[this._HP - 1];
+        this.sprite = hpTextureName[this._HP - 1];
     }
 
     public update(position: IPointData) {

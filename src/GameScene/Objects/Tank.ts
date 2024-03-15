@@ -148,15 +148,15 @@ export class Tank extends BaseObject {
      * @param direction new direction changed
      */
     private changeTextureFollowDirection(direction: Direction) {
-        const tankMoveTextures: string[] = ['tank-move-up', 'tank-move-down', 'tank-move-left', 'tank-move-right'];
-        const tankStandTextures: string[] = ['tank-stand-up', 'tank-stand-down', 'tank-stand-left', 'tank-stand-right'];
+        const tankMoveTexturesName: string[] = AppConstants.tankMoveTexturesName;
+        const tankStandTexturesName: string[] = AppConstants.tankStandTexturesName;
 
         // change texture when tank move
-        this.sprite = tankMoveTextures[direction - 1];
+        this.sprite = tankMoveTexturesName[direction - 1];
 
         // when tank stop move:
         if (direction === Direction.STAND) {
-            this.sprite = tankStandTextures[this.lastDirection - 1];
+            this.sprite = tankStandTexturesName[this.lastDirection - 1];
         }
     }
 
