@@ -1,7 +1,7 @@
 import { BaseObject } from '../Objects/BaseObject';
 import { CreateNewRandomPositionFn } from '../type';
-import { IPointData } from '@pixi/core';
-import Emitter, { getRandomBoolean } from '../util';
+import { IPointData } from '../../pixi';
+import { getRandomBoolean } from '../util';
 import { AppConstants } from '../Constants';
 import { EnvironmentPool } from '../ObjectPool.ts/EnvironmentPool';
 
@@ -41,7 +41,7 @@ export class EnvironmentController {
     public init() {
         const position: IPointData = { x: 400, y: 580 };
         this._bunker.position = position;
-        Emitter.emit('add-to-scene', this._bunker.sprite);
+        this.bunker.show();
 
         console.log(this._environmentPool.objectList);
 
@@ -62,14 +62,14 @@ export class EnvironmentController {
             this._usingEnvironmentObjects.push(object1);
             this._usingEnvironmentObjects.push(object2);
             this._usingEnvironmentObjects.push(object3);
-            Emitter.emit('add-to-scene', object1.sprite);
-            Emitter.emit('add-to-scene', object2.sprite);
-            Emitter.emit('add-to-scene', object3.sprite);
+            object1.show();
+            object2.show();
+            object3.show();
         }
 
         for (let i = 0; i < AppConstants.numbersOfEnvironmentObjects * 2; i ++) {
             const object = this._environmentPool.releaseObject();
-            Emitter.emit('add-to-scene', object.sprite);
+            object.show();
             const rectangle = this._createNewRandomPositionCall(object.size);
             object.rectangle = rectangle;
             const position: IPointData = { x: rectangle.x, y: rectangle.y };
@@ -82,15 +82,15 @@ export class EnvironmentController {
     public reset() {
 
         this._usingEnvironmentObjects.forEach(object => {
-            Emitter.emit('remove-from-scene', object.sprite);
+            object.remove();
             this._environmentPool.getObject(object);
         });
 
         this._rewardObjects.forEach(rewardObject => {
-            Emitter.emit('remove-from-scene', rewardObject.sprite);
+            rewardObject.remove();
         });
 
-        Emitter.emit('remove-from-scene', this._bunker.sprite);
+        this._bunker.remove();
 
         this._usingEnvironmentObjects = [];
         this._rewardObjects = [];
@@ -117,7 +117,7 @@ export class EnvironmentController {
             rewardObject.size = AppConstants.rewardSpriteSize;
 
             // add hp bag to game scene
-            Emitter.emit('add-to-scene', rewardObject.sprite);
+            rewardObject.show();
 
             // push mid hp bag to list
             this._rewardObjects.push(rewardObject);
@@ -137,7 +137,7 @@ export class EnvironmentController {
     }
 
     public removeObject(object: BaseObject, objectList: BaseObject[]) {
-        Emitter.emit('remove-from-scene', object.sprite);
+        object.remove();
 
         const p = objectList.findIndex(objects => objects === object);
         objectList.splice(p, 1);

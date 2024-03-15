@@ -1,5 +1,5 @@
 // Tank class
-import { Point } from '@pixi/core';
+import { IPointData } from '../../pixi';
 import { RandomEngine } from '../Engine/RandomEngine';
 import { BaseObject } from './BaseObject';
 import { Direction, TankDieFn } from '../type';
@@ -52,7 +52,7 @@ export class Tank extends BaseObject {
             // set control fire key event by space keyboard
             const fire = keyboard(' ');
             fire.press = () => {
-                this.fire(this.position, this.lastDirection, true);
+                this.fire({ position: this.position, direction: this.lastDirection, isPlayer: true });
             };
         } else {
 
@@ -105,10 +105,10 @@ export class Tank extends BaseObject {
     /**
      * tank start to fire bullet
      */
-    public fire(position: Point, direction: Direction, isPlayer: boolean) {
+    public fire(option: {position: IPointData, direction: Direction, isPlayer: boolean}) {
 
         // call fire bullet to tank controller
-        Emitter.emit('fire-bullet', { position, direction, isPlayer });
+        Emitter.emit(AppConstants.fireBulletEvent, option);
     }
 
     /**
@@ -188,7 +188,7 @@ export class Tank extends BaseObject {
         if (!this._isPlayerTank) {
             this._fireBulletTime -= dt;
             if (this._fireBulletTime <= 0) {
-                this.fire(this.position, this.lastDirection, false);
+                this.fire({ position: this.position, direction : this.lastDirection, isPlayer: false });
                 this._fireBulletTime = getRandomArbitrary(3000, 5000);
             }
         }

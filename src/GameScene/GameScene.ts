@@ -1,13 +1,11 @@
 import 'pixi-spine';
 import '@pixi-spine/loader-3.8';
-import { Container, DisplayObject } from '@pixi/display';
-import { Sprite } from '@pixi/sprite';
+import { Container, DisplayObject, Sprite, Point, Rectangle } from '../pixi';
 import { AssetsLoader } from '../AssetsLoader';
 import { TankController } from './Controller/TankController';
 import { BulletController } from './Controller/BulletController';
 import { EnvironmentController } from './Controller/EnvironmentController';
 import { Size } from './type';
-import { Point, Rectangle } from '@pixi/core';
 import { CollisionController } from './Controller/CollisionController';
 import { Tank } from './Objects/Tank';
 import { Bullet } from './Objects/Bullet';
@@ -57,12 +55,8 @@ export class GameScene extends Container {
     }
 
     private _useEventEffect() {
-        Emitter.on('add-to-scene', (sprite: Sprite) => {
-            this.addToScene(sprite);
-        });
-        Emitter.on('remove-from-scene', (sprite: Sprite) => {
-            this.removeFromScene(sprite);
-        });
+        Emitter.on(AppConstants.addToSceneEvent, this.addToScene.bind(this));
+        Emitter.on(AppConstants.removeFromSceneEvent, this.removeFromScene.bind(this));
     }
 
     /**
@@ -209,10 +203,6 @@ export class GameScene extends Container {
 
     public createNewRandomPositionCall(size: Size): Rectangle {
         return this._collisionController.createNewRandomPosition(size);
-    }
-
-    public displayGameOverCall() {
-        this._UIController.displayGameOver();
     }
 
     private addToScene(displayObject: DisplayObject) {

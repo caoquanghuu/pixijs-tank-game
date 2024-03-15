@@ -1,4 +1,4 @@
-import { Point } from '@pixi/core';
+import { Point } from '../../pixi';
 import { Tank } from '../Objects/Tank';
 import { TankPool } from '../ObjectPool.ts/TankPool';
 import { CreateNewRandomPositionFn, Direction, SetNewScoreFn } from '../type';
@@ -47,7 +47,7 @@ export class TankController {
     }
 
     public reset() {
-        Emitter.emit('remove-from-scene', this._spineBoy.spine);
+        this._spineBoy.remove();
 
         this._usingTanks.forEach((tank) => {
             if (!tank.isPlayerTank) {
@@ -57,14 +57,15 @@ export class TankController {
     }
 
     public init() {
-        Emitter.emit('add-to-scene', this._playerTank.sprite);
+        this._playerTank.show();
         this._playerTank.rectangle = this._createNewRandomPositionCall(this._playerTank.size);
+        this._playerTank.HPBar.show();
 
         const position = new Point(this._playerTank.rectangle.x, this._playerTank.rectangle.y);
 
         this._playerTank.position = position;
 
-        Emitter.emit('add-to-scene', this._spineBoy.spine);
+        this._spineBoy.show();
         this._spineBoy.position = this._playerTank.position;
     }
 
@@ -100,8 +101,8 @@ export class TankController {
         this._usingTanks.push(tank);
 
         // add this tank to game sense
-        Emitter.emit('add-to-scene', tank.sprite);
-        Emitter.emit('add-to-scene', tank.HPBar.sprite);
+        tank.show();
+        tank.HPBar.show();
 
         const direction = randomEnumKey(Direction);
         tank.direction = direction;
@@ -135,7 +136,7 @@ export class TankController {
         if (tankDie.isPlayerTank) {
 
             // call game over to UI controller
-            Emitter.emit('display-game-over', null);
+            Emitter.emit(AppConstants.displayGameOverEvent, null);
         } else {
 
             //return tank to tank pool
@@ -154,9 +155,9 @@ export class TankController {
             tankDie.sprite.tint = AppConstants.colorOfAiTank;
 
             //remove sprite from game scene
-            Emitter.emit('remove-from-scene', tankDie.sprite);
+            tankDie.remove();
 
-            Emitter.emit('remove-from-scene', tankDie.HPBar.sprite);
+            tankDie.HPBar.remove();
 
             // remove from using tank list
             const p = this._usingTanks.findIndex(tank => tank === tankDie);

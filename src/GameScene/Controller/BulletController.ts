@@ -1,4 +1,4 @@
-import { Point } from '@pixi/core';
+import { IPointData } from '../../pixi';
 import { Bullet } from '../Objects/Bullet';
 import { Direction } from '../type';
 import { BaseObject } from '../Objects/BaseObject';
@@ -25,29 +25,27 @@ export class BulletController {
      * @param tankDirection direction of tank require fire bullet
      * @param isPlayerBullet define is player tank require fire bullet
      */
-    public createBullet(tankPosition: Point, tankDirection: Direction, isPlayerBullet: boolean) {
+    public createBullet(option: {position: IPointData, direction: Direction, isPlayer: boolean}) {
 
         // create a new bullet
-        const bullet = new Bullet (isPlayerBullet);
+        const bullet = new Bullet (option.isPlayer);
         this._bullets.push(bullet);
 
         // set position and direction for this bullet
-        bullet.position = tankPosition;
-        bullet.direction = tankDirection;
+        bullet.position = option.position;
+        bullet.direction = option.direction;
 
         // append bullet to game sense
-        Emitter.emit('add-to-scene', bullet.sprite);
+        bullet.show();
 
         // add sound fire bullet if it is player fire
-        if (isPlayerBullet) {
+        if (option.isPlayer) {
             sound.play('bullet-fire', { volume: AppConstants.volumeOfFireBullet });
         }
     }
 
     private _useEventEffect() {
-        Emitter.on('fire-bullet', (option: {position: Point, direction: Direction, isPlayer: boolean}) => {
-            this.createBullet(option.position, option.direction, option.isPlayer);
-        });
+        Emitter.on(AppConstants.fireBulletEvent, this.createBullet.bind(this));
     }
 
     public reset() {
@@ -68,7 +66,7 @@ export class BulletController {
         this._bullets.splice(p, 1);
 
         // remove bullet in game sense
-        Emitter.emit('remove-from-scene', bullet.sprite);
+        bullet.remove();
 
         // create a sprite with explosion
         const explosion = new BaseObject('explosion');
@@ -77,7 +75,7 @@ export class BulletController {
         explosion.setImageSize(AppConstants.explosionSpriteSize);
 
         // add this explosion to game
-        Emitter.emit('add-to-scene', explosion.sprite);
+        explosion.show();
 
         // set position for it where bullet being remove
         explosion.position = bullet.position;
@@ -89,7 +87,7 @@ export class BulletController {
         }
 
         // remove this bullet after time
-        setTimeout(() => { Emitter.emit('remove-from-scene', explosion.sprite); }, AppConstants.timeExplosionDisappear);
+        setTimeout(() => { explosion.remove(); }, AppConstants.timeExplosionDisappear);
     }
 
 

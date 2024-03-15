@@ -1,9 +1,8 @@
-import { Sprite } from '@pixi/sprite';
 import { Direction, Size } from '../type';
 import { BaseEngine } from '../Engine/BaseEngine';
 import { AssetsLoader } from '../../AssetsLoader';
-import { IPointData, Point, Rectangle } from '@pixi/core';
-import { switchFn } from '../util';
+import { IPointData, Sprite, Point, Rectangle } from '../../pixi';
+import Emitter, { switchFn } from '../util';
 import { AppConstants } from '../Constants';
 
 export class BaseObject {
@@ -92,6 +91,19 @@ export class BaseObject {
 
     set size(size) {
         this._size = size;
+    }
+
+    /**
+     * method to render object to game scene
+     */
+    public show(): void {
+        Emitter.emit(AppConstants.addToSceneEvent, this.sprite);
+    }
+    /**
+     * method to stop render object from game scene
+     */
+    public remove(): void {
+        Emitter.emit(AppConstants.removeFromSceneEvent, this.sprite);
     }
 
     public move(deltaTime: number, isBullet) {

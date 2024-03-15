@@ -1,8 +1,7 @@
 
-import { Sprite } from '@pixi/sprite';
+import { Sprite, Point } from '../../pixi';
 import { AssetsLoader } from '../../AssetsLoader';
 import { Text } from '@pixi/text';
-import { Point } from '@pixi/core';
 import { DisplayScoreFn, ResetGameSceneFn, StartPlayGameFn } from '../type';
 import { AppConstants } from '../Constants';
 import Emitter from '../util';
@@ -23,9 +22,7 @@ export class UIController {
     }
 
     private _useEventEffect() {
-        Emitter.on('display-game-over', () => {
-            this.displayGameOver();
-        });
+        Emitter.on(AppConstants.displayGameOverEvent, this.displayGameOver.bind(this));
     }
 
     /**
@@ -68,7 +65,7 @@ export class UIController {
 
         btnSprite.position = AppConstants.mainMenuButtonPosition;
 
-        Emitter.emit('add-to-scene', mainBg);
+        Emitter.emit(AppConstants.addToSceneEvent, mainBg);
 
         // stop update
         Emitter.emit('stop-update', null);
@@ -119,7 +116,7 @@ export class UIController {
         // player tap on start button to start play game
         btnReplay.on('pointertap', () => {
             // remove bg
-            Emitter.emit('remove-from-scene', overBg);
+            Emitter.emit(AppConstants.removeFromSceneEvent, overBg);
 
             // call reset game
             this._resetGameSceneCall();
@@ -137,7 +134,7 @@ export class UIController {
         btnReplay.position = AppConstants.buttonReplayPosition;
 
         // add bg game to game scene
-        Emitter.emit('add-to-scene', overBg);
+        Emitter.emit(AppConstants.addToSceneEvent, overBg);
 
         // display score at position
         const positionDisplayScore = new Point(400, 340);

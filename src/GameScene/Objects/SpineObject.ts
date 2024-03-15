@@ -3,8 +3,10 @@ import '@pixi-spine/loader-3.8';
 import { Assets } from '@pixi/assets';
 import { Spine } from 'pixi-spine';
 import { BaseObject } from './BaseObject';
-import { IPointData } from '@pixi/core';
+import { IPointData } from '../../pixi';
 import { AddAnimationOption, AnimationOption } from '../type';
+import Emitter from '../util';
+import { AppConstants } from '../Constants';
 
 export class SpineObject extends BaseObject {
     private _url: string;
@@ -39,6 +41,14 @@ export class SpineObject extends BaseObject {
     override get position(): IPointData {
         const position = this._spine.position;
         return position;
+    }
+
+    override show() {
+        Emitter.emit(AppConstants.addToSceneEvent, this.spine);
+    }
+
+    override remove() {
+        Emitter.emit(AppConstants.removeFromSceneEvent, this.spine);
     }
 
     /**

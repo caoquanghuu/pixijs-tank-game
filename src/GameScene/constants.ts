@@ -1,5 +1,5 @@
-import { IPointData, Point } from '@pixi/core';
 import { Size } from './type';
+import { IPointData, Point } from '../pixi';
 
 export namespace AppConstants {
     export const screenWidth: number = 800;
@@ -79,4 +79,11 @@ export namespace AppConstants {
 
     export const speedOfBullet: number = 200;
     export const speedOfTank: number = 100;
+
+    export const addToSceneEvent: string = 'add-to-scene';
+    export const removeFromSceneEvent: string = 'remove-from-scene';
+
+    export const fireBulletEvent: string = 'fire-bullet';
+
+    export const displayGameOverEvent: string = 'display-game-over';
 }

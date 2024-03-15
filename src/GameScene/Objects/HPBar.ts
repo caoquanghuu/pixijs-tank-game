@@ -1,4 +1,4 @@
-import { Point } from '@pixi/core';
+import { IPointData } from '../../pixi';
 import { BaseObject } from './BaseObject';
 import { AppConstants } from '../Constants';
 import Emitter from '../util';
@@ -10,7 +10,7 @@ export class HPBar extends BaseObject {
     constructor(isPlayer: boolean) {
         super(isPlayer ? 'player-hp' : 'bot-hp');
 
-        Emitter.emit('add-to-scene', this.sprite);
+        Emitter.emit(AppConstants.addToSceneEvent, this.sprite);
 
         this._isPlayer = isPlayer;
     }
@@ -30,8 +30,8 @@ export class HPBar extends BaseObject {
         this.sprite = hpTexture[this._HP - 1];
     }
 
-    public update(position: Point) {
-        const newPosition = new Point(position.x, position.y - AppConstants.distanceOfHpBarAndTank);
+    public update(position: IPointData) {
+        const newPosition: IPointData = { x: position.x, y: position.y - AppConstants.distanceOfHpBarAndTank };
         this.position = newPosition;
         this.changeHPSpriteFollowHP();
     }
