@@ -1,8 +1,9 @@
 import { IPointData, Rectangle } from '../pixi';
 import EventEmitter from 'eventemitter3';
 import { BaseObject } from './Objects/BaseObject';
+import { Direction } from './type';
 
-export const randomEnumKey = (enumeration: any) => {
+export const randomEnumKey = (enumeration: any): any => {
     const keys = Object.keys(enumeration).filter(
         (k) => !(Math.abs(Number.parseInt(k)) + 1)
     );
@@ -10,7 +11,7 @@ export const randomEnumKey = (enumeration: any) => {
     return enumeration[enumKey];
 };
 
-export function getRandomArbitrary(min: number, max: number) {
+export function getRandomArbitrary(min: number, max: number): number {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -64,15 +65,11 @@ export function keyboard(value: any) {
     return key;
 }
 
-export function getDistanceOfTwoPosition(pos1: IPointData, pos2: IPointData) {
+export function getDistanceOfTwoPosition(pos1: IPointData, pos2: IPointData): number {
     const distance: number = Math.sqrt(
         Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2)
     );
     return distance;
-}
-
-export function isClassOf(target: object, targetCompare: object) {
-    return target && typeof target === 'object' && (/^(object|array)$/i.test(target.constructor.name)) === (/^(object|array)$/i.test(targetCompare.constructor.name));
 }
 
 export const switchFn = (lookupObject, defaultCase = '_default') => expression => (lookupObject[expression] || lookupObject[defaultCase])();
@@ -81,7 +78,7 @@ export const switchFn = (lookupObject, defaultCase = '_default') => expression =
  * function random return a boolean result base on percent
  * @param percent percent want to take true result
  */
-export function getRandomBoolean(percent: number) {
+export function getRandomBoolean(percent: number): boolean {
     const randomNumber = getRandomArbitrary(1, 100);
     if (randomNumber <= percent) {
         return true;
@@ -90,7 +87,7 @@ export function getRandomBoolean(percent: number) {
     }
 }
 
-export function checkCollisionBetweenTwoRectangle(r1: Rectangle, r2: Rectangle) {
+export function checkCollisionBetweenTwoRectangle(r1: Rectangle, r2: Rectangle): boolean {
 
     if (r1.x + r1.width / 2 >= r2.x - r2.width / 2 &&
         r1.x - r1.width / 2 <= r2.x + r2.width / 2 &&
@@ -106,7 +103,7 @@ export function checkCollisionBetweenTwoRectangle(r1: Rectangle, r2: Rectangle) 
      * @param object1 object list 1
      * @param object2 object list 2
      */
-export function checkCollision(object1: BaseObject, object2: BaseObject) {
+export function checkCollision(object1: BaseObject, object2: BaseObject): boolean {
 
     const aBox = new Rectangle(object1.sprite.x, object1.sprite.y, object1.size.w, object1.size.h);
     const bBox = new Rectangle(object2.sprite.x, object2.sprite.y, object2.size.w, object2.size.h);
@@ -114,6 +111,17 @@ export function checkCollision(object1: BaseObject, object2: BaseObject) {
     // const bBox = object2.sprite.getBounds();
 
     return checkCollisionBetweenTwoRectangle(aBox, bBox);
+}
+
+/**
+     * random get a direction from enum
+     */
+export function createRandomDirection(): Direction {
+
+    // random to get direction from enum Direction
+    const direction = randomEnumKey(Direction);
+
+    return direction;
 }
 
 const eventEmitter = new EventEmitter();

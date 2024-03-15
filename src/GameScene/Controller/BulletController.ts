@@ -44,11 +44,11 @@ export class BulletController {
         }
     }
 
-    private _useEventEffect() {
+    private _useEventEffect(): void {
         Emitter.on(AppConstants.fireBulletEvent, this.createBullet.bind(this));
     }
 
-    public reset() {
+    public reset(): void {
         if (!this._bullets) return;
         this._bullets.forEach(bullet => {
             this.removeBullet(bullet);
@@ -59,7 +59,7 @@ export class BulletController {
      * remove bullet when require
      * @param bullet bullet which need to remove
      */
-    public removeBullet(bullet: Bullet) {
+    public removeBullet(bullet: Bullet): void {
 
         // remove bullet in array list
         const p = this._bullets.findIndex(bullets => bullets === bullet);
@@ -95,7 +95,7 @@ export class BulletController {
      * check position of bullet, if if go out of game sense then remove it
      * @param dt
      */
-    public update(dt: number) {
+    public update(dt: number): void {
 
         //check bullet position out of map yet then:
         this._bullets.forEach(bullet => {

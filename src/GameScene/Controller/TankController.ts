@@ -22,7 +22,7 @@ export class TankController {
 
     constructor(createNewRandomPositionCallBack: CreateNewRandomPositionFn, setNewScoreCallBack: SetNewScoreFn) {
 
-        this._tankPool = new TankPool(this.tankDie.bind(this));
+        this._tankPool = new TankPool(this._tankDie.bind(this));
 
         this._useEventEffect();
 
@@ -30,7 +30,7 @@ export class TankController {
         this._setNewScoreCall = setNewScoreCallBack;
 
         // create a player tank
-        this._playerTank = new Tank(true, this.tankDie.bind(this));
+        this._playerTank = new Tank(true, this._tankDie.bind(this));
         this._usingTanks.push(this._playerTank);
 
         // test add spine boy on player tank
@@ -46,17 +46,17 @@ export class TankController {
         return this._usingTanks;
     }
 
-    public reset() {
+    public reset(): void {
         this._spineBoy.remove();
 
         this._usingTanks.forEach((tank) => {
             if (!tank.isPlayerTank) {
-                this.tankDie(tank);
+                this._tankDie(tank);
             }
         });
     }
 
-    public init() {
+    public init(): void {
         this._playerTank.show();
         this._playerTank.rectangle = this._createNewRandomPositionCall(this._playerTank.size);
         this._playerTank.HPBar.show();
@@ -69,16 +69,14 @@ export class TankController {
         this._spineBoy.position = this._playerTank.position;
     }
 
-    private _useEventEffect() {
-        Emitter.on('fire-bullet', (option: {position: Point, direction: Direction, isPlayer: boolean}) => {
-            this.fireBulletOfSpineBoy(option.position, option.direction, option.isPlayer);
-        });
+    private _useEventEffect(): void {
+        Emitter.on('fire-bullet', this._fireBulletOfSpineBoy.bind(this));
     }
 
     /**
      * spawn a enemy tank
      */
-    private spawnTank() {
+    private _spawnTank(): void {
 
         // get a Tank from TankPool then display it.
         const tank = this._tankPool.releaseTank();
@@ -86,7 +84,7 @@ export class TankController {
         // random create boss tank
         const isCreateBossTank = getRandomBoolean(50);
         if (isCreateBossTank) {
-            this.createBossTank(tank);
+            this._createBossTank(tank);
         }
 
         tank.rectangle = this._createNewRandomPositionCall(tank.size);
@@ -108,7 +106,7 @@ export class TankController {
         tank.direction = direction;
     }
 
-    private createBossTank(tank: Tank) {
+    private _createBossTank(tank: Tank): void {
         // tank have more hp
         tank.HP = AppConstants.maxHpOfBossTank;
 
@@ -119,7 +117,7 @@ export class TankController {
         tank.fireBulletTime = AppConstants.timeFireBulletOfBossTank;
     }
 
-    public fireBulletOfSpineBoy(position: Point, direction: Direction, isPlayerBullet: boolean) {
+    private _fireBulletOfSpineBoy(position: Point, direction: Direction, isPlayerBullet: boolean): void {
         // animation fire for spine boy
         if (isPlayerBullet) {
             this._spineBoy.addAnimation({ trackIndex: 2, animationName: 'shoot', loop: false, delay:0 });
@@ -130,7 +128,7 @@ export class TankController {
      * tank will die
      * @param tank tank which will die
      */
-    private tankDie(tankDie: Tank) {
+    private _tankDie(tankDie: Tank): void {
 
         // check tank die is player or AI tank
         if (tankDie.isPlayerTank) {
@@ -169,7 +167,7 @@ export class TankController {
      * handle move of tank when have collision
      * @param tank tank which need to handle move
      */
-    public handleTankMove(tank: Tank) {
+    public handleTankMove(tank: Tank): void {
 
         // get current direction of tank
         const direction = tank.direction;
@@ -224,7 +222,7 @@ export class TankController {
         if (this._spawnTankTime <= 0) {
             this._spawnTankTime = getRandomArbitrary(AppConstants.minTimeSpawnTank, AppConstants.timeSpawnTank);
             if (this._tankPool.tankPool.length != 0) {
-                this.spawnTank();
+                this._spawnTank();
             }
 
         }

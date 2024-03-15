@@ -5,7 +5,7 @@ export class BaseEngine {
     public forceChangeDirectionCall: () => void = null;
 
     // get a direction
-    get direction() {
+    get direction(): Direction {
         return this._direction;
     }
 

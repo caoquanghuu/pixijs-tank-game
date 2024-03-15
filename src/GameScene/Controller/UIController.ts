@@ -30,14 +30,14 @@ export class UIController {
         this._resetGameSceneCall = resetGameSceneCallBack;
     }
 
-    private _useEventEffect() {
+    private _useEventEffect(): void {
         Emitter.on(AppConstants.displayGameOverEvent, this.displayGameOver.bind(this));
     }
 
     /**
      * method to display main menu game
      */
-    public displayMainMenuGame() {
+    public displayMainMenuGame(): void {
         // create a main game back ground
         const mainBg = new Sprite(AssetsLoader.getTexture('main-back-ground'));
         mainBg.width = AppConstants.screenWidth;
@@ -83,7 +83,7 @@ export class UIController {
         // sound.play('main-menu-music', { volume: AppConstants.volumeMainMenuMusic, loop: true });
     }
 
-    public displayGameOver() {
+    public displayGameOver(): void {
         // stop update
         Emitter.emit('stop-update', null);
 

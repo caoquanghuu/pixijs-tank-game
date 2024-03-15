@@ -27,7 +27,7 @@ export class EnvironmentPool extends ObjectsPool {
      * @param name name of object want create base on asset
      * @param position set position for object if require
      */
-    private createEnvironmentObject(name: string) {
+    private createEnvironmentObject(name: string): void {
 
         // use name to get image from asset
         const object = new BaseObject(name);

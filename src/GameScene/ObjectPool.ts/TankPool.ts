@@ -36,7 +36,7 @@ export class TankPool {
         return tank;
     }
 
-    public getTank(tank: Tank) {
+    public getTank(tank: Tank): void {
 
         // get tank die from tank controller
         // return tank to tank pool when tank die

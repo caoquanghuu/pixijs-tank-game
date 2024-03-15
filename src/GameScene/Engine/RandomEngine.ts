@@ -1,6 +1,6 @@
 import { AppConstants } from '../Constants';
 import { Direction } from '../type';
-import { randomEnumKey } from '../util';
+import { createRandomDirection } from '../util';
 import { BaseEngine } from './BaseEngine';
 
 export class RandomEngine extends BaseEngine {
@@ -12,19 +12,7 @@ export class RandomEngine extends BaseEngine {
         this.forceChangeDirectionCall = this.forceChangeDirection;
     }
 
-    /**
-     * random get a direction from enum
-     */
-    private randomDirection() {
-
-        // random to get direction from enum Direction
-        const direction = randomEnumKey(Direction);
-
-        // assign direction to this direction
-        this.direction = direction;
-    }
-
-    public forceChangeDirection() {
+    public forceChangeDirection(): void {
         if (this._forceDirectionCountDown <= 0) {
             this._forceDirectionCountDown = AppConstants.forceDirectionCountDown;
             this._directionChangeTime = 0;
@@ -39,7 +27,8 @@ export class RandomEngine extends BaseEngine {
         // if it = 0 then set randomDirection again to get new direction.
         if (this._directionChangeTime <= 0) {
             this._directionChangeTime = AppConstants.directionChangeTime;
-            this.randomDirection();
+            const direction: Direction = createRandomDirection();
+            this.direction = direction;
         }
 
         if (this._forceDirectionCountDown) {

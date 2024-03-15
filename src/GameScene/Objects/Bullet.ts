@@ -40,7 +40,7 @@ export class Bullet extends BaseObject {
         return this._moveEngine.direction;
     }
 
-    set direction(direction) {
+    set direction(direction: Direction) {
         this._moveEngine.direction = direction;
     }
 
@@ -48,7 +48,7 @@ export class Bullet extends BaseObject {
      * rotate sprite follow direction
      * @param bullet bullet which is's sprite will be rotate
      */
-    private rotateSpriteFollowDirection() {
+    private rotateSpriteFollowDirection(): void {
         const rotateUp = () => {
             this.sprite.angle = 180;
         };

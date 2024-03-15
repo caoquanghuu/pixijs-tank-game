@@ -95,7 +95,7 @@ export class EnvironmentController {
     }
 
 
-    private createRewardRandomly(position: IPointData) {
+    private _createRewardRandomly(position: IPointData): void {
 
         // get a random number
         const randomBoolean = getRandomBoolean(10);
@@ -122,7 +122,7 @@ export class EnvironmentController {
         }
     }
 
-    public removeEnvironmentObject(environment: BaseObject) {
+    public removeEnvironmentObject(environment: BaseObject): void {
 
         this._environmentPool.getObject(environment);
 
@@ -131,10 +131,10 @@ export class EnvironmentController {
         const position: IPointData = environment.position;
 
         // create reward randomly
-        this.createRewardRandomly(position);
+        this._createRewardRandomly(position);
     }
 
-    public removeObject(object: BaseObject, objectList: BaseObject[]) {
+    public removeObject(object: BaseObject, objectList: BaseObject[]): void {
         object.remove();
 
         const p = objectList.findIndex(objects => objects === object);

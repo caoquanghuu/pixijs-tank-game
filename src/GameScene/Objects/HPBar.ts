@@ -23,7 +23,7 @@ export class HPBar extends BaseObject {
         this._HP = hp;
     }
 
-    private changeHPSpriteFollowHP() {
+    private changeHPSpriteFollowHP(): void {
 
         const hpTextureName: string[] = AppConstants.hpTexturesName;
 

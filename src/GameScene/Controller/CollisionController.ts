@@ -50,7 +50,7 @@ export class CollisionController {
 
     }
 
-    private getUsingObjectsList() {
+    private _createUsingObjectsList(): void {
         const tanksList = this._getTankListCall();
         const environmentsList = this._getEnvironmentListCall();
         this._usingObjectsList = environmentsList.concat(tanksList);
@@ -103,7 +103,7 @@ export class CollisionController {
     /**
      * handle collision between objects.
      */
-    private handleCollision() {
+    private _handleCollision(): void {
         // get using tanks list from tank controller
         const tanks = this._getTankListCall();
 
@@ -205,7 +205,7 @@ export class CollisionController {
     }
 
     public update() {
-        this.handleCollision();
-        this.getUsingObjectsList();
+        this._handleCollision();
+        this._createUsingObjectsList();
     }
 }

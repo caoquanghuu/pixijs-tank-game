@@ -1,7 +1,7 @@
 import { Direction, Size } from '../type';
 import { BaseEngine } from '../Engine/BaseEngine';
 import { AssetsLoader } from '../../AssetsLoader';
-import { IPointData, Sprite, Point, Rectangle } from '../../pixi';
+import { IPointData, Sprite, Rectangle } from '../../pixi';
 import Emitter, { switchFn } from '../util';
 import { AppConstants } from '../Constants';
 
@@ -46,7 +46,7 @@ export class BaseObject {
         this.sprite.position = position;
     }
 
-    get moveEngine() {
+    get moveEngine(): BaseEngine {
         return this._moveEngine;
     }
 
@@ -89,11 +89,11 @@ export class BaseObject {
     }
 
     // method to get size of this object for check collision
-    get size() {
+    get size(): Size {
         return this._size;
     }
 
-    set size(size) {
+    set size(size: Size) {
         this._size = size;
     }
 
@@ -110,7 +110,7 @@ export class BaseObject {
         Emitter.emit(AppConstants.removeFromSceneEvent, this.sprite);
     }
 
-    public move(deltaTime: number, isBullet) {
+    public move(deltaTime: number, isBullet: boolean) {
         if (!this.moveEngine) {
             return;
         }
@@ -183,7 +183,7 @@ export class BaseObject {
         }
 
 
-        const newPosition: Point = new Point(nextX, nextY);
+        const newPosition: IPointData = { x: nextX, y: nextY };
 
 
         //set next position for sprite
@@ -191,7 +191,7 @@ export class BaseObject {
     }
 
     // method to set width height of the image
-    public setImageSize(size: Size) {
+    public setImageSize(size: Size): void {
         this.sprite.width = size.w;
         this.sprite.height = size.h;
     }
