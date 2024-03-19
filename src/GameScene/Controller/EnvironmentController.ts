@@ -3,7 +3,7 @@ import { CreateNewRandomPositionFn } from '../type';
 import { IPointData } from '../../pixi';
 import { getRandomBoolean } from '../util';
 import { AppConstants } from '../Constants';
-import { EnvironmentPool } from '../ObjectPool.ts/EnvironmentPool';
+import { EnvironmentPool } from '../ObjectPool/EnvironmentPool';
 
 export class EnvironmentController {
     private _environmentPool: EnvironmentPool;
