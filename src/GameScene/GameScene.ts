@@ -1,6 +1,6 @@
 import 'pixi-spine';
 import '@pixi-spine/loader-3.8';
-import { Container, DisplayObject, Sprite, Point, Rectangle, IPointData } from '../pixi';
+import { Container, DisplayObject, Sprite, Rectangle, IPointData } from '../pixi';
 import { AssetsLoader } from '../AssetsLoader';
 import { TankController } from './Controller/TankController';
 import { BulletController } from './Controller/BulletController';
@@ -47,7 +47,7 @@ export class GameScene extends Container {
             spine.addAnimation({ trackIndex:0, animationName: 'idle', loop: true, delay:1.65 });
             spine.addAnimation({ trackIndex:1, animationName: 'shoot', loop: false, delay:4.5 });
             spine.spine.scale = { x:-0.2, y:0.2 };
-            const position = new Point(400, 400);
+            const position: IPointData = { x: 400, y: 400 };
             spine.position = position;
             this.addToScene(spine.spine);
         }

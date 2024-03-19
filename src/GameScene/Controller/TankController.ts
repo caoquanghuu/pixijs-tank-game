@@ -1,10 +1,10 @@
-import { Point } from '../../pixi';
 import { Tank } from '../Objects/Tank';
 import { TankPool } from '../ObjectPool.ts/TankPool';
 import { CreateNewRandomPositionFn, Direction, SetNewScoreFn } from '../type';
 import Emitter, { getRandomArbitrary, getRandomBoolean, randomEnumKey, switchFn } from '../util';
 import { SpineBoy } from '../Objects/SpineBoy';
 import { AppConstants } from '../Constants';
+import { IPointData } from '@pixi/core';
 
 export class TankController {
 
@@ -61,7 +61,7 @@ export class TankController {
         this._playerTank.rectangle = this._createNewRandomPositionCall(this._playerTank.size);
         this._playerTank.HPBar.show();
 
-        const position = new Point(this._playerTank.rectangle.x, this._playerTank.rectangle.y);
+        const position = { x: this._playerTank.rectangle.x, y: this._playerTank.rectangle.y };
 
         this._playerTank.position = position;
 
@@ -90,7 +90,7 @@ export class TankController {
         tank.rectangle = this._createNewRandomPositionCall(tank.size);
 
         // create new position based on rectangle
-        const position = new Point(tank.rectangle.x, tank.rectangle.y);
+        const position = { x: tank.rectangle.x, y: tank.rectangle.y };
 
         // set position for tank
         tank.position = position;
@@ -117,7 +117,7 @@ export class TankController {
         tank.fireBulletTime = AppConstants.timeFireBulletOfBossTank;
     }
 
-    private _fireBulletOfSpineBoy(position: Point, direction: Direction, isPlayerBullet: boolean): void {
+    private _fireBulletOfSpineBoy(position: IPointData, direction: Direction, isPlayerBullet: boolean): void {
         // animation fire for spine boy
         if (isPlayerBullet) {
             this._spineBoy.addAnimation({ trackIndex: 2, animationName: 'shoot', loop: false, delay:0 });
@@ -176,22 +176,22 @@ export class TankController {
         tank.direction = Direction.STAND;
 
         const flitchUp = () => {
-            const newPosition = new Point(tank.position.x, tank.position.y + AppConstants.distanceFlitchWhenHaveCollision);
+            const newPosition: IPointData = { x: tank.position.x, y: tank.position.y + AppConstants.distanceFlitchWhenHaveCollision };
             tank.position = newPosition;
         };
 
         const flitchDown = () => {
-            const newPosition = new Point(tank.position.x, tank.position.y - AppConstants.distanceFlitchWhenHaveCollision);
+            const newPosition: IPointData = { x: tank.position.x, y: tank.position.y - AppConstants.distanceFlitchWhenHaveCollision };
             tank.position = newPosition;
         };
 
         const flitchLeft = () => {
-            const newPosition = new Point(tank.position.x + AppConstants.distanceFlitchWhenHaveCollision, tank.position.y);
+            const newPosition: IPointData = { x: tank.position.x + AppConstants.distanceFlitchWhenHaveCollision, y: tank.position.y };
             tank.position = newPosition;
         };
 
         const flitchRight = () => {
-            const newPosition = new Point(tank.position.x - AppConstants.distanceFlitchWhenHaveCollision, tank.position.y);
+            const newPosition: IPointData = { x: tank.position.x - AppConstants.distanceFlitchWhenHaveCollision, y: tank.position.y };
             tank.position = newPosition;
         };
 
