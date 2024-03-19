@@ -9,8 +9,8 @@ import { IPointData } from '@pixi/core';
 export class TankController {
 
     private _usingTanks: Tank[] = [];
-    private _spawnTankTime: number = AppConstants.timeSpawnTank;
     private _playerTank: Tank;
+    private _spawnTankTime: number = AppConstants.timeSpawnTank;
     private _tankPool: TankPool;
 
     private _createNewRandomPositionCall: CreateNewRandomPositionFn;
@@ -28,10 +28,6 @@ export class TankController {
 
         this._createNewRandomPositionCall = createNewRandomPositionCallBack;
         this._setNewScoreCall = setNewScoreCallBack;
-
-        // create a player tank
-        this._playerTank = new Tank(true, this._tankDie.bind(this));
-        this._usingTanks.push(this._playerTank);
 
         // test add spine boy on player tank
         this._spineBoy = new SpineBoy();
@@ -52,18 +48,18 @@ export class TankController {
         this._usingTanks.forEach((tank) => {
             if (!tank.isPlayerTank) {
                 this._tankDie(tank);
+            } else {
+                this._playerTank.remove();
+                this._playerTank = undefined;
             }
         });
+
+        this._usingTanks = [];
     }
 
     public init(): void {
-        this._playerTank.show();
-        this._playerTank.rectangle = this._createNewRandomPositionCall(this._playerTank.size);
-        this._playerTank.HPBar.show();
-
-        const position = { x: this._playerTank.rectangle.x, y: this._playerTank.rectangle.y };
-
-        this._playerTank.position = position;
+        this._getTank(true);
+        this._getTank(false);
 
         this._spineBoy.show();
         this._spineBoy.position = this._playerTank.position;
@@ -73,48 +69,37 @@ export class TankController {
         Emitter.on('fire-bullet', this._fireBulletOfSpineBoy.bind(this));
     }
 
-    /**
-     * spawn a enemy tank
-     */
-    private _spawnTank(): void {
+    private _getTank(type: boolean) {
+        const tank = this._tankPool.releaseTank(type);
 
-        // get a Tank from TankPool then display it.
-        const tank = this._tankPool.releaseTank();
+        if (!type) {
+            const isCreateBossTank = getRandomBoolean(50);
 
-        // random create boss tank
-        const isCreateBossTank = getRandomBoolean(50);
-        if (isCreateBossTank) {
-            this._createBossTank(tank);
+            if (isCreateBossTank) {
+                tank.HP = AppConstants.maxHpOfBossTank;
+
+                // colored tank
+                tank.sprite.tint = AppConstants.colorOfBossTank;
+
+                // tank shoot faster
+                tank.fireBulletTime = AppConstants.timeFireBulletOfBossTank;
+
+                tank.direction = randomEnumKey(Direction);
+            }
+        } else {
+            this._playerTank = tank;
         }
 
         tank.rectangle = this._createNewRandomPositionCall(tank.size);
 
-        // create new position based on rectangle
         const position = { x: tank.rectangle.x, y: tank.rectangle.y };
 
-        // set position for tank
         tank.position = position;
 
-        // push this tank to using tank
         this._usingTanks.push(tank);
 
-        // add this tank to game sense
         tank.show();
         tank.HPBar.show();
-
-        const direction = randomEnumKey(Direction);
-        tank.direction = direction;
-    }
-
-    private _createBossTank(tank: Tank): void {
-        // tank have more hp
-        tank.HP = AppConstants.maxHpOfBossTank;
-
-        // colored tank
-        tank.sprite.tint = AppConstants.colorOfBossTank;
-
-        // tank shoot faster
-        tank.fireBulletTime = AppConstants.timeFireBulletOfBossTank;
     }
 
     private _fireBulletOfSpineBoy(position: IPointData, direction: Direction, isPlayerBullet: boolean): void {
@@ -222,7 +207,7 @@ export class TankController {
         if (this._spawnTankTime <= 0) {
             this._spawnTankTime = getRandomArbitrary(AppConstants.minTimeSpawnTank, AppConstants.timeSpawnTank);
             if (this._tankPool.tankPool.length != 0) {
-                this._spawnTank();
+                this._getTank(false);
             }
 
         }
