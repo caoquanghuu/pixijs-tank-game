@@ -1,6 +1,6 @@
 import 'pixi-spine';
 import '@pixi-spine/loader-3.8';
-import { Container, DisplayObject, Sprite, Point, Rectangle } from '../pixi';
+import { Container, DisplayObject, Sprite, Point, Rectangle, IPointData } from '../pixi';
 import { AssetsLoader } from '../AssetsLoader';
 import { TankController } from './Controller/TankController';
 import { BulletController } from './Controller/BulletController';
@@ -57,6 +57,7 @@ export class GameScene extends Container {
     private _useEventEffect() {
         Emitter.on(AppConstants.addToSceneEvent, this.addToScene.bind(this));
         Emitter.on(AppConstants.removeFromSceneEvent, this.removeFromScene.bind(this));
+        Emitter.on(AppConstants.displayScore, this.displayScore.bind(this));
     }
 
     /**
@@ -80,8 +81,8 @@ export class GameScene extends Container {
         this._environmentController.init();
     }
 
-    public setNewScore(newScore: number) {
-        this._playerScore += newScore;
+    public plusScore(score: number) {
+        this._playerScore += score;
 
         // call display score on changed score
         const positionDisplayScore = AppConstants.defaultScoreDisplayPosition;
@@ -114,7 +115,7 @@ export class GameScene extends Container {
      * method for display score of player
      * @param positionDisplay position which score will be display
      */
-    public displayScore(positionDisplay: Point) {
+    public displayScore(positionDisplay: IPointData) {
 
         // remove old sprite of score if have
         if (this._scoreSpriteArray) {
@@ -218,7 +219,6 @@ export class GameScene extends Container {
 
         this._UIController = new UIController({
             startPlayGameCallBack: this.startPlayGame.bind(this),
-            displayScoreCallBack: this.displayScore.bind(this),
             resetGameSceneCallBack: this._resetGameScene.bind(this)
         });
 
@@ -237,7 +237,7 @@ export class GameScene extends Container {
 
         this._bulletController = new BulletController();
 
-        this._tankController = new TankController(this.createNewRandomPositionCall.bind(this), this.setNewScore.bind(this));
+        this._tankController = new TankController(this.createNewRandomPositionCall.bind(this), this.plusScore.bind(this));
 
         this._environmentController = new EnvironmentController(this.createNewRandomPositionCall.bind(this));
 

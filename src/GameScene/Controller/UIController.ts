@@ -1,32 +1,28 @@
 
-import { Sprite, Point } from '../../pixi';
+import { Sprite, IPointData } from '../../pixi';
 import { AssetsLoader } from '../../AssetsLoader';
 import { Text } from '@pixi/text';
-import { DisplayScoreFn, ResetGameSceneFn, StartPlayGameFn } from '../type';
+import { ResetGameSceneFn, StartPlayGameFn } from '../type';
 import { AppConstants } from '../Constants';
 import Emitter from '../util';
 
 
 export class UIController {
     private _startPlayGameCall: StartPlayGameFn;
-    private _displayScoreCall: DisplayScoreFn;
     private _resetGameSceneCall: ResetGameSceneFn;
 
 
     constructor({
         startPlayGameCallBack,
-        displayScoreCallBack,
         resetGameSceneCallBack
     }: {
         startPlayGameCallBack: StartPlayGameFn,
-        displayScoreCallBack: DisplayScoreFn,
         resetGameSceneCallBack: ResetGameSceneFn
     }) {
 
         this._useEventEffect();
 
         this._startPlayGameCall = startPlayGameCallBack;
-        this._displayScoreCall = displayScoreCallBack;
         this._resetGameSceneCall = resetGameSceneCallBack;
     }
 
@@ -146,8 +142,8 @@ export class UIController {
         Emitter.emit(AppConstants.addToSceneEvent, overBg);
 
         // display score at position
-        const positionDisplayScore = new Point(400, 340);
-        this._displayScoreCall(positionDisplayScore);
+        const positionDisplayScore: IPointData = { x: 400, y: 340 };
+        Emitter.emit(AppConstants.displayScore, positionDisplayScore);
     }
 
 }

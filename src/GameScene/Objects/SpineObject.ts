@@ -1,7 +1,7 @@
 import 'pixi-spine';
 import '@pixi-spine/loader-3.8';
 import { Assets } from '@pixi/assets';
-import { Spine } from 'pixi-spine';
+import { ISkeletonData, Spine } from 'pixi-spine';
 import { BaseObject } from './BaseObject';
 import { IPointData } from '../../pixi';
 import { AddAnimationOption, AnimationOption } from '../type';
@@ -10,7 +10,7 @@ import { AppConstants } from '../Constants';
 
 export class SpineObject extends BaseObject {
     private _url: string;
-    private _spineData: any;
+    private _spineData: ISkeletonData;
     protected _spine: Spine;
     private _animationName: string;
     private _animationSpeed: number;
@@ -20,6 +20,7 @@ export class SpineObject extends BaseObject {
 
         // set speed for spine
         this._animationSpeed = 1;
+
     }
 
     /** method to get current animation name */

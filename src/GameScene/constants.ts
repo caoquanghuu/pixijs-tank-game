@@ -1,5 +1,5 @@
 import { Size } from './type';
-import { IPointData, Point } from '../pixi';
+import { IPointData } from '../pixi';
 
 export namespace AppConstants {
     export const screenWidth: number = 800;
@@ -15,8 +15,8 @@ export namespace AppConstants {
     export const minScreenUseAbleHeight: number = 10;
     export const maxScreenUseAbleHeight: number = 590;
 
-    export const defaultScoreDisplayPosition: Point = new Point(760, 10);
-    export const positionOfBunker: Point = new Point(400, 580);
+    export const defaultScoreDisplayPosition: IPointData = { x: 760, y: 10 };
+    export const positionOfBunker: IPointData = { x: 400, y: 580 };
     export const textGameOverPosition: IPointData = { x: 180, y: 80 };
     export const textYourScorePosition: IPointData = { x: 180, y: 110 };
     export const buttonReplayPosition: IPointData = { x: 180, y: 180 };
@@ -90,5 +90,7 @@ export namespace AppConstants {
     export const tankMoveTexturesName: string[] = ['tank-move-up', 'tank-move-down', 'tank-move-left', 'tank-move-right'];
     export const tankStandTexturesName: string[] = ['tank-stand-up', 'tank-stand-down', 'tank-stand-left', 'tank-stand-right'];
     export const hpTexturesName: string[] = ['1-hp', '2-hp', '3-hp', '4-hp', 'player-hp'];
+
+    export const displayScore: string = 'display-score';
 
 }
