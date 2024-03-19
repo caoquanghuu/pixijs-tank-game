@@ -1,22 +1,25 @@
 import { IPointData } from '../../pixi';
 import { Bullet } from '../Objects/Bullet';
 import { Direction } from '../type';
-import { BaseObject } from '../Objects/BaseObject';
 import { sound } from '@pixi/sound';
 import { AppConstants } from '../Constants';
 import Emitter from '../util';
 import { BulletPool } from '../ObjectPool/BulletPool';
+import { ExplosionPool } from '../ObjectPool/ExplosionPool';
 
 export class BulletController {
 
     // bullets list which display on game sense
     private _usingBullets: Bullet [] = [];
     private _bulletPool: BulletPool;
+    private _explosionPool: ExplosionPool;
 
     constructor() {
         this._useEventEffect();
 
         this._bulletPool = new BulletPool();
+
+        this._explosionPool = new ExplosionPool();
     }
 
     get bullets(): Bullet[] {
@@ -78,26 +81,26 @@ export class BulletController {
         // remove bullet in game sense
         bullet.remove();
 
-        // create a sprite with explosion
-        const explosion = new BaseObject('explosion');
-
-        // set size for explosion sprite
-        explosion.setImageSize(AppConstants.explosionSpriteSize);
-
-        // add this explosion to game
-        explosion.show();
-
-        // set position for it where bullet being remove
-        explosion.position = bullet.position;
-
         // set sound for explosion
         if (bullet.isPlayerBullet) {
             sound.play('explosion');
             sound.volume('explosion', AppConstants.volumeOfExplosion);
         }
 
-        // remove this bullet after time
-        setTimeout(() => { explosion.remove(); }, AppConstants.timeExplosionDisappear);
+        // create a explosion where bullet being remove
+        this._displayExplosion(bullet.position);
+
+    }
+
+    private _displayExplosion(position: IPointData) {
+        const explosion = this._explosionPool.releaseObject();
+        explosion.position = position;
+        explosion.show();
+
+        setTimeout(() => {
+            explosion.remove();
+            this._explosionPool.getObject(explosion);
+        }, AppConstants.timeExplosionDisappear);
     }
 
 

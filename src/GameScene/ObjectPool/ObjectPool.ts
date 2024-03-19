@@ -26,6 +26,6 @@ export class ObjectsPool {
 
         // get object die from controller
         // return object to object pool when object die
-        this.objectPool.push(object);
+        this.objectPool.unshift(object);
     }
 }
