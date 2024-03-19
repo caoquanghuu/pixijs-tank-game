@@ -11,8 +11,8 @@ export class TankPool {
 
     // a array to contain bot tank
     private _tanksPool: Tank[] = [];
-    private _playerTank: Tank;
     private _tankDieCall: TankDieFn;
+    private _playerTank: Tank;
 
     /**
      * constructor tank pool base on number of tank
@@ -27,6 +27,7 @@ export class TankPool {
         }
 
         this._playerTank = new Tank(true, this._tankDieCall);
+
     }
 
     /**
@@ -37,7 +38,9 @@ export class TankPool {
     public releaseTank(type: boolean): Tank {
 
         if (type) {
+
             return this._playerTank;
+
         } else {
             // get tank from tank pool and return that tank
             const tank = this._tanksPool.pop();
@@ -49,7 +52,7 @@ export class TankPool {
 
         // get tank die from tank controller
         // return tank to tank pool when tank die
-        this._tanksPool.push(tank);
+        this._tanksPool.unshift(tank);
     }
 
     get tankPool(): Tank[] {

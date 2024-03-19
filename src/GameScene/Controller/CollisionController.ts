@@ -183,22 +183,25 @@ export class CollisionController {
 
         // check collision with bullet and environment
         bullets.forEach(bullet => {
+
+            let isBulletHaveCollision: boolean = false;
             environments.forEach(environment => {
                 const isCollision = checkCollision(bullet, environment);
                 if (isCollision) {
-
-                    // remove the bullet
-                    this._removeBulletCall(bullet);
+                    isBulletHaveCollision = true;
 
                     // remove the environment
                     this._removeEnvironmentCall(environment);
                 }
             });
 
+            if (isBulletHaveCollision) this._removeBulletCall(bullet);
+
             // check collision with bullet and bunker
             const isCollision = checkCollision(bullet, bunker);
             if (isCollision) {
                 Emitter.emit(AppConstants.displayGameOverEvent, null);
+                this._removeBulletCall(bullet);
             }
 
         });

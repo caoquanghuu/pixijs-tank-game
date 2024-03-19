@@ -13,10 +13,13 @@ export class BulletPool {
         // create bullets object with define from begin*/
         for (let i = 0; i < this._maxBullets; i++) {
 
-            const bullet = new Bullet();
-
-            this._bulletPool.push(bullet);
+            this._createBullet();
         }
+    }
+
+    private _createBullet() {
+        const bullet = new Bullet();
+        this._bulletPool.push(bullet);
     }
 
     /**
@@ -25,18 +28,18 @@ export class BulletPool {
      */
     public releaseBullet(): Bullet {
         if (!this._bulletPool) {
-
-            const bullet = new Bullet();
-            this._bulletPool.push(bullet);
-
-            return this._bulletPool.pop();
-        } else {
-
-            return this._bulletPool.pop();
+            this._createBullet();
         }
+        const bullet = this._bulletPool.pop();
+        return bullet;
     }
 
     public getBullet(bullet: Bullet) {
-        this._bulletPool.push(bullet);
+        bullet.isPlayerBullet = false;
+        this._bulletPool.unshift(bullet);
+    }
+
+    get bulletPool(): Bullet[] {
+        return this._bulletPool;
     }
 }

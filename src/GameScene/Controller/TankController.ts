@@ -46,12 +46,7 @@ export class TankController {
         this._spineBoy.remove();
 
         this._usingTanks.forEach((tank) => {
-            if (!tank.isPlayerTank) {
-                this._tankDie(tank);
-            } else {
-                this._playerTank.remove();
-                this._playerTank = undefined;
-            }
+            tank.remove();
         });
 
         this._usingTanks = [];
@@ -59,7 +54,6 @@ export class TankController {
 
     public init(): void {
         this._getTank(true);
-        this._getTank(false);
 
         this._spineBoy.show();
         this._spineBoy.position = this._playerTank.position;

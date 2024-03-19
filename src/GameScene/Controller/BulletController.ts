@@ -54,10 +54,11 @@ export class BulletController {
     }
 
     public reset(): void {
-        if (!this._usingBullets) return;
         this._usingBullets.forEach(bullet => {
             bullet.remove();
+            this._bulletPool.getBullet(bullet);
         });
+
         this._usingBullets = [];
     }
 
