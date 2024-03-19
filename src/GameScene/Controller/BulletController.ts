@@ -5,18 +5,22 @@ import { BaseObject } from '../Objects/BaseObject';
 import { sound } from '@pixi/sound';
 import { AppConstants } from '../Constants';
 import Emitter from '../util';
+import { BulletPool } from '../ObjectPool/BulletPool';
 
 export class BulletController {
 
     // bullets list which display on game sense
-    private _bullets: Bullet [] = [];
+    private _usingBullets: Bullet [] = [];
+    private _bulletPool: BulletPool;
 
     constructor() {
         this._useEventEffect();
+
+        this._bulletPool = new BulletPool();
     }
 
     get bullets(): Bullet[] {
-        return this._bullets;
+        return this._usingBullets;
     }
 
     /**
@@ -28,12 +32,13 @@ export class BulletController {
     public createBullet(option: {position: IPointData, direction: Direction, isPlayer: boolean}) {
 
         // create a new bullet
-        const bullet = new Bullet (option.isPlayer);
-        this._bullets.push(bullet);
+        const bullet = this._bulletPool.releaseBullet();
+        this._usingBullets.push(bullet);
 
         // set position and direction for this bullet
         bullet.position = option.position;
         bullet.direction = option.direction;
+        bullet.isPlayerBullet = option.isPlayer;
 
         // append bullet to game sense
         bullet.show();
@@ -49,10 +54,11 @@ export class BulletController {
     }
 
     public reset(): void {
-        if (!this._bullets) return;
-        this._bullets.forEach(bullet => {
-            this.removeBullet(bullet);
+        if (!this._usingBullets) return;
+        this._usingBullets.forEach(bullet => {
+            bullet.remove();
         });
+        this._usingBullets = [];
     }
 
     /**
@@ -62,8 +68,11 @@ export class BulletController {
     public removeBullet(bullet: Bullet): void {
 
         // remove bullet in array list
-        const p = this._bullets.findIndex(bullets => bullets === bullet);
-        this._bullets.splice(p, 1);
+        const p = this._usingBullets.findIndex(bullets => bullets === bullet);
+        this._usingBullets.splice(p, 1);
+
+        // return bullet to bullet pool
+        this._bulletPool.getBullet(bullet);
 
         // remove bullet in game sense
         bullet.remove();
@@ -98,7 +107,7 @@ export class BulletController {
     public update(dt: number): void {
 
         //check bullet position out of map yet then:
-        this._bullets.forEach(bullet => {
+        this._usingBullets.forEach(bullet => {
 
             // check bullet position out of map yet?
             // if is it.

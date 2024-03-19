@@ -60,6 +60,7 @@ export namespace AppConstants {
     export const maxHpOfBossTank: number = 3;
     export const maxHpOfAiTank: number = 1;
     export const maxNumberOfAiTank: number = 20;
+    export const maxNumberOfBullet: number = 50;
 
     export const colorOfBossTank: string = '106BEE';
     export const colorOfAiTank: string = 'F02468';

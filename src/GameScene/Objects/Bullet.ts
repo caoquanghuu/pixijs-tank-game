@@ -12,7 +12,7 @@ export class Bullet extends BaseObject {
      * create a bullet object with image and speed and move engine
      * @param isPlayer is this bullet is belong to player tank
      */
-    constructor(isPlayer: boolean) {
+    constructor() {
         // set id is bullet to get image of bullet */
         super('bullet');
 
@@ -21,9 +21,6 @@ export class Bullet extends BaseObject {
 
         // set move engine for bullet
         this.moveEngine = new BaseEngine();
-
-        // set property for this bullet
-        this._isPlayerBullet = isPlayer;
 
         // resize bullet sprite
         this.setImageSize(AppConstants.bulletSpriteSize);
@@ -34,6 +31,10 @@ export class Bullet extends BaseObject {
 
     get isPlayerBullet(): boolean {
         return this._isPlayerBullet;
+    }
+
+    set isPlayerBullet(isPlayer: boolean) {
+        this._isPlayerBullet = isPlayer;
     }
 
     get direction(): Direction {
