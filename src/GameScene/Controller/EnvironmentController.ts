@@ -4,9 +4,11 @@ import { IPointData } from '../../pixi';
 import { Bunker, Environment, Reward, getRandomBoolean } from '../util';
 import { AppConstants } from '../Constants';
 import { EnvironmentPool } from '../ObjectPool/EnvironmentPool';
+import { RewardPool } from '../ObjectPool/RewardPool';
 
 export class EnvironmentController {
     private _environmentPool: EnvironmentPool;
+    private _rewardPool: RewardPool;
 
     // list of environment objects which will be create on map
     private _usingEnvironmentObjects: Environment[] = [];
@@ -19,6 +21,8 @@ export class EnvironmentController {
         this._createNewRandomPositionCall = createNewRandomPositionCallBack;
 
         this._environmentPool = new EnvironmentPool();
+
+        this._rewardPool = new RewardPool();
 
         this._bunker = new Bunker(AppConstants.textureName.baseBunker);
         this._bunker.setImageSize(AppConstants.bunkerSpriteSize);
@@ -104,15 +108,10 @@ export class EnvironmentController {
         if (randomBoolean) {
 
             // create new object is hp bag
-            const rewardObject = new Reward(AppConstants.textureName.medicalBag);
+            const rewardObject = this._rewardPool.releaseObject();
 
             // set position of it where it be call
             rewardObject.position = position;
-
-            // set size
-            rewardObject.setImageSize(AppConstants.rewardSpriteSize);
-
-            rewardObject.size = AppConstants.rewardSpriteSize;
 
             // add hp bag to game scene
             rewardObject.show();
@@ -135,6 +134,10 @@ export class EnvironmentController {
     }
 
     public removeObject(object: BaseObject, objectList: BaseObject[]): void {
+        if (object instanceof Reward) {
+            this._rewardPool.getObject(object);
+        }
+
         object.remove();
 
         const p = objectList.findIndex(objects => objects === object);

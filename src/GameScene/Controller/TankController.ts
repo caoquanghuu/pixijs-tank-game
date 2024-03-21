@@ -99,7 +99,7 @@ export class TankController {
     private _fireBulletOfSpineBoy(position: IPointData, direction: Direction, isPlayerBullet: boolean): void {
         // animation fire for spine boy
         if (isPlayerBullet) {
-            this._spineBoy.addAnimation({ trackIndex: 2, animationName: 'shoot', loop: false, delay:0 });
+            this._spineBoy.addAnimation({ trackIndex: 2, animationName: AppConstants.animationName.shoot, loop: false, delay:0 });
         }
     }
 
