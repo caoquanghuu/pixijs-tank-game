@@ -1,9 +1,8 @@
 import 'pixi-spine';
 import '@pixi-spine/loader-3.8';
-import { Assets } from '@pixi/assets';
 import { ISkeletonData, Spine } from 'pixi-spine';
 import { BaseObject } from './BaseObject';
-import { IPointData } from '../../pixi';
+import { IPointData, Assets } from '../../pixi';
 import { AddAnimationOption, AnimationOption } from '../type';
 import Emitter from '../util';
 import { AppConstants } from '../Constants';

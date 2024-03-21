@@ -1,7 +1,6 @@
 
-import { Sprite, IPointData } from '../../pixi';
+import { Sprite, IPointData, Text } from '../../pixi';
 import { AssetsLoader } from '../../AssetsLoader';
-import { Text } from '@pixi/text';
 import { ResetGameSceneFn, StartPlayGameFn } from '../type';
 import { AppConstants } from '../Constants';
 import Emitter from '../util';

@@ -11,6 +11,7 @@ export * from '@pixi/graphics';
 export * from '@pixi/ui';
 export * from '@pixi/assets';
 
+
 // Renderer plugins
 import { extensions } from '@pixi/core';
 import { BatchRenderer } from '@pixi/core';
@@ -23,4 +24,5 @@ extensions.add(TickerPlugin);
 // Loader plugins
 import { spritesheetAsset } from '@pixi/spritesheet';
 extensions.add(spritesheetAsset);
+
 

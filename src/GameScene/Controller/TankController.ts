@@ -4,7 +4,7 @@ import { CreateNewRandomPositionFn, Direction, SetNewScoreFn } from '../type';
 import Emitter, { getRandomArbitrary, getRandomBoolean, randomEnumKey, switchFn } from '../util';
 import { SpineBoy } from '../Objects/SpineBoy';
 import { AppConstants } from '../Constants';
-import { IPointData } from '@pixi/core';
+import { IPointData } from '../../pixi';
 
 export class TankController {
 

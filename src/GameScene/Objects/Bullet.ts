@@ -3,7 +3,7 @@ import { BaseEngine } from '../Engine/BaseEngine';
 import { switchFn } from '../util';
 import { Direction } from '../type';
 import { AppConstants } from '../Constants';
-import { Rectangle } from '@pixi/core';
+import { Rectangle } from '../../pixi';
 
 export class Bullet extends BaseObject {
     // property define this bullet belong to player or bot tank
