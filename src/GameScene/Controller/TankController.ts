@@ -33,7 +33,7 @@ export class TankController {
         this._spineBoy = new SpineBoy();
 
         this._spineBoy.loadBundle('assets/units/spine2d/spine-boy/spine-boy-pro.json').then(() => {
-            this._spineBoy.setAnimation({ trackIndex:0, animationName: 'idle', loop: true });
+            this._spineBoy.setAnimation({ trackIndex:0, animationName: AppConstants.animationName.idle, loop: true });
         });
     }
 
@@ -60,7 +60,7 @@ export class TankController {
     }
 
     private _useEventEffect(): void {
-        Emitter.on('fire-bullet', this._fireBulletOfSpineBoy.bind(this));
+        Emitter.on(AppConstants.eventEmitter.fireBullet, this._fireBulletOfSpineBoy.bind(this));
     }
 
     private _getTank(type: boolean) {
@@ -113,7 +113,7 @@ export class TankController {
         if (tankDie.isPlayerTank) {
 
             // call game over to UI controller
-            Emitter.emit(AppConstants.displayGameOverEvent, null);
+            Emitter.emit(AppConstants.eventEmitter.displayGameOver, null);
         } else {
 
             //return tank to tank pool

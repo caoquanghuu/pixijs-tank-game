@@ -1,3 +1,4 @@
+import { AppConstants } from '../Constants';
 import { Direction } from '../type';
 import { keyboard } from '../util';
 import { BaseEngine } from './BaseEngine';
@@ -20,10 +21,10 @@ export class ControlEngine extends BaseEngine {
     constructor() {
         super();
         // add event listener for keydown
-        this._left = keyboard('ArrowLeft'),
-        this._up = keyboard('ArrowUp'),
-        this._right = keyboard('ArrowRight'),
-        this._down = keyboard('ArrowDown');
+        this._left = keyboard(AppConstants.keyboardEvent.moveLeft),
+        this._up = keyboard(AppConstants.keyboardEvent.moveUp),
+        this._right = keyboard(AppConstants.keyboardEvent.moveRight),
+        this._down = keyboard(AppConstants.keyboardEvent.moveDown);
 
         this._left.press = () => {
             this.direction = Direction.LEFT;

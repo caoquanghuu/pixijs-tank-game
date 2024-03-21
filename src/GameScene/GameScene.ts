@@ -37,13 +37,13 @@ export class GameScene extends Container {
         // test spine object
         const spine = new SpineObject();
         spine.loadBundle('assets/units/spine2d/spine-boy/spine-boy-pro.json').then(() => {
-            spine.setAnimation({ trackIndex:0, animationName: 'idle', loop: true });
-            spine.addAnimation({ trackIndex:0, animationName: 'aim', loop: false, delay:0.5 });
-            spine.addAnimation({ trackIndex:1, animationName: 'shoot', loop: false, delay:0.75 });
-            spine.addAnimation({ trackIndex:0, animationName: 'walk', loop: true, delay:1.1 });
-            spine.addAnimation({ trackIndex:0, animationName: 'run', loop: true, delay:1.5 });
-            spine.addAnimation({ trackIndex:0, animationName: 'idle', loop: true, delay:1.65 });
-            spine.addAnimation({ trackIndex:1, animationName: 'shoot', loop: false, delay:4.5 });
+            spine.setAnimation({ trackIndex:0, animationName: AppConstants.animationName.idle, loop: true });
+            spine.addAnimation({ trackIndex:0, animationName: AppConstants.animationName.aim, loop: false, delay:0.5 });
+            spine.addAnimation({ trackIndex:1, animationName: AppConstants.animationName.shoot, loop: false, delay:0.75 });
+            spine.addAnimation({ trackIndex:0, animationName: AppConstants.animationName.walk, loop: true, delay:1.1 });
+            spine.addAnimation({ trackIndex:0, animationName: AppConstants.animationName.run, loop: true, delay:1.5 });
+            spine.addAnimation({ trackIndex:0, animationName: AppConstants.animationName.idle, loop: true, delay:1.65 });
+            spine.addAnimation({ trackIndex:1, animationName: AppConstants.animationName.shoot, loop: false, delay:4.5 });
             spine.spine.scale = { x:-0.2, y:0.2 };
             const position: IPointData = { x: 400, y: 400 };
             spine.position = position;
@@ -53,11 +53,11 @@ export class GameScene extends Container {
     }
 
     private _useEventEffect() {
-        Emitter.on(AppConstants.addToSceneEvent, this.addToScene.bind(this));
-        Emitter.on(AppConstants.removeFromSceneEvent, this.removeFromScene.bind(this));
+        Emitter.on(AppConstants.eventEmitter.addToScene, this.addToScene.bind(this));
+        Emitter.on(AppConstants.eventEmitter.removeFromScene, this.removeFromScene.bind(this));
         Emitter.on(AppConstants.displayScore, this.displayScore.bind(this));
-        Emitter.on(AppConstants.addObjectToSceneEvent, this._addObjectToScene.bind(this));
-        Emitter.on(AppConstants.removeObjectFromSceneEvent, this._removeObjectFromScene.bind(this));
+        Emitter.on(AppConstants.eventEmitter.addObjectToScene, this._addObjectToScene.bind(this));
+        Emitter.on(AppConstants.eventEmitter.removeObjectFromScene, this._removeObjectFromScene.bind(this));
     }
 
     /**
@@ -85,7 +85,7 @@ export class GameScene extends Container {
         this._playerScore += score;
 
         // call display score on changed score
-        const positionDisplayScore = AppConstants.defaultScoreDisplayPosition;
+        const positionDisplayScore: IPointData = { x: AppConstants.defaultScoreDisplayPosition.x, y: AppConstants.defaultScoreDisplayPosition.y };
         this.displayScore(positionDisplayScore);
     }
 
@@ -95,7 +95,7 @@ export class GameScene extends Container {
     public startPlayGame() {
 
         // set a back ground of game
-        const bg = new Sprite(AssetsLoader.getTexture('game-back-ground'));
+        const bg = new Sprite(AssetsLoader.getTexture(AppConstants.textureName.backGround));
         this.addChild(bg);
         bg.width = AppConstants.screenWidth;
         bg.height = AppConstants.screenHeight;
@@ -108,7 +108,7 @@ export class GameScene extends Container {
 
         this._createObjects();
 
-        Emitter.emit('start-update', null);
+        Emitter.emit(AppConstants.eventEmitter.startUpDate, null);
     }
 
     /**
@@ -128,7 +128,7 @@ export class GameScene extends Container {
         const scoreArray: string[] = `${this._playerScore}`.split('').reverse();
 
         // create a start position
-        const position = positionDisplay;
+        const position: IPointData = { x: positionDisplay.x, y: positionDisplay.y };
 
         // which each element will be convert to a sprite display number of that element
         const scoreSpriteArray: Sprite[] = scoreArray.map(score => {
@@ -188,7 +188,7 @@ export class GameScene extends Container {
         }
 
         if (object instanceof Bullet && otherObject instanceof Bunker) {
-            Emitter.emit(AppConstants.displayGameOverEvent, null);
+            Emitter.emit(AppConstants.eventEmitter.displayGameOver, null);
         }
     }
 

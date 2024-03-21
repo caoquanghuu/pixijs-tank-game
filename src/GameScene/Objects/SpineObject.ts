@@ -18,7 +18,7 @@ export class SpineObject extends BaseObject {
         super();
 
         // set speed for spine
-        this._animationSpeed = 1;
+        this._animationSpeed = AppConstants.spineAnimationSpeed;
 
     }
 
@@ -44,11 +44,11 @@ export class SpineObject extends BaseObject {
     }
 
     override show() {
-        Emitter.emit(AppConstants.addToSceneEvent, this.spine);
+        Emitter.emit(AppConstants.eventEmitter.addToScene, this.spine);
     }
 
     override remove() {
-        Emitter.emit(AppConstants.removeFromSceneEvent, this.spine);
+        Emitter.emit(AppConstants.eventEmitter.removeFromScene, this.spine);
     }
 
     /**

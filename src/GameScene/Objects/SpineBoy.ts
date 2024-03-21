@@ -37,13 +37,13 @@ export class SpineBoy extends SpineObject {
      * method to change animation base on input key
      */
     private changeAnimation() {
-        this._left = keyboard('ArrowLeft'),
-        this._up = keyboard('ArrowUp'),
-        this._right = keyboard('ArrowRight'),
-        this._down = keyboard('ArrowDown');
+        this._left = keyboard(AppConstants.keyboardEvent.moveLeft),
+        this._up = keyboard(AppConstants.keyboardEvent.moveUp),
+        this._right = keyboard(AppConstants.keyboardEvent.moveRight),
+        this._down = keyboard(AppConstants.keyboardEvent.moveDown);
 
         this._left.press = () => {
-            this.setAnimation({ trackIndex:1, animationName: 'run', loop: true });
+            this.setAnimation({ trackIndex:1, animationName: AppConstants.animationName.run, loop: true });
             this.flip = true;
             this._keyHandler.isLeft = true;
         };
@@ -51,7 +51,7 @@ export class SpineBoy extends SpineObject {
             this._keyHandler.isLeft = false;
         };
         this._right.press = () => {
-            this.setAnimation({ trackIndex:1, animationName: 'run', loop: true });
+            this.setAnimation({ trackIndex:1, animationName: AppConstants.animationName.run, loop: true });
             this.flip = false;
             this._keyHandler.isRight = true;
         };
@@ -59,14 +59,14 @@ export class SpineBoy extends SpineObject {
             this._keyHandler.isRight = false;
         };
         this._up.press = () => {
-            this.setAnimation({ trackIndex:1, animationName: 'hoverboard', loop: true });
+            this.setAnimation({ trackIndex:1, animationName: AppConstants.animationName.hoverBoard, loop: true });
             this._keyHandler.isUp = true;
         };
         this._up.release = () => {
             this._keyHandler.isUp = false;
         };
         this._down.press = () => {
-            this.setAnimation({ trackIndex:1, animationName: 'hoverboard', loop: true });
+            this.setAnimation({ trackIndex:1, animationName: AppConstants.animationName.hoverBoard, loop: true });
             this._keyHandler.isDown = true;
         };
         this._down.release = () => {
@@ -85,10 +85,10 @@ export class SpineBoy extends SpineObject {
         // spine boy have idle animation when tank stop
         if (this._keyHandler.isUp === false && this._keyHandler.isDown === false && this._keyHandler.isLeft === false && this._keyHandler.isRight === false) {
             // check current animation is idle or not
-            if (this.animationName === 'idle') return;
+            if (this.animationName === AppConstants.animationName.idle) return;
 
             // set back animation idle for spine boy when stop moving
-            this.setAnimation({ trackIndex:1, animationName: 'idle', loop: true });
+            this.setAnimation({ trackIndex:1, animationName: AppConstants.animationName.idle, loop: true });
         }
     }
 }

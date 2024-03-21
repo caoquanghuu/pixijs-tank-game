@@ -8,9 +8,9 @@ export class HPBar extends BaseObject {
     private _HP: number;
 
     constructor(isPlayer: boolean) {
-        super(isPlayer ? 'player-hp' : 'bot-hp');
+        super(isPlayer ? AppConstants.textureName.playerHP : AppConstants.textureName.botHp);
 
-        Emitter.emit(AppConstants.addToSceneEvent, this.sprite);
+        Emitter.emit(AppConstants.eventEmitter.addToScene, this.sprite);
 
         this._isPlayer = isPlayer;
     }

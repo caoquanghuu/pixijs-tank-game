@@ -6,7 +6,7 @@ export class ExplosionPool extends ObjectsPool {
     constructor() {
         super();
         for (let i = 0; i < AppConstants.maxNumberOfBullet; i++) {
-            const explosion = new BaseObject('explosion');
+            const explosion = new BaseObject(AppConstants.textureName.explosion);
 
             explosion.setImageSize(AppConstants.explosionSpriteSize);
 

@@ -15,7 +15,7 @@ export class Bullet extends BaseObject {
      */
     constructor() {
         // set id is bullet to get image of bullet */
-        super('bullet');
+        super(AppConstants.textureName.bullet);
 
         // set speed of bullet
         this.speed = AppConstants.speedOfBullet;

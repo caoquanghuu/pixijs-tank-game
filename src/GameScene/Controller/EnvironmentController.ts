@@ -20,7 +20,7 @@ export class EnvironmentController {
 
         this._environmentPool = new EnvironmentPool();
 
-        this._bunker = new Bunker('base-bunker');
+        this._bunker = new Bunker(AppConstants.textureName.baseBunker);
         this._bunker.setImageSize(AppConstants.bunkerSpriteSize);
         this._bunker.size = AppConstants.bunkerSpriteSize;
     }
@@ -39,15 +39,15 @@ export class EnvironmentController {
     }
 
     public init() {
-        const position: IPointData = { x: 400, y: 580 };
+        const position: IPointData = AppConstants.positionOfBunker;
         this._bunker.position = position;
         this.bunker.show();
 
         // create tree around bunker
-        const pos1: IPointData = { x: 370, y: 600 };
-        const pos2: IPointData = { x: 430, y: 600 };
-        const pos3: IPointData = { x: 381, y: 560 };
-        for (let i = 0; i < 6; i++) {
+        const pos1: IPointData = { x: AppConstants.positionLeftOfFences.x, y: AppConstants.positionLeftOfFences.y };
+        const pos2: IPointData = { x: AppConstants.positionRightOfFences.x, y: AppConstants.positionRightOfFences.y };
+        const pos3: IPointData = { x: AppConstants.positionTopOfFences.x, y: AppConstants.positionTopOfFences.y };
+        for (let i = 0; i < AppConstants.numberSideOfFence; i++) {
             const object1 = this._environmentPool.releaseObject();
             const object2 = this._environmentPool.releaseObject();
             const object3 = this._environmentPool.releaseObject();
@@ -98,13 +98,13 @@ export class EnvironmentController {
     private _createRewardRandomly(position: IPointData): void {
 
         // get a random number
-        const randomBoolean = getRandomBoolean(10);
+        const randomBoolean = getRandomBoolean(AppConstants.ratioCreateReward);
 
-        // if random number === 1
+        // if random boolean is true
         if (randomBoolean) {
 
             // create new object is hp bag
-            const rewardObject = new Reward('medical-bag');
+            const rewardObject = new Reward(AppConstants.textureName.medicalBag);
 
             // set position of it where it be call
             rewardObject.position = position;

@@ -22,7 +22,7 @@ export class Tank extends BaseObject {
 
     constructor(isPlayer: boolean, tankDieCallBack: TankDieFn) {
         // set image of tank is player tank or bot tank
-        super('tank-stand-up');
+        super(AppConstants.textureName.tankStandUp);
 
         // define methods need to call
         this._tankDieCall = tankDieCallBack;
@@ -108,7 +108,7 @@ export class Tank extends BaseObject {
     public fire(option: {position: IPointData, direction: Direction, isPlayer: boolean}) {
 
         // call fire bullet to tank controller
-        Emitter.emit(AppConstants.fireBulletEvent, option);
+        Emitter.emit(AppConstants.eventEmitter.fireBullet, option);
     }
 
     /**
@@ -129,16 +129,16 @@ export class Tank extends BaseObject {
         if (direction != Direction.STAND) {
 
             // check sound is playing or not
-            const movingSound = sound.find('tank-moving-sound');
+            const movingSound = sound.find(AppConstants.soundCfg.tankMoving);
 
             if (!movingSound.isPlaying) {
 
                 // if sound not playing then play
-                sound.play('tank-moving-sound', { volume: AppConstants.volumeOfTankMoving, loop: true });
+                sound.play(AppConstants.soundCfg.tankMoving, { volume: AppConstants.volumeOfTankMoving, loop: true });
             }
         } else {
             // stop playing moving sound when tank stop
-            sound.stop('tank-moving-sound');
+            sound.stop(AppConstants.soundCfg.tankMoving);
         }
 
     }

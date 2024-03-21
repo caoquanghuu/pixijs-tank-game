@@ -20,9 +20,14 @@ export namespace AppConstants {
     export const textGameOverPosition: IPointData = { x: 180, y: 80 };
     export const textYourScorePosition: IPointData = { x: 180, y: 110 };
     export const buttonReplayPosition: IPointData = { x: 180, y: 180 };
+    export const positionLeftOfFences: IPointData = { x: 370, y: 600 };
+    export const positionRightOfFences: IPointData = { x: 430, y: 600 };
+    export const positionTopOfFences: IPointData = { x: 381, y: 560 };
 
     export const mainMenuTitlePosition: IPointData = { x: 180, y: 60 };
     export const mainMenuButtonPosition: IPointData = { x: 180, y: 180 };
+
+    export const scoreDisplayPositionOnGameOver: IPointData = { x: 400, y: 340 };
 
     export const spaceBetweenScoresNumber: number = 17;
 
@@ -46,6 +51,7 @@ export namespace AppConstants {
     export const distanceOfHpBarAndTank: number = 20;
 
     export const numbersOfEnvironmentObjects: number = 30;
+    export const numberSideOfFence: number = 6;
 
     export const ratioCreateReward: number = 10;
     export const ratioCreateBossTank: number = 50;
@@ -81,19 +87,71 @@ export namespace AppConstants {
     export const speedOfBullet: number = 200;
     export const speedOfTank: number = 100;
 
-    export const addToSceneEvent: string = 'add-to-scene';
-    export const removeFromSceneEvent: string = 'remove-from-scene';
-    export const addObjectToSceneEvent: string = 'add-object-to-scene';
-    export const removeObjectFromSceneEvent: string = 'remove-object-from-scene';
-
-    export const fireBulletEvent: string = 'fire-bullet';
-
-    export const displayGameOverEvent: string = 'display-game-over';
-
     export const tankMoveTexturesName: string[] = ['tank-move-up', 'tank-move-down', 'tank-move-left', 'tank-move-right'];
     export const tankStandTexturesName: string[] = ['tank-stand-up', 'tank-stand-down', 'tank-stand-left', 'tank-stand-right'];
     export const hpTexturesName: string[] = ['1-hp', '2-hp', '3-hp', '4-hp', 'player-hp'];
 
     export const displayScore: string = 'display-score';
 
+    export const spineAnimationSpeed: number = 1;
+
+    export const eventEmitter = {
+        addToScene: 'add-to-scene',
+        removeFromScene: 'remove-from-scene',
+        addObjectToScene: 'add-object-to-scene',
+        removeObjectFromScene: 'remove-object-from-scene',
+        fireBullet: 'fire-bullet',
+        displayGameOver: 'display-game-over',
+        startUpDate: 'start-update',
+        stopUpdate: 'stop-update'
+    };
+
+    export const soundCfg = {
+        explosion: 'explosion',
+        fire: 'bullet-fire',
+        tankMoving: 'tank-moving-sound',
+        mainMusic: 'main-menu-music',
+        collectReward: 'collect-reward-sound',
+    };
+
+    export const textureName = {
+        baseBunker: 'base-bunker',
+        bullet: 'bullet',
+        playerHP: 'player-hp',
+        botHp: 'bot-hp',
+        tankStandUp: 'tank-stand-up',
+        medicalBag: 'medical-bag',
+        tree1: 'tree-1',
+        tree2: 'tree-2',
+        rock: 'rock',
+        explosion: 'explosion',
+        backGround: 'game-back-ground',
+        mainBackGround: 'main-back-ground',
+        title: 'title',
+        button: 'button-sprite'
+    };
+
+    export const text = {
+        start: 'start',
+        gameOver: 'Game Over',
+        yourScore: 'Your Score',
+        playAgain: 'Play Again',
+    };
+
+    export const animationName = {
+        idle : 'idle',
+        run: 'run',
+        hoverBoard: 'hoverboard',
+        aim: 'aim',
+        shoot: 'shoot',
+        walk: 'walk',
+    };
+
+    export const keyboardEvent = {
+        moveLeft: 'ArrowLeft',
+        moveUp: 'ArrowUp',
+        moveRight: 'ArrowRight',
+        moveDown: 'ArrowDown',
+        fire: ' '
+    };
 }

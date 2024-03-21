@@ -36,7 +36,6 @@ export class BulletController {
 
         // create a new bullet
         const bullet = this._bulletPool.releaseBullet();
-        this._usingBullets.push(bullet);
 
         // set position and direction for this bullet
         bullet.position = option.position;
@@ -46,14 +45,16 @@ export class BulletController {
         // append bullet to game sense
         bullet.show();
 
+        this._usingBullets.push(bullet);
+
         // add sound fire bullet if it is player fire
         if (option.isPlayer) {
-            sound.play('bullet-fire', { volume: AppConstants.volumeOfFireBullet });
+            sound.play(AppConstants.soundCfg.fire, { volume: AppConstants.volumeOfFireBullet });
         }
     }
 
     private _useEventEffect(): void {
-        Emitter.on(AppConstants.fireBulletEvent, this.createBullet.bind(this));
+        Emitter.on(AppConstants.eventEmitter.fireBullet, this.createBullet.bind(this));
     }
 
     public reset(): void {
@@ -83,8 +84,7 @@ export class BulletController {
 
         // set sound for explosion
         if (bullet.isPlayerBullet) {
-            sound.play('explosion');
-            sound.volume('explosion', AppConstants.volumeOfExplosion);
+            sound.play(AppConstants.soundCfg.explosion, { volume: AppConstants.volumeOfExplosion });
         }
 
         // create a explosion where bullet being remove

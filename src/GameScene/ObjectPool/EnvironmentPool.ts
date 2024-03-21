@@ -13,9 +13,9 @@ export class EnvironmentPool extends ObjectsPool {
 
         // create environment object with define from begin*/
         for (let i = 0; i < this.maxObjects; i++) {
-            this.createEnvironmentObject('tree-1');
-            this.createEnvironmentObject('tree-2');
-            this.createEnvironmentObject('rock');
+            this.createEnvironmentObject(AppConstants.textureName.tree1);
+            this.createEnvironmentObject(AppConstants.textureName.tree2);
+            this.createEnvironmentObject(AppConstants.textureName.rock);
         }
     }
 

@@ -50,26 +50,26 @@ class Main {
         // Update function
         this._pixiApp.ticker.add(this._update.bind(this));
 
-        sound.add('main-menu-music', 'sound/main-menu-music.mp3');
+        sound.add(AppConstants.soundCfg.mainMusic, 'sound/main-menu-music.mp3');
 
         // add sound collect reward effect
-        sound.add('collect-reward-sound', 'sound/collect-reward-sound.mp3');
+        sound.add(AppConstants.soundCfg.collectReward, 'sound/collect-reward-sound.mp3');
 
         // set moving sound
-        sound.add('tank-moving-sound', 'sound/tank-moving.mp3');
+        sound.add(AppConstants.soundCfg.tankMoving, 'sound/tank-moving.mp3');
 
         // add fire sound
-        sound.add('bullet-fire', 'sound/bullet-fire.mp3');
+        sound.add(AppConstants.soundCfg.fire, 'sound/bullet-fire.mp3');
 
         // add explosion sound
-        sound.add('explosion', 'sound/explosion.mp3');
+        sound.add(AppConstants.soundCfg.explosion, 'sound/explosion.mp3');
     }
 
     private _useEventEffect() {
-        Emitter.on('stop-update', () => {
+        Emitter.on(AppConstants.eventEmitter.stopUpdate, () => {
             this._isUpdate = false;
         });
-        Emitter.on('start-update', () => {
+        Emitter.on(AppConstants.eventEmitter.startUpDate, () => {
             this._isUpdate = true;
         });
     }
