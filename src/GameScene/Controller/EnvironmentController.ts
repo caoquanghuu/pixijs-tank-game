@@ -1,7 +1,7 @@
 import { BaseObject } from '../Objects/BaseObject';
 import { CreateNewRandomPositionFn } from '../type';
 import { IPointData } from '../../pixi';
-import { getRandomBoolean } from '../util';
+import { Bunker, Environment, Reward, getRandomBoolean } from '../util';
 import { AppConstants } from '../Constants';
 import { EnvironmentPool } from '../ObjectPool/EnvironmentPool';
 
@@ -9,9 +9,9 @@ export class EnvironmentController {
     private _environmentPool: EnvironmentPool;
 
     // list of environment objects which will be create on map
-    private _usingEnvironmentObjects: BaseObject[] = [];
-    private _rewardObjects: BaseObject[] = [];
-    private _bunker: BaseObject;
+    private _usingEnvironmentObjects: Environment[] = [];
+    private _rewardObjects: Reward[] = [];
+    private _bunker: Bunker;
     private _createNewRandomPositionCall: CreateNewRandomPositionFn;
 
     constructor(createNewRandomPositionCallBack: CreateNewRandomPositionFn) {
@@ -20,21 +20,21 @@ export class EnvironmentController {
 
         this._environmentPool = new EnvironmentPool();
 
-        this._bunker = new BaseObject('base-bunker');
+        this._bunker = new Bunker('base-bunker');
         this._bunker.setImageSize(AppConstants.bunkerSpriteSize);
         this._bunker.size = AppConstants.bunkerSpriteSize;
     }
 
-    get rewardObjects(): BaseObject[] {
+    get rewardObjects(): Reward[] {
         return this._rewardObjects;
     }
 
     // method for collision controller can access to get position of environment objects*/
-    get environmentObjects(): BaseObject[] {
+    get environmentObjects(): Environment[] {
         return this._usingEnvironmentObjects;
     }
 
-    get bunker(): BaseObject {
+    get bunker(): Bunker {
         return this._bunker;
     }
 
@@ -104,7 +104,7 @@ export class EnvironmentController {
         if (randomBoolean) {
 
             // create new object is hp bag
-            const rewardObject = new BaseObject('medical-bag');
+            const rewardObject = new Reward('medical-bag');
 
             // set position of it where it be call
             rewardObject.position = position;

@@ -1,6 +1,7 @@
 
 import { AppConstants } from '../Constants';
 import { BaseObject } from '../Objects/BaseObject';
+import { Environment } from '../util';
 import { ObjectsPool } from './ObjectPool';
 
 export class EnvironmentPool extends ObjectsPool {
@@ -30,7 +31,7 @@ export class EnvironmentPool extends ObjectsPool {
     private createEnvironmentObject(name: string): void {
 
         // use name to get image from asset
-        const object = new BaseObject(name);
+        const object = new Environment(name);
 
         // set size */
         object.setImageSize(AppConstants.environmentSpriteSize);

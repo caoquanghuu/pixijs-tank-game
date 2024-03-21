@@ -83,6 +83,8 @@ export namespace AppConstants {
 
     export const addToSceneEvent: string = 'add-to-scene';
     export const removeFromSceneEvent: string = 'remove-from-scene';
+    export const addObjectToSceneEvent: string = 'add-object-to-scene';
+    export const removeObjectFromSceneEvent: string = 'remove-object-from-scene';
 
     export const fireBulletEvent: string = 'fire-bullet';
 

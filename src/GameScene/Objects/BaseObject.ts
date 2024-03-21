@@ -101,13 +101,13 @@ export class BaseObject {
      * method to render object to game scene
      */
     public show(): void {
-        Emitter.emit(AppConstants.addToSceneEvent, this.sprite);
+        Emitter.emit(AppConstants.addObjectToSceneEvent, this);
     }
     /**
      * method to stop render object from game scene
      */
     public remove(): void {
-        Emitter.emit(AppConstants.removeFromSceneEvent, this.sprite);
+        Emitter.emit(AppConstants.removeObjectFromSceneEvent, this);
     }
 
     public move(deltaTime: number, isBullet: boolean) {

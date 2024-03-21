@@ -3,6 +3,7 @@ import { BaseEngine } from '../Engine/BaseEngine';
 import { switchFn } from '../util';
 import { Direction } from '../type';
 import { AppConstants } from '../Constants';
+import { Rectangle } from '@pixi/core';
 
 export class Bullet extends BaseObject {
     // property define this bullet belong to player or bot tank
@@ -83,5 +84,6 @@ export class Bullet extends BaseObject {
         //bullet move
         this.move(dt, true);
         this.rotateSpriteFollowDirection();
+        this.rectangle = new Rectangle(this.position.x, this.position.y, this.size.w, this.size.h);
     }
 }

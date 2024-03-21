@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import { IPointData, Rectangle } from '../pixi';
 import EventEmitter from 'eventemitter3';
 import { BaseObject } from './Objects/BaseObject';
-import { Direction } from './type';
+import { Direction, Size } from './type';
+import { AppConstants } from './Constants';
 
 export const randomEnumKey = (enumeration: any): any => {
     const keys = Object.keys(enumeration).filter(
@@ -124,6 +126,21 @@ export function createRandomDirection(): Direction {
     return direction;
 }
 
+export function removeFromArray(param: BaseObject, array: BaseObject[]) {
+    const p: number = array.findIndex(value => param === value);
+    if (p !== -1) {
+        array.splice(p, 1);
+    } else {
+        console.log(`${param}` + 'not exist');
+    }
+}
+
+export class Environment extends BaseObject {}
+
+export class Reward extends BaseObject {}
+
+export class Bunker extends BaseObject {}
+
 const eventEmitter = new EventEmitter();
 const Emitter = {
     on: (event: string, fn) => eventEmitter.on(event, fn),
@@ -134,3 +151,63 @@ const Emitter = {
 };
 Object.freeze(Emitter);
 export default Emitter;
+
+export namespace CollisionHelper {
+    export function checkCollisionHelp(objects: BaseObject[], onCollision: (object1: BaseObject, object2: BaseObject) => void) {
+        objects.forEach(object => {
+            objects.forEach(otherObject => {
+                if (object !== otherObject) {
+                    if (checkCollision(object, otherObject)) {
+                        onCollision(object, otherObject);
+                    }
+                }
+            });
+        });
+    }
+}
+
+
+/**
+     * method to return a new rectangle which have no collision with other objects on map
+     * @param size size of object want to get rectangle
+     * @returns return rectangle calculated base on size
+     */
+export function createNewRandomPosition(size: Size, inGameObjectsList: BaseObject[]): Rectangle {
+
+    // create a new rectangle
+    const rectangle = new Rectangle(null, null, size.w, size.h);
+
+    let isPositionAvailable = true;
+
+    do {
+        // create a test position which will be compare
+        const pos1: IPointData = { x: getRandomArbitrary(AppConstants.minScreenUseAbleWidth, AppConstants.maxScreenUseAbleWidth), y: getRandomArbitrary(AppConstants.minScreenUseAbleHeight, AppConstants.maxScreenUseAbleHeight) };
+
+        // try assign test position to rectangle
+        rectangle.x = pos1.x;
+        rectangle.y = pos1.y;
+
+        // check this test rectangle is collision with other objects
+        isPositionAvailable = inGameObjectsList.some(object => {
+
+            // use calculate distance to get random position
+            const pos2: IPointData = { x: object.position.x, y: object.position.y };
+            const distance = getDistanceOfTwoPosition(pos1, pos2);
+
+            if (distance < AppConstants.distanceOfObjectsWhenCreate) {
+                return false;
+            }
+
+            // use collision to get random position
+            // const isCollisionWithOther = this.checkCollisionBetweenTwoRectangle(rectangle, object.rectangle);
+            // if (!isCollisionWithOther) {
+            //     return true;
+            // }
+        });
+
+    } while (isPositionAvailable);
+
+    // return that rectangle which will ready to use
+    return rectangle;
+}
+

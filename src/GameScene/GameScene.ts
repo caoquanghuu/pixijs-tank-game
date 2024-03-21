@@ -1,22 +1,18 @@
 import 'pixi-spine';
 import '@pixi-spine/loader-3.8';
-import { Container, DisplayObject, Sprite, Rectangle, IPointData } from '../pixi';
+import { Container, Sprite, Rectangle, IPointData, DisplayObject } from '../pixi';
 import { AssetsLoader } from '../AssetsLoader';
 import { TankController } from './Controller/TankController';
 import { BulletController } from './Controller/BulletController';
 import { EnvironmentController } from './Controller/EnvironmentController';
 import { Size } from './type';
-import { CollisionController } from './Controller/CollisionController';
 import { Tank } from './Objects/Tank';
 import { Bullet } from './Objects/Bullet';
 import { BaseObject } from './Objects/BaseObject';
 import { SpineObject } from './Objects/SpineObject';
 import { UIController } from './Controller/UIController';
 import { AppConstants } from './Constants';
-import Emitter from './util';
-// import { Color } from '@pixi/core';
-// Color.shared.setValue(0xffffff).toHex(); // '#ffffff'
-
+import Emitter, { Bunker, CollisionHelper, Environment, Reward, createNewRandomPosition } from './util';
 
 export class GameScene extends Container {
     private _time = 0;
@@ -25,8 +21,10 @@ export class GameScene extends Container {
     private _tankController: TankController;
     private _bulletController: BulletController;
     private _environmentController: EnvironmentController;
-    private _collisionController: CollisionController;
     private _UIController: UIController;
+
+    private _inGameObjects: BaseObject[] = [];
+    private _collisionObjects: BaseObject[] = [];
 
     constructor() {
         super();
@@ -49,7 +47,7 @@ export class GameScene extends Container {
             spine.spine.scale = { x:-0.2, y:0.2 };
             const position: IPointData = { x: 400, y: 400 };
             spine.position = position;
-            this.addToScene(spine.spine);
+            this.addChild(spine.spine);
         }
         );
     }
@@ -58,6 +56,8 @@ export class GameScene extends Container {
         Emitter.on(AppConstants.addToSceneEvent, this.addToScene.bind(this));
         Emitter.on(AppConstants.removeFromSceneEvent, this.removeFromScene.bind(this));
         Emitter.on(AppConstants.displayScore, this.displayScore.bind(this));
+        Emitter.on(AppConstants.addObjectToSceneEvent, this._addObjectToScene.bind(this));
+        Emitter.on(AppConstants.removeObjectFromSceneEvent, this._removeObjectFromScene.bind(this));
     }
 
     /**
@@ -96,7 +96,7 @@ export class GameScene extends Container {
 
         // set a back ground of game
         const bg = new Sprite(AssetsLoader.getTexture('game-back-ground'));
-        this.addToScene(bg);
+        this.addChild(bg);
         bg.width = AppConstants.screenWidth;
         bg.height = AppConstants.screenHeight;
 
@@ -139,7 +139,7 @@ export class GameScene extends Container {
             scoreSprite.width = AppConstants.scoreSpriteWidth;
             scoreSprite.height = AppConstants.scoreSpriteHeight;
 
-            this.addToScene(scoreSprite);
+            this.addChild(scoreSprite);
 
             scoreSprite.position.set(position.x, position.y);
 
@@ -152,38 +152,44 @@ export class GameScene extends Container {
         this._scoreSpriteArray = scoreSpriteArray;
     }
 
-    public update(deltaTime: number) {
-        this._time += deltaTime;
-        if (this._time > 1000) {
-            this._time -= 1000;
-            console.log('GameScene update');
+    private async _checkCollision() {
+        CollisionHelper.checkCollisionHelp(this._inGameObjects, this._onCollision.bind(this));
+    }
+
+    private _onCollision(object: BaseObject, otherObject: BaseObject) {
+        if (object instanceof Tank && otherObject instanceof Bullet) {
+            if (object.isPlayerTank !== otherObject.isPlayerBullet) {
+                object.HP -= 1;
+                this._collisionObjects.push(otherObject);
+            }
         }
 
-        if (this._tankController && this._bulletController && this._collisionController) {
-            this._tankController.update(deltaTime);
-            this._bulletController.update(deltaTime);
-            this._collisionController.update();
+        if (object instanceof Tank && otherObject instanceof Tank) {
+            this.handleTankMoveCall(object);
         }
-    }
 
-    public getTankList(): Tank[] {
-        return this._tankController.usingTankList;
-    }
+        if (object instanceof Tank && otherObject instanceof Environment) {
+            this.handleTankMoveCall(object);
+        }
 
-    public getBulletList(): Bullet[] {
-        return this._bulletController.bullets;
-    }
+        if (object instanceof Tank && otherObject instanceof Reward) {
+            if (object.isPlayerTank) object.HP += 1;
 
-    public getEnvironmentList(): BaseObject[] {
-        return this._environmentController.environmentObjects;
-    }
+            this._collisionObjects.push(otherObject);
+        }
 
-    public getRewardList(): BaseObject[] {
-        return this._environmentController.rewardObjects;
-    }
+        if (object instanceof Tank && otherObject instanceof Bunker) {
+            this.handleTankMoveCall(object);
+        }
 
-    public getBunker(): BaseObject {
-        return this._environmentController.bunker;
+        if (object instanceof Bullet && otherObject instanceof Environment) {
+            this._collisionObjects.push(object);
+            this._collisionObjects.push(otherObject);
+        }
+
+        if (object instanceof Bullet && otherObject instanceof Bunker) {
+            Emitter.emit(AppConstants.displayGameOverEvent, null);
+        }
     }
 
     public removeEnvironmentCall(environment: BaseObject) {
@@ -203,15 +209,29 @@ export class GameScene extends Container {
     }
 
     public createNewRandomPositionCall(size: Size): Rectangle {
-        return this._collisionController.createNewRandomPosition(size);
+        return createNewRandomPosition(size, this._inGameObjects);
     }
 
     private addToScene(displayObject: DisplayObject) {
         this.addChild(displayObject);
     }
 
+    private _addObjectToScene(object: BaseObject) {
+        this.addChild(object.sprite);
+
+        this._inGameObjects.push(object);
+    }
+
     private removeFromScene(sprite: Sprite) {
         this.removeChild(sprite);
+    }
+
+    private _removeObjectFromScene(object: BaseObject) {
+        this.removeChild(object.sprite);
+
+        const p = this._inGameObjects.findIndex(objects => objects === object);
+
+        this._inGameObjects.splice(p, 1);
     }
 
     public async init() {
@@ -222,19 +242,7 @@ export class GameScene extends Container {
             resetGameSceneCallBack: this._resetGameScene.bind(this)
         });
 
-        // // constructor controllers
-        this._collisionController = new CollisionController({
-            getTankListCallBack: this.getTankList.bind(this),
-            getBulletListCallBack: this.getBulletList.bind(this),
-            getEnvironmentListCallBack: this.getEnvironmentList.bind(this),
-            removeBulletCallBack: this.removeBulletCall.bind(this),
-            handleTankMoveCallBack: this.handleTankMoveCall.bind(this),
-            removeEnvironmentCallBack: this.removeEnvironmentCall.bind(this),
-            removeRewardObjectCallBack: this.removeRewardObjectCall.bind(this),
-            getRewardListCallBack: this.getRewardList.bind(this),
-            getBunkerCallBack: this.getBunker.bind(this)
-        });
-
+        // constructor controllers
         this._bulletController = new BulletController();
 
         this._tankController = new TankController(this.createNewRandomPositionCall.bind(this), this.plusScore.bind(this));
@@ -242,5 +250,32 @@ export class GameScene extends Container {
         this._environmentController = new EnvironmentController(this.createNewRandomPositionCall.bind(this));
 
         this._UIController.displayMainMenuGame();
+    }
+
+    public update(deltaTime: number) {
+        this._time += deltaTime;
+        if (this._time > 1000) {
+            this._time -= 1000;
+            console.log('GameScene update');
+        }
+
+        if (this._tankController && this._bulletController) {
+            this._tankController.update(deltaTime);
+            this._bulletController.update(deltaTime);
+        }
+
+        this._checkCollision().then(() => {
+            const objectsToRemove: BaseObject[] = this._collisionObjects.filter((item, index) => {
+                return this._collisionObjects.indexOf(item) === index;
+            });
+            objectsToRemove.forEach(object => {
+                if (object instanceof Environment) this.removeEnvironmentCall(object);
+                if (object instanceof Bullet) this.removeBulletCall(object);
+                if (object instanceof Reward) this.removeRewardObjectCall(object);
+            });
+        }).then(() => {
+            this._collisionObjects = [];
+        });
+
     }
 }

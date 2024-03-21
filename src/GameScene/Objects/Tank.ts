@@ -1,5 +1,5 @@
 // Tank class
-import { IPointData } from '../../pixi';
+import { IPointData, Rectangle } from '../../pixi';
 import { RandomEngine } from '../Engine/RandomEngine';
 import { BaseObject } from './BaseObject';
 import { Direction, TankDieFn } from '../type';
@@ -165,6 +165,8 @@ export class Tank extends BaseObject {
      * @param dt delta time from ticker
      */
     update(dt: number): void {
+        // update rectangle
+        this.rectangle = new Rectangle(this.position.x, this.position.y, this.size.w, this.size.h);
 
         // move
         this.move(dt, false);
