@@ -76,16 +76,16 @@ export class BulletController {
         const p = this._usingBullets.findIndex(bullets => bullets === bullet);
         this._usingBullets.splice(p, 1);
 
-        // return bullet to bullet pool
-        this._bulletPool.getBullet(bullet);
-
         // remove bullet in game sense
         bullet.remove();
 
         // set sound for explosion
-        if (bullet.isPlayerBullet) {
+        if (bullet.isPlayerBullet === true) {
             sound.play(AppConstants.soundCfg.explosion, { volume: AppConstants.volumeOfExplosion });
         }
+
+        // return bullet to bullet pool
+        this._bulletPool.getBullet(bullet);
 
         // create a explosion where bullet being remove
         this._displayExplosion(bullet.position);

@@ -4,7 +4,6 @@ import { AssetsLoader } from '../../AssetsLoader';
 import { ResetGameSceneFn, StartPlayGameFn } from '../type';
 import { AppConstants } from '../Constants';
 import Emitter from '../util';
-import { sound } from '@pixi/sound';
 
 
 export class UIController {
@@ -76,7 +75,7 @@ export class UIController {
         Emitter.emit(AppConstants.eventEmitter.stopUpdate, null);
 
         // play game music
-        sound.play(AppConstants.soundCfg.mainMusic, { volume: AppConstants.volumeMainMenuMusic, loop: true });
+        // sound.play(AppConstants.soundCfg.mainMusic, { volume: AppConstants.volumeMainMenuMusic, loop: true });
     }
 
     public displayGameOver(): void {

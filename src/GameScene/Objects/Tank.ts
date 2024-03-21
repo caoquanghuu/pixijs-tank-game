@@ -50,7 +50,7 @@ export class Tank extends BaseObject {
             this._HPBar.HP = AppConstants.maxHpOfPlayerTank;
 
             // set control fire key event by space keyboard
-            const fire = keyboard(' ');
+            const fire = keyboard(AppConstants.keyboardEvent.fire);
             fire.press = () => {
                 this.fire({ position: this.position, direction: this.lastDirection, isPlayer: true });
             };
