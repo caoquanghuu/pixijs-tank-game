@@ -9,7 +9,7 @@
     "start-ip": "yarn start --host 0.0.0.0"
   },
   "license": "ISC",
-  "author": "hung.luongkong@gmail.com",
+  "author": "caoquanghuu@gmail.com",
   "private": true,
   "dependencies": {
     "@pixi-spine/base": "^4.0.3",
