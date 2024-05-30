@@ -2,7 +2,7 @@
 import { IPointData, Rectangle } from '../../pixi';
 import { RandomEngine } from '../Engine/RandomEngine';
 import { BaseObject } from './BaseObject';
-import { Direction, TankDieFn } from '../type';
+import { Direction } from '../type';
 import { ControlEngine } from '../Engine/ControlEngine';
 import Emitter, { getRandomArbitrary, keyboard } from '../util';
 import { HPBar } from './HPBar';
@@ -17,15 +17,11 @@ export class Tank extends BaseObject {
     // hp of this tank
     private _HPBar: HPBar;
 
-    private _tankDieCall: TankDieFn;
     private _fireBulletTime: number;
 
-    constructor(isPlayer: boolean, tankDieCallBack: TankDieFn) {
+    constructor(isPlayer: boolean) {
         // set image of tank is player tank or bot tank
         super(AppConstants.textureName.tankStandUp);
-
-        // define methods need to call
-        this._tankDieCall = tankDieCallBack;
 
         // set speed of tank
         this.speed = AppConstants.speedOfTank;
@@ -117,7 +113,7 @@ export class Tank extends BaseObject {
     public checkHPOfTank() {
         if (this.HPBar.HP === 0) {
             // call tank die to tank controller
-            this._tankDieCall(this);
+            Emitter.emit(AppConstants.eventEmitter.tankDie, this);
         }
     }
 

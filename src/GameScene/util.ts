@@ -5,6 +5,11 @@ import { BaseObject } from './Objects/BaseObject';
 import { Direction, Size } from './type';
 import { AppConstants } from './Constants';
 
+/**
+ * method to get a random enum value from enum
+ * @param enumeration enum
+ * @returns return random enum value
+ */
 export const randomEnumKey = (enumeration: any): any => {
     const keys = Object.keys(enumeration).filter(
         (k) => !(Math.abs(Number.parseInt(k)) + 1)
@@ -13,12 +18,23 @@ export const randomEnumKey = (enumeration: any): any => {
     return enumeration[enumKey];
 };
 
+/**
+ * method to return a random number
+ * @param min min of value want to get
+ * @param max max of value want to bet
+ * @returns return random number
+ */
 export function getRandomArbitrary(min: number, max: number): number {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+/**
+ * method to add an key board event listener
+ * @param value name of key board
+ * @returns return key
+ */
 export function keyboard(value: any) {
     const key: any = {};
     key.value = value;
@@ -67,6 +83,12 @@ export function keyboard(value: any) {
     return key;
 }
 
+/**
+ * method to calculate distance of 2 object
+ * @param pos1 position 1
+ * @param pos2 position 2
+ * @returns return distance
+ */
 export function getDistanceOfTwoPosition(pos1: IPointData, pos2: IPointData): number {
     const distance: number = Math.sqrt(
         Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2)
@@ -89,6 +111,12 @@ export function getRandomBoolean(percent: number): boolean {
     }
 }
 
+/**
+ * method to check collision between 2 rectangle
+ * @param r1 rectangle 1
+ * @param r2 rectangle 2
+ * @returns return boolean result
+ */
 export function checkCollisionBetweenTwoRectangle(r1: Rectangle, r2: Rectangle): boolean {
 
     if (r1.x + r1.width / 2 >= r2.x - r2.width / 2 &&
@@ -126,6 +154,11 @@ export function createRandomDirection(): Direction {
     return direction;
 }
 
+/**
+ * method support remove a object from array object
+ * @param param object want to be remove
+ * @param array array include object
+ */
 export function removeFromArray(param: BaseObject, array: BaseObject[]) {
     const p: number = array.findIndex(value => param === value);
     if (p !== -1) {
@@ -140,6 +173,8 @@ export class Environment extends BaseObject {}
 export class Reward extends BaseObject {}
 
 export class Bunker extends BaseObject {}
+
+export class Explosion extends BaseObject {}
 
 const eventEmitter = new EventEmitter();
 const Emitter = {
@@ -168,10 +203,11 @@ export namespace CollisionHelper {
 
 
 /**
-     * method to return a new rectangle which have no collision with other objects on map
-     * @param size size of object want to get rectangle
-     * @returns return rectangle calculated base on size
-     */
+ * method help to get a position which don't have collision with other object on array list
+ * @param size size of the object want to create position
+ * @param inGameObjectsList array of other object to compare
+ * @returns return rectangle
+ */
 export function createNewRandomPosition(size: Size, inGameObjectsList: BaseObject[]): Rectangle {
 
     // create a new rectangle

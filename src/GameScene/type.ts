@@ -17,6 +17,15 @@ export type Size = {
     h: number,
 };
 
+export enum ObjectsType {
+    TANK,
+    PLAYER,
+    REWARD,
+    ENVIRONMENT,
+    BULLET,
+    EXPLOSION
+}
+
 export type AnimationOption = {
     trackIndex: number,
     animationName: string,

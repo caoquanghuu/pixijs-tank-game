@@ -10,7 +10,7 @@ export class TankController {
 
     private _usingTanks: Tank[] = [];
     private _playerTank: Tank;
-    private _spawnTankTime: number = AppConstants.timeSpawnTank;
+    private _spawnTankTime: number = 0;
     private _tankPool: TankPool;
 
     private _createNewRandomPositionCall: CreateNewRandomPositionFn;
@@ -22,7 +22,7 @@ export class TankController {
 
     constructor(createNewRandomPositionCallBack: CreateNewRandomPositionFn, setNewScoreCallBack: SetNewScoreFn) {
 
-        this._tankPool = new TankPool(this._tankDie.bind(this));
+        this._tankPool = new TankPool();
 
         this._useEventEffect();
 
@@ -30,11 +30,11 @@ export class TankController {
         this._setNewScoreCall = setNewScoreCallBack;
 
         // test add spine boy on player tank
-        this._spineBoy = new SpineBoy();
+        // this._spineBoy = new SpineBoy();
 
-        this._spineBoy.loadBundle('assets/units/spine2d/spine-boy/spine-boy-pro.json').then(() => {
-            this._spineBoy.setAnimation({ trackIndex:0, animationName: AppConstants.animationName.idle, loop: true });
-        });
+        // this._spineBoy.loadBundle('assets/units/spine2d/spine-boy/spine-boy-pro.json').then(() => {
+        //     this._spineBoy.setAnimation({ trackIndex:0, animationName: AppConstants.animationName.idle, loop: true });
+        // });
     }
 
     /**method get tank list for check collision can access */
@@ -43,7 +43,7 @@ export class TankController {
     }
 
     public reset(): void {
-        this._spineBoy.remove();
+        // this._spineBoy.remove();
 
         this._usingTanks.forEach((tank) => {
             tank.remove();
@@ -55,12 +55,13 @@ export class TankController {
     public init(): void {
         this._getTank(true);
 
-        this._spineBoy.show();
-        this._spineBoy.position = this._playerTank.position;
+        // this._spineBoy.show();
+        // this._spineBoy.position = this._playerTank.position;
     }
 
     private _useEventEffect(): void {
         Emitter.on(AppConstants.eventEmitter.fireBullet, this._fireBulletOfSpineBoy.bind(this));
+        Emitter.on(AppConstants.eventEmitter.tankDie, this._tankDie.bind(this));
     }
 
     private _getTank(type: boolean) {
@@ -209,7 +210,7 @@ export class TankController {
         this._usingTanks.forEach(tank => tank.update(dt));
 
         // test update for spine boy
-        this._spineBoy.update(this._playerTank.position);
+        // this._spineBoy.update(this._playerTank.position);
     }
 
 }

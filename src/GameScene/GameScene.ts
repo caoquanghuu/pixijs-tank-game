@@ -13,6 +13,7 @@ import { SpineObject } from './Objects/SpineObject';
 import { UIController } from './Controller/UIController';
 import { AppConstants } from './Constants';
 import Emitter, { Bunker, CollisionHelper, Environment, Reward, createNewRandomPosition } from './util';
+import { ObjectsPool } from './ObjectPool/ObjectPool';
 
 export class GameScene extends Container {
     private _time = 0;
@@ -22,6 +23,8 @@ export class GameScene extends Container {
     private _bulletController: BulletController;
     private _environmentController: EnvironmentController;
     private _UIController: UIController;
+
+    private _objectsPool: ObjectsPool;
 
     private _inGameObjects: BaseObject[] = [];
     private _collisionObjects: BaseObject[] = [];
@@ -35,21 +38,21 @@ export class GameScene extends Container {
         this.init.bind(this);
 
         // test spine object
-        const spine = new SpineObject();
-        spine.loadBundle('assets/units/spine2d/spine-boy/spine-boy-pro.json').then(() => {
-            spine.setAnimation({ trackIndex:0, animationName: AppConstants.animationName.idle, loop: true });
-            spine.addAnimation({ trackIndex:0, animationName: AppConstants.animationName.aim, loop: false, delay:0.5 });
-            spine.addAnimation({ trackIndex:1, animationName: AppConstants.animationName.shoot, loop: false, delay:0.75 });
-            spine.addAnimation({ trackIndex:0, animationName: AppConstants.animationName.walk, loop: true, delay:1.1 });
-            spine.addAnimation({ trackIndex:0, animationName: AppConstants.animationName.run, loop: true, delay:1.5 });
-            spine.addAnimation({ trackIndex:0, animationName: AppConstants.animationName.idle, loop: true, delay:1.65 });
-            spine.addAnimation({ trackIndex:1, animationName: AppConstants.animationName.shoot, loop: false, delay:4.5 });
-            spine.spine.scale = { x:-0.2, y:0.2 };
-            const position: IPointData = { x: 400, y: 400 };
-            spine.position = position;
-            this.addChild(spine.spine);
-        }
-        );
+        // const spine = new SpineObject();
+        // spine.loadBundle('assets/units/spine2d/spine-boy/spine-boy-pro.json').then(() => {
+        //     spine.setAnimation({ trackIndex:0, animationName: AppConstants.animationName.idle, loop: true });
+        //     spine.addAnimation({ trackIndex:0, animationName: AppConstants.animationName.aim, loop: false, delay:0.5 });
+        //     spine.addAnimation({ trackIndex:1, animationName: AppConstants.animationName.shoot, loop: false, delay:0.75 });
+        //     spine.addAnimation({ trackIndex:0, animationName: AppConstants.animationName.walk, loop: true, delay:1.1 });
+        //     spine.addAnimation({ trackIndex:0, animationName: AppConstants.animationName.run, loop: true, delay:1.5 });
+        //     spine.addAnimation({ trackIndex:0, animationName: AppConstants.animationName.idle, loop: true, delay:1.65 });
+        //     spine.addAnimation({ trackIndex:1, animationName: AppConstants.animationName.shoot, loop: false, delay:4.5 });
+        //     spine.spine.scale = { x:-0.2, y:0.2 };
+        //     const position: IPointData = { x: 400, y: 400 };
+        //     spine.position = position;
+        //     this.addChild(spine.spine);
+        // }
+        // );
     }
 
     private _useEventEffect() {

@@ -52,6 +52,7 @@ export namespace AppConstants {
 
     export const numbersOfEnvironmentObjects: number = 30;
     export const numberSideOfFence: number = 6;
+    export const numberOfRewardObjects: number = 30;
 
     export const ratioCreateReward: number = 10;
     export const ratioCreateBossTank: number = 50;
@@ -103,7 +104,8 @@ export namespace AppConstants {
         fireBullet: 'fire-bullet',
         displayGameOver: 'display-game-over',
         startUpDate: 'start-update',
-        stopUpdate: 'stop-update'
+        stopUpdate: 'stop-update',
+        tankDie: 'tank-die'
     };
 
     export const soundCfg = {

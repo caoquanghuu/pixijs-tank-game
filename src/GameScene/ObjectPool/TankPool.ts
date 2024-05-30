@@ -11,22 +11,20 @@ export class TankPool {
 
     // a array to contain bot tank
     private _tanksPool: Tank[] = [];
-    private _tankDieCall: TankDieFn;
     private _playerTank: Tank;
 
     /**
      * constructor tank pool base on number of tank
      */
-    constructor(tankDieCallBack: TankDieFn) {
-        this._tankDieCall = tankDieCallBack;
+    constructor() {
 
         // a loop to create tank and add it to tank pool
         for (let i = 0; i < this._maxTanks; i++) {
-            const tank = new Tank(false, this._tankDieCall);
+            const tank = new Tank(false);
             this._tanksPool.push(tank);
         }
 
-        this._playerTank = new Tank(true, this._tankDieCall);
+        this._playerTank = new Tank(true);
 
     }
 

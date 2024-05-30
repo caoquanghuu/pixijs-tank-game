@@ -6,10 +6,11 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "webpack serve --env mode=debug --mode=development",
-    "start-ip": "yarn start --host 0.0.0.0"
+    "start-ip": "yarn start --host 0.0.0.0",
+    "build": "yarn clean & webpack --env mode=production"
   },
   "license": "ISC",
-  "author": "hung.luongkong@gmail.com",
+  "author": "caoquanghuu@gmail.com",
   "private": true,
   "dependencies": {
     "@pixi-spine/base": "^4.0.3",

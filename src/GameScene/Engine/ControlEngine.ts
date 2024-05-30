@@ -21,9 +21,9 @@ export class ControlEngine extends BaseEngine {
     constructor() {
         super();
         // add event listener for keydown
-        this._left = keyboard(AppConstants.keyboardEvent.moveLeft),
-        this._up = keyboard(AppConstants.keyboardEvent.moveUp),
-        this._right = keyboard(AppConstants.keyboardEvent.moveRight),
+        this._left = keyboard(AppConstants.keyboardEvent.moveLeft);
+        this._up = keyboard(AppConstants.keyboardEvent.moveUp);
+        this._right = keyboard(AppConstants.keyboardEvent.moveRight);
         this._down = keyboard(AppConstants.keyboardEvent.moveDown);
 
         this._left.press = () => {
@@ -52,6 +52,41 @@ export class ControlEngine extends BaseEngine {
             this._keyHandler.isDown = true;
         };
         this._down.release = () => {
+            this._keyHandler.isDown = false;
+        };
+
+
+        const left = keyboard('a');
+        const up = keyboard('w');
+        const right = keyboard('d');
+        const down = keyboard('s');
+
+        left.press = () => {
+            this.direction = Direction.LEFT;
+            this._keyHandler.isLeft = true;
+        };
+        left.release = () => {
+            this._keyHandler.isLeft = false;
+        };
+        right.press = () => {
+            this.direction = Direction.RIGHT;
+            this._keyHandler.isRight = true;
+        };
+        right.release = () => {
+            this._keyHandler.isRight = false;
+        };
+        up.press = () => {
+            this.direction = Direction.UP;
+            this._keyHandler.isUp = true;
+        };
+        up.release = () => {
+            this._keyHandler.isUp = false;
+        };
+        down.press = () => {
+            this.direction = Direction.DOWN;
+            this._keyHandler.isDown = true;
+        };
+        down.release = () => {
             this._keyHandler.isDown = false;
         };
     }
